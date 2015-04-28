@@ -1,6 +1,13 @@
 <resources>
     <string name="app_name">HomeSafe</string>
 
-    <string name="hello_world">Hello world!</string>
+    <string name="home_safe">Home Safe</string>
     <string name="action_settings">Settings</string>
+    <string-array name="menu_array">
+        <item>Emergency Contacts</item>
+        <item>Favorite Locations</item>
+        <item>Settings</item>
+    </string-array>
+    <string name="drawer_open">Drawer Opened</string>
+    <string name="drawer_close">Drawer Closed</string>
 </resources>
