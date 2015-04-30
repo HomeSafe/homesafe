@@ -1,6 +1,5 @@
 package cse403.homesafe;
 
-import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -10,7 +9,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -47,7 +45,6 @@ public class StartScreen extends ActionBarActivity {
     private void addDrawerItems() {
         final String[] menuListItems = getResources().getStringArray(R.array.menu_array);
         mAdapter = new ArrayAdapter<String>(this, R.layout.drawer_list_item, menuListItems);
-
         mDrawerList.setAdapter(mAdapter);
 
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
