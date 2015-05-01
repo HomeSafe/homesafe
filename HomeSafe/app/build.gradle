@@ -10,6 +10,8 @@ android {
         targetSdkVersion 21
         versionCode 1
         versionName "0.1"
+        applicationId "cse403.homesafe"
+        testApplicationId "cse403.homesafe.test"
     }
     buildTypes {
         release {
@@ -22,4 +24,6 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.0.0'
+    testCompile 'junit:junit:4.12'
+    compile 'junit:junit:4.12'
 }

@@ -6,7 +6,7 @@ import cse403.homesafe.Data.Location;
 /**
  * Abstraction that serves as the interface for sending emails through TODO: Decide email service
  */
-public class Email {
+public class Email implements Message {
 
     private static Email _instance = new Email();
 

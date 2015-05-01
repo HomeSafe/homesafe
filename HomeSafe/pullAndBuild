@@ -1,0 +1,5 @@
+echo "Building HomeSafe..."
+git pull origin master
+git checkout master
+./gradlew assembleDebug
+echo "Script ended."

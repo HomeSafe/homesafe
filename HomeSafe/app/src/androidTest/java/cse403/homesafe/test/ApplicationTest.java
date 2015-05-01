@@ -1,4 +1,4 @@
-package cse403.homesafe;
+package cse403.homesafe.test;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

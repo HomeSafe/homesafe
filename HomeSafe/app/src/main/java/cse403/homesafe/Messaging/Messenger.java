@@ -18,14 +18,5 @@ public class Messenger {
      */
     public static void sendNotifications (int tier, Location location) {
 
-        // TODO: Uncomment once Contacts is implemented
-        // Contacts.getList(tier);
-        // for (Contact contact : list) {
-        //      if (contact.hasNumber())
-        //          sms.sendMessage(contact, location, customMessage);
-        //      if (contact.hasEmail())
-        //          email.sendMessage(contact, location, customMessage);
-        // }
-
     }
 }

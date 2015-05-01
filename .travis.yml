@@ -3,3 +3,6 @@ android:
     components:
         - build-tools-19.1.0
         - android-14
+
+script:
+    - ./HomeSafe/gradlew
