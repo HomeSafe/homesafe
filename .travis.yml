@@ -5,4 +5,4 @@ android:
         - android-14
 
 script:
-    - ./gradlew
+    - ./HomeSafe/gradlew
