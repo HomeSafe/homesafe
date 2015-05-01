@@ -10,6 +10,8 @@ android {
         targetSdkVersion 21
         versionCode 1
         versionName "0.1"
+        applicationId "cse403.homesafe"
+        testApplicationId "cse403.homesafe.test"
     }
     buildTypes {
         release {
