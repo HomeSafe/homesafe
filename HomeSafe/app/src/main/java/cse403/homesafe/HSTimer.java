@@ -17,7 +17,7 @@ public class HSTimer {
      * @param estimatedTimeArrival :
      */
     public HSTimer(long estimatedTimeArrival) {
-        timer = setTimer(estimatedTimeArrival);
+       //timer = setTimer(estimatedTimeArrival);
     }
 
     /**
@@ -46,7 +46,7 @@ public class HSTimer {
     }
 
     /**
-     * Extends the time of the timer.
+     * Extends the timer.
      *
      * @return true if the timer has been extended otherwise false.
      */
@@ -65,7 +65,7 @@ public class HSTimer {
     }
 
     /**
-     * Set the timer to a specified time.
+     * Returns a CountDownTimer that is set to a specified time.
      *
      * @param estimatedTimeArrival : the starting time of the timer.
      * @return a CountDownTimer object set to the specified time.
