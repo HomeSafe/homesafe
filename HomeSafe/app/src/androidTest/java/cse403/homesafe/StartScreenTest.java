@@ -1,16 +1,17 @@
 package cse403.homesafe;
 
-import android.test.ActivityInstrumentationTestCase2;
-import android.test.ActivityTestCase;
-import android.widget.TextView;
+import android.content.Intent;
+import android.test.ActivityUnitTestCase;
+import android.test.suitebuilder.annotation.MediumTest;
+
 
 /**
  * Test case for StartScreen
  */
-public class StartScreenTest extends ActivityInstrumentationTestCase2<StartScreen> {
+public class StartScreenTest extends ActivityUnitTestCase<StartScreen> {
 
     private StartScreen startScreen;
-    private TextView textView;
+    private Intent startIntent;
 
     public StartScreenTest() {
         super(StartScreen.class);
@@ -20,12 +21,17 @@ public class StartScreenTest extends ActivityInstrumentationTestCase2<StartScree
     protected void setUp() throws Exception {
         super.setUp();
         startScreen = getActivity();
-        textView =
-                (TextView) startScreen
-                        .findViewById(R.id.textView);
+        startIntent = new Intent(Intent.ACTION_MAIN);
     }
 
+    @MediumTest
+    public void testPreconditions() {
+
+    }
+
+    @MediumTest
     public void randomTest() {
+
         assertEquals(true, false);
     }
 
