@@ -2,6 +2,7 @@ package cse403.homesafe;
 
 import android.content.Intent;
 import android.test.ActivityUnitTestCase;
+import android.test.SingleLaunchActivityTestCase;
 import android.test.suitebuilder.annotation.MediumTest;
 
 
@@ -26,12 +27,12 @@ public class StartScreenTest extends ActivityUnitTestCase<StartScreen> {
 
     @MediumTest
     public void testPreconditions() {
-
+        assertEquals(true, false);
     }
 
     @MediumTest
-    public void randomTest() {
-
+    public void testRandom() {
+        assertEquals(1, 0);
         assertEquals(true, false);
     }
 
