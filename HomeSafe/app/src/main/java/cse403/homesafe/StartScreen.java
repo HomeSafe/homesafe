@@ -1,5 +1,5 @@
 package cse403.homesafe;
-
+//This class is for Start Screen Activity, where it handles the side bar and start trip events
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -125,7 +125,7 @@ public class StartScreen extends ActionBarActivity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        // Pass any configuration change to the drawer toggls
+        // Pass any configuration change to the drawer toggles
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 }
