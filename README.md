@@ -74,9 +74,9 @@ to do tomorrow
 ###Releasing a New Version
 Before adding anything to the repository please update the version name located in the Androidmanifest.xml and build.grade module:app files by incrementing the decimal portion by 1 (so 1.1 becomes 1.2 and 1.9 becomes 1.10 and so on). This is for good book keeping, and let's us know what is featured in which version. I've highlighted which items specifically must be changed in the below pictures.
 
-![alt text](README assets\screenshot3.png "screenshot3")
+![alt text](README assets/screenshot3.png "screenshot3")
 
-![alt text](README assets\screenshot2.png "screenshot2")
+![alt text](README assets/screenshot2.png "screenshot2")
 
 
 The following command will archive your files into a tar ball that can then be added to the repository
