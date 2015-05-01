@@ -56,7 +56,7 @@ There are several options for this step that all boil down to the preference of 
 
 Once you are inside your chosen IDE (I'm using Android Studio for this tutorial) open the project folder; the actual java source code is located in the HomeSafe/app/src/main/java/cse403/homesafe folder and all the layout source files you might need are located in the HomeSafe/app/src/main/res. Any user documentation you might need is on the [HomeSafe website](http://homesafe.github.io/ "HomeSafe website"), please read it if you need a high-level view of the product.
 
-![alt text](README assets\screenshot1.png "screenshot1")
+![alt text](README assets/screenshot1.png "screenshot1")
 
 When you first open the project folder in your IDE you should get a file structure similar to the one shown in the above picture.
 
