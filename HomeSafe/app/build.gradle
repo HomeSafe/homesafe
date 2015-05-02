@@ -18,6 +18,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
 
 dependencies {
@@ -25,5 +28,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.0.0'
     testCompile 'junit:junit:4.12'
     compile 'junit:junit:4.12'
+    testCompile 'org.robolectric:robolectric:2.4'
 }
+
 

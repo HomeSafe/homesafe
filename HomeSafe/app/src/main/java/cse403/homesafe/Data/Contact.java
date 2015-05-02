@@ -9,13 +9,28 @@ package cse403.homesafe.Data;
  * the alert level at which this Contact should be notified.
  */
 public class Contact {
-    String cid;
-    int tier;
-    String name;
-    String email;
-    String phoneNumber;
+    private int cid;
+    private Contacts.Tier tier;
+    private String name;
+    private String email;
+    private String phoneNumber;
 
+    public Contact(String name, String email, String phoneNumber, Contacts.Tier tier) {
+        this.tier = tier;
+        this.name = name;
+        this.email = email;
+        this.phoneNumber = email;
 
+        cid = (name + phoneNumber).hashCode();
+    }
+
+    public Contact(String name, String phoneNumber, Contacts.Tier tier) {
+        this(name, "", phoneNumber, tier);
+    }
+
+    public Contact(String name) {
+        this(name, "", "", Contacts.Tier.ONE);
+    }
     /**
      * Replaces the contact's name, email address, and phone number with the passed
      * in values.
@@ -27,11 +42,10 @@ public class Contact {
     }
 
     /**
-     * replaces this contact's tier with the passed in int tier
-     * @param tier the tier to replace with
-     * @return true if successful
+     * Replaces this contact's tier with the passed in tier.
+     * @param newTier the tier to replace with
      */
-    public boolean switchTier(int tier) {
-        return true;
+    public void switchTier(Contacts.Tier newTier) {
+        this.tier = newTier;
     }
 }

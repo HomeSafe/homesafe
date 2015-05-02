@@ -10,7 +10,7 @@ import cse403.homesafe.Data.Contact;
 import cse403.homesafe.Data.Location;
 
 /**
- * TODO: Discuss if feasible
+ * Provides the interface for making audio calls through Android's native service.
  */
 public class Call extends IntentService {
 
@@ -18,11 +18,19 @@ public class Call extends IntentService {
         super("Call");
     }
 
+    /**
+     * Get singleton instance of Call
+     * @return Default instance of Call
+     */
     public static Message getInstance() {
         return null;
     }
 
-    public void sendMessage(Contact recipient, Location location, String customMessage) {
+    /**
+     * Starts an audio call to the specified Contact.
+     * @param recipient The reciever of the call, specified by the Contact's phone number.
+     */
+    public void makeCall(Contact recipient) {
 
     }
 

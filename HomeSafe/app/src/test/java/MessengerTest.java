@@ -3,6 +3,8 @@ import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
+import cse403.homesafe.Messaging.Messenger;
+
 /**
  * Test class for Messenger.java
  */
@@ -15,7 +17,8 @@ public class MessengerTest extends TestCase {
 
     @Test
     public void testSendNotifications() {
-        assertEquals(1, 0);
+        Messenger.sendNotifications();
+        // assertEquals();
     }
 }
 

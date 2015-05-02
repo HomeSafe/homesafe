@@ -10,14 +10,21 @@ import java.util.LinkedList;
  */
 public class Contacts {
     private LinkedList<Contact> contacts;
-    private int tierLevel;
+
+    /**
+     * Represents the 3 possible tiers contacts can fall under.
+     */
+    public enum Tier {
+        ONE,
+        TWO,
+        THREE
+    }
 
     // Representation invariant:
     // contacts must not be null;
 
 
-    public Contacts(int tierLevel){
-        this.tierLevel = tierLevel;
+    public Contacts(){
         contacts = new LinkedList<Contact>();
     }
 
@@ -26,7 +33,7 @@ public class Contacts {
      * @param c the contact to be added
      * @return true on success
      */
-    public boolean addContact(Contact c){
+    public boolean addContact(Contact c, Tier tier){
         contacts.add(c);
         return true;
     }
