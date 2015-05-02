@@ -6,4 +6,4 @@ android:
 	- sys-img-armeabi-v7a-android-19
 
 script:
-    - ./HomeSafe/gradlew connectedCheck
+    - ./HomeSafe/gradlew test
