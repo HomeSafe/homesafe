@@ -68,6 +68,13 @@ Testing is very important (especially if you plan to add your code to our code).
 * [Android testing](http://tools.android.com/tech-docs/unit-testing-support)
 * [JUnit Testing](http://www.javacodegeeks.com/2014/11/junit-tutorial-unit-testing.html)
 * [JUnit Testing in Eclipse](http://help.eclipse.org/luna/index.jsp?topic=%2Forg.eclipse.jdt.doc.user%2FgettingStarted%2Fqs-junit.htm)
+To run the whole test suite at once, navigate to the project's top-level directory (homesafe/HomeSafe). From here, you can run the command:
+```
+$ ./gradlew connectedCheck
+```
+This will build and run all tests. Note that you MUST HAVE AN ANDROID DEVICE CONNECTED for the tests to run. This is due to the Android test suite depending on device-specific libraries to run. If you wish to bypass this restriction, you may use [Robolectric](https://www.bignerdranch.com/blog/all-in-together-android-studio-gradle-and-robolectric/). Once the tests have completed, you may find a detailed report in the file app/build/outputs/reports/androidTests/connected/index.html.
+
+If you'd like to run individual tests, you'll find core class JUnit tests in app/src/main/java/UnitTests/ and Activity unit tests in app/src/androidTest/java/cse403/homesafe/test/. 
 
 ###Setting Up Automated Builds and Tests
 Building and testing can be a pain; if you're interesting in setting up automated daily builds the following sites can help you on your way to setting some up: [Jenkins](http://jenkins-ci.org/ "Jenkins"), [CruiseControl](http://cruisecontrol.sourceforge.net/ "CruiseControl"), [Cron](http://en.wikipedia.org/wiki/Cron "Cron").
