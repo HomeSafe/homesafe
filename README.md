@@ -5,17 +5,10 @@ Homesafe - Developer Documentation
 2. Getting Started
  * Cloning the repository
  * Building HomeSafe
- * Version control and you!
- * Android development and you!
-3. Using HomeSafe
- * HomeSafe basics overview
- * Adding a contact
- * Setting up a trip
- * Ending a trip
- * Sending a message
- * Settings
-5. Contact HomeSafe
- * Common questions
+3. Developing HomeSafe
+ * Testing
+ * Automated Builds and Testing
+ * Releasing a New Version
  * Report a bug
 
 ###New to HomeSafe?
@@ -85,7 +78,7 @@ Building and testing can be a pain; if you're interesting in setting up automate
 You may also use [Travis CI](https://travis-ci.org). We've provided a travis.yml file in the top level directory for continuous integration. This will automatically build and test the application on commit and at a specified schedule.
 
 ###Releasing a New Version
-Before adding anything to the repository please update the version name located in the Androidmanifest.xml and build.grade files by incrementing the decimal portion by 1 (so 1.1 becomes 1.2 and 1.9 becomes 1.10 and so on). This is for good book keeping, and let's us know what is featured in which version. I've highlighted which items specifically must be changed in the below pictures.
+Before adding anything to the repository please update the version name located in the Androidmanifest.xml and build.grade files by incrementing the decimal portion by 1 (so 1.1 becomes 1.2 and 1.9 becomes 1.10 and so on). This is for good book keeping, and let's us know what is featured in which version. Highlighted below in the photos are the specific items to be changed.
 
 ![alt text](README assets/screenshot3.png "screenshot3")
 
