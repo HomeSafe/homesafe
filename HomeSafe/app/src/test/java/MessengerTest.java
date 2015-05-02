@@ -1,5 +1,3 @@
-package UnitTests;
-
 import junit.framework.TestCase;
 
 import org.junit.Before;
