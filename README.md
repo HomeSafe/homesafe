@@ -71,14 +71,18 @@ Testing is very important (especially if you plan to add your code to our code).
 
 To run the whole test suite at once, navigate to the project's top-level directory (homesafe/HomeSafe). From here, you can run the command:
 ```
-$ ./gradlew connectedCheck
+$ ./gradlew test
 ```
-This will build and run all tests. Note that you MUST HAVE AN ANDROID DEVICE CONNECTED for the tests to run. This is due to the Android test suite depending on device-specific libraries to run. If you wish to bypass this restriction, you may use [Robolectric](https://www.bignerdranch.com/blog/all-in-together-android-studio-gradle-and-robolectric/). Once the tests have completed, you may find a detailed report in the file app/build/outputs/reports/androidTests/connected/index.html.
-
+This will build and run all tests. Once the tests have completed, you may find a detailed report in the file
+```
+app/build/outputs/reports/androidTests/connected/index.html.
+```
 If you'd like to run individual tests, you'll find core class JUnit tests in app/src/main/java/UnitTests/ and Activity unit tests in app/src/androidTest/java/cse403/homesafe/test/. 
 
 ###Setting Up Automated Builds and Tests
 Building and testing can be a pain; if you're interesting in setting up automated daily builds the following sites can help you on your way to setting some up: [Jenkins](http://jenkins-ci.org/ "Jenkins"), [CruiseControl](http://cruisecontrol.sourceforge.net/ "CruiseControl"), [Cron](http://en.wikipedia.org/wiki/Cron "Cron").
+
+You may also use [Travis CI](https://travis-ci.org). We've provided a travis.yml file in the top level directory for continuous integration. This will automatically build and test the application on commit and at a specified schedule.
 
 ###Releasing a New Version
 Before adding anything to the repository please update the version name located in the Androidmanifest.xml and build.grade files by incrementing the decimal portion by 1 (so 1.1 becomes 1.2 and 1.9 becomes 1.10 and so on). This is for good book keeping, and let's us know what is featured in which version. I've highlighted which items specifically must be changed in the below pictures.
