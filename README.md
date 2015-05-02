@@ -68,6 +68,7 @@ Testing is very important (especially if you plan to add your code to our code).
 * [Android testing](http://tools.android.com/tech-docs/unit-testing-support)
 * [JUnit Testing](http://www.javacodegeeks.com/2014/11/junit-tutorial-unit-testing.html)
 * [JUnit Testing in Eclipse](http://help.eclipse.org/luna/index.jsp?topic=%2Forg.eclipse.jdt.doc.user%2FgettingStarted%2Fqs-junit.htm)
+
 To run the whole test suite at once, navigate to the project's top-level directory (homesafe/HomeSafe). From here, you can run the command:
 ```
 $ ./gradlew connectedCheck
