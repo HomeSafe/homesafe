@@ -52,5 +52,24 @@ public class Contacts {
         return false;
     }
 
+    /**
+     * Returns a LinkedList of all Contact objects which are of the passed-in tier.
+     *
+     * @param tier The desired Tier of the returned objects
+     * @return A LinkedList<Contact> which contains all Contact objects with the given Tier
+     */
+    public LinkedList<Contact> getContactsInTier(Contacts.Tier tier) {
+        if (tier != Tier.ONE && tier != Tier.TWO && tier != Tier.THREE) {
+            return null;
+        }
+        LinkedList<Contact> result = new LinkedList<Contact>();
+        for(Contact c : contacts) {
+            if(c.getTier() == tier) {
+                result.add(c);
+            }
+        }
+        return result;
+    }
+
 
 }
