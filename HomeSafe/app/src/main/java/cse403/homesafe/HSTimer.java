@@ -2,6 +2,8 @@ package cse403.homesafe;
 
 import android.os.CountDownTimer;
 
+import cse403.homesafe.Data.Contacts;
+
 /**
  * A HSTimer object that represents a count down timer.
  */
@@ -17,7 +19,7 @@ public class HSTimer {
      * @param estimatedTimeArrival :
      */
     public HSTimer(long estimatedTimeArrival) {
-       //timer = setTimer(estimatedTimeArrival);
+       timer = setTimer(estimatedTimeArrival);
     }
 
     /**
@@ -26,7 +28,7 @@ public class HSTimer {
      * @return true if timer successfully started otherwise false.
      */
     public boolean startTimer() {
-        //timer.start();
+        timer.start();
         return true;
     }
 
@@ -36,12 +38,7 @@ public class HSTimer {
      * @return true if the timer successfully ended otherwise false.
      */
     public boolean endTimer() {
-        //timer.cancel();
-        return true;
-    }
-
-    // Don't need this method since we're using a count down timer?
-    public boolean clearTimer() {
+        timer.onFinish();
         return true;
     }
 
@@ -50,7 +47,8 @@ public class HSTimer {
      *
      * @return true if the timer has been extended otherwise false.
      */
-    public boolean extendTimer() {
+    public boolean extendTimer(long extraTime) {
+        // timer = setTimer(Long.parseLong(myTextField) * 1000 + extraTime);
         return true;
     }
 
@@ -61,6 +59,7 @@ public class HSTimer {
      * @return true if tier has been swtiched otherwise false.
      */
     public boolean switchTier(int tier) {
+        // Contacts.Tier = tier ??
         return true;
     }
 
@@ -74,12 +73,19 @@ public class HSTimer {
         CountDownTimer newTimer = new CountDownTimer(estimatedTimeArrival, COUNT_DOWN_INTERVAL) {
             @Override
             public void onTick(long millisUntilFinished) {
-                //myTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
+                /**
+                 * Waiting for XML fields
+                 * myTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
+                 */
             }
 
             @Override
             public void onFinish() {
-                //myTextField.setText("Enter Password");
+                /**
+                 * Waiting for XML fields
+                 * myTextField.setText("Enter Password");
+                 * timer = setTimer(5 minutes);
+                 */
             }
         };
         return newTimer;
