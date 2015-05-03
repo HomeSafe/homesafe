@@ -10,15 +10,24 @@ import java.util.LinkedList;
  */
 public class Destinations {
     private LinkedList<Location> destinations;
+    private static Destinations instance = new Destinations();
 
     // Representation invariant:
     // destinations is not null
+    // instance is not null.
 
     /**
-     * Constructor
+     * private constructor for singleton.
      */
-    public Destinations() {
+    private Destinations() {
         destinations = new LinkedList<Location>();
+    }
+
+    public static Destinations getInstance() {
+        if (instance == null) {
+            instance = new Destinations();
+        }
+        return instance;
     }
 
     /**

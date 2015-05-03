@@ -15,6 +15,12 @@ public class Contact {
     private String email;
     private String phoneNumber;
 
+    // ****** Representation Invariant
+    // name must not be null
+    // tier must not be null
+    // One of the following must not be null
+    //      name, email, phone number
+
     /**
      * Constructs a new Contact object with the passed-in name, email, phoneNumber, and tier
      * @param name The name of the new Contact
