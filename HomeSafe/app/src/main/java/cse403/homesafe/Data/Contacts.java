@@ -22,6 +22,7 @@ public class Contacts {
 
     // Representation invariant:
     // contacts must not be null;
+    // No two contacts in the LinkedList contacts may have the same contact id
 
 
     public Contacts(){
