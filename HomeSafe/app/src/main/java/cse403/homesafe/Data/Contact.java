@@ -15,6 +15,13 @@ public class Contact {
     private String email;
     private String phoneNumber;
 
+    /**
+     * Constructs a new Contact object with the passed-in name, email, phoneNumber, and tier
+     * @param name The name of the new Contact
+     * @param email The email address of the new contact.
+     * @param phoneNumber The phone number of the new Contact
+     * @param tier The tier of the new Contact (ONE, TWO, THREE)
+     */
     public Contact(String name, String email, String phoneNumber, Contacts.Tier tier) {
         this.tier = tier;
         this.name = name;
@@ -24,30 +31,22 @@ public class Contact {
         cid = (name + phoneNumber).hashCode();
     }
 
+    /**
+     * Constructs a new Contact object with the passed-in name, phoneNumber, and tier
+     * @param name The name of the new Contact
+     * @param phoneNumber The phone number of the new Contact
+     * @param tier The tier of the new Contact (ONE, TWO, THREE)
+     */
     public Contact(String name, String phoneNumber, Contacts.Tier tier) {
         this(name, "", phoneNumber, tier);
     }
 
+    /**
+     * Constructs a new Contact object with the passed-in name
+     * @param name The name of the new Contact
+     */
     public Contact(String name) {
         this(name, "", "", Contacts.Tier.ONE);
-    }
-
-    /**
-     * Replaces the contact's name, email address, and phone number with the passed
-     * in values.
-     *
-     * @return true if successful
-     */
-    public boolean editContact(String name, String email, String phoneNumber) {
-        return false;
-    }
-
-    /**
-     * Replaces this contact's tier with the passed in tier.
-     * @param newTier the tier to replace with
-     */
-    public void switchTier(Contacts.Tier newTier) {
-        this.tier = newTier;
     }
 
     /**
