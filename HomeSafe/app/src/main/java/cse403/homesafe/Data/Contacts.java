@@ -8,8 +8,9 @@ import java.util.LinkedList;
  *
  * This class provides functionality for adding and removing contacts.
  */
-public class Contacts {
+public class Contacts{
     private LinkedList<Contact> contacts;
+    private static Contacts instance = new Contacts();
 
     /**
      * Represents the 3 possible tiers contacts can fall under.
@@ -20,13 +21,23 @@ public class Contacts {
         THREE
     }
 
-    // Representation invariant:
-    // contacts must not be null;
-    // No two contacts in the LinkedList contacts may have the same contact id
+    // ***** Representation invariant:
+    // Contacts must not be null.
+    // No two contacts in the LinkedList contacts may have the same contact id.
+    // instance is not null.
 
-
-    public Contacts(){
+    /**
+     * Private constructor for the Singleton
+     */
+    private Contacts(){
         contacts = new LinkedList<Contact>();
+    }
+
+    public static Contacts getInstance() {
+        if (instance == null) {
+            instance = new Contacts();
+        }
+        return instance;
     }
 
     /**
