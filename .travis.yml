@@ -3,7 +3,7 @@ android:
     components:
         - build-tools-19.1.0
         - android-14
-    - sys-img-armeabi-v7a-android-19
+        - sys-img-armeabi-v7a-android-19
 
 script:
     - ./HomeSafe/gradlew test
