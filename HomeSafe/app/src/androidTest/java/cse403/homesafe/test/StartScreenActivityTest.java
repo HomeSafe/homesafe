@@ -2,28 +2,27 @@ package cse403.homesafe.test;
 
 import android.content.Intent;
 import android.test.ActivityUnitTestCase;
-import android.test.SingleLaunchActivityTestCase;
 import android.test.suitebuilder.annotation.MediumTest;
 
-import cse403.homesafe.StartScreen;
+import cse403.homesafe.StartScreenActivity;
 
 
 /**
- * Test case for StartScreen
+ * Test case for StartScreenActivity
  */
-public class StartScreenTest extends ActivityUnitTestCase<StartScreen> {
+public class StartScreenActivityTest extends ActivityUnitTestCase<StartScreenActivity> {
 
-    private StartScreen startScreen;
+    private StartScreenActivity startScreenActivity;
     private Intent startIntent;
 
-    public StartScreenTest() {
-        super(StartScreen.class);
+    public StartScreenActivityTest() {
+        super(StartScreenActivity.class);
     }
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        startScreen = getActivity();
+        startScreenActivity = getActivity();
         startIntent = new Intent(Intent.ACTION_MAIN);
     }
 

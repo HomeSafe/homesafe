@@ -12,7 +12,7 @@ public class Messenger {
     private static Email email = Email.getInstance();  // For sending email
 
     /**
-     * Sends notifications to the specified tier of Contacts
+     * Sends notifications to the specified tier of ContactsActivity
      * @param tier      Tier of contacts to be notified
      * @param location  Last known user location
      */

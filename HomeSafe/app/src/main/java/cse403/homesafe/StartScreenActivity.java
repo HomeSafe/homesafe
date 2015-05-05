@@ -1,10 +1,12 @@
 package cse403.homesafe;
 //This class is for Start Screen Activity, where it handles the side bar and start trip events
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -12,13 +14,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
-public class StartScreen extends ActionBarActivity {
+public class StartScreenActivity extends ActionBarActivity {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
     private ArrayAdapter<String> mAdapter;
+    Toolbar toolbar;
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     private String[] navList;
@@ -49,9 +51,14 @@ public class StartScreen extends ActionBarActivity {
 
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             //A good example of how to make a toast
+//            Toast.makeText(StartScreenActivity.this, menuListItems[position], Toast.LENGTH_SHORT).show();
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(StartScreen.this, menuListItems[position], Toast.LENGTH_SHORT).show();
+                //TODO hardcoded case, needs a switch to go to three different screens
+                Intent i= new Intent(StartScreenActivity.this, ContactsActivity.class);
+//                i.putExtra("string", Yourlist.get(pos).sms);
+                startActivity(i);
+//                finish();
             }
         });
     }
@@ -95,19 +102,15 @@ public class StartScreen extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // The action bar home/up action should open or close the drawer.
         // ActionBarDrawerToggle will take care of this.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
         // Activate the navigation drawer toggle
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-
-        return super.onOptionsItemSelected(item);
+        switch(item.getItemId()) {
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     /**
