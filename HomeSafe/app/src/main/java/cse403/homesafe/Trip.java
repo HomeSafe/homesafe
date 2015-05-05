@@ -1,5 +1,6 @@
 package cse403.homesafe;
 
+import cse403.homesafe.Data.Contacts;
 import cse403.homesafe.Data.Location;
 import cse403.homesafe.Messaging.Messenger;
 
@@ -13,7 +14,6 @@ public class Trip {
     private Location endLocation;
     private HSTimer timer;
     private boolean arrived;
-    private Messenger messenger;
 
     /**
      * Constructor
@@ -21,14 +21,16 @@ public class Trip {
      * @param delay         Estimated time to arrive at destination
      */
     public Trip(Location endLocation, long delay) {
-
+        this.endLocation = endLocation;
+        timer = new HSTimer(delay);
+        arrived = false;
     }
 
     /**
      * Start trip using existing settings
      */
     public void startTrip() {
-
+        timer.startTimer();
     }
 
     /**
@@ -36,7 +38,7 @@ public class Trip {
      * @return  True if successfully ended trip
      */
     public boolean endTrip() {
-        return false;
+        return timer.endTimer();
     }
 
     /**
@@ -49,8 +51,8 @@ public class Trip {
     /**
      * Extend time to arrive at destination
      */
-    public void extendTime() {
-
+    public void extendTime(long extraTime) {
+        timer.extendTimer(extraTime);
     }
 
     /**

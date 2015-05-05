@@ -1,7 +1,7 @@
 package cse403.homesafe.Messaging;
 
 import cse403.homesafe.Data.Contact;
-import cse403.homesafe.Data.Location;
+import android.location.Location;
 
 /**
  * Interface for the various communication channels available from the device. Provides

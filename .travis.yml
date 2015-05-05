@@ -3,7 +3,18 @@ android:
     components:
         - build-tools-19.1.0
         - android-14
-	- sys-img-armeabi-v7a-android-19
+        - sys-img-armeabi-v7a-android-19
 
 script:
     - ./HomeSafe/gradlew test
+
+notifications:
+    email:
+        - dliuxy94@uw.edu
+        - jahrndez@uw.edu
+        - jestelle@uw.edu
+        - kitsonl@uw.edu
+        - leaf94@uw.edu
+        - luluyi@uw.edu
+        - rcfox@uw.edu
+        - paramv@uw.edu

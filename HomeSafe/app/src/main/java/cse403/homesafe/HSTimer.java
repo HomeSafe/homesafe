@@ -2,6 +2,10 @@ package cse403.homesafe;
 
 import android.os.CountDownTimer;
 
+import java.util.concurrent.TimeUnit;
+
+import cse403.homesafe.Data.Contacts;
+
 /**
  * A HSTimer object that represents a count down timer.
  */
@@ -17,7 +21,7 @@ public class HSTimer {
      * @param estimatedTimeArrival :
      */
     public HSTimer(long estimatedTimeArrival) {
-       //timer = setTimer(estimatedTimeArrival);
+       timer = setTimer(estimatedTimeArrival);
     }
 
     /**
@@ -26,8 +30,8 @@ public class HSTimer {
      * @return true if timer successfully started otherwise false.
      */
     public boolean startTimer() {
-        //timer.start();
-        return true;
+        timer.start();
+        return timer != null;
     }
 
     /**
@@ -36,13 +40,8 @@ public class HSTimer {
      * @return true if the timer successfully ended otherwise false.
      */
     public boolean endTimer() {
-        //timer.cancel();
-        return true;
-    }
-
-    // Don't need this method since we're using a count down timer?
-    public boolean clearTimer() {
-        return true;
+        timer.onFinish();
+        return timer == null;
     }
 
     /**
@@ -50,8 +49,9 @@ public class HSTimer {
      *
      * @return true if the timer has been extended otherwise false.
      */
-    public boolean extendTimer() {
-        return true;
+    public boolean extendTimer(long extraTime) {
+        // timer = setTimer(Long.parseLong(myTextField) * 1000 + extraTime);
+        return timer != null;
     }
 
     /**
@@ -74,12 +74,24 @@ public class HSTimer {
         CountDownTimer newTimer = new CountDownTimer(estimatedTimeArrival, COUNT_DOWN_INTERVAL) {
             @Override
             public void onTick(long millisUntilFinished) {
-                //myTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
+                long millis = millisUntilFinished;
+                String hms =  String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(millis),
+                        TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)),
+                                TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MICROSECONDS.toMinutes(millis)));
+                System.out.println(hms);
+                /**
+                 * Waiting for XML fields
+                 * myTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
+                 */
             }
 
             @Override
             public void onFinish() {
-                //myTextField.setText("Enter Password");
+                /**
+                 * Waiting for XML fields
+                 * Reset Timer if User does not enter password
+                 *
+                 */
             }
         };
         return newTimer;
