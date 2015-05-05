@@ -3,7 +3,6 @@ package cse403.homesafe.Messaging;
 import android.telephony.SmsManager;
 
 import cse403.homesafe.Data.Contact;
-import cse403.homesafe.Data.Location;
 
 /**
  * Abstraction that serves as the interface for sending text messages
@@ -34,7 +33,8 @@ public class SMS implements Message {
      * @param location Last location of user
      * @param customMessage Customized message to be sent
      */
-    public void sendMessage(Contact recipient, Location location, String customMessage) {
+    @Override
+    public void sendMessage(Contact recipient, android.location.Location location, String customMessage) {
 
     }
 }
