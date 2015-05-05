@@ -2,6 +2,8 @@ package cse403.homesafe;
 
 import android.os.CountDownTimer;
 
+import java.util.concurrent.TimeUnit;
+
 import cse403.homesafe.Data.Contacts;
 
 /**
@@ -29,7 +31,7 @@ public class HSTimer {
      */
     public boolean startTimer() {
         timer.start();
-        return true;
+        return timer != null;
     }
 
     /**
@@ -39,7 +41,7 @@ public class HSTimer {
      */
     public boolean endTimer() {
         timer.onFinish();
-        return true;
+        return timer == null;
     }
 
     /**
@@ -49,7 +51,7 @@ public class HSTimer {
      */
     public boolean extendTimer(long extraTime) {
         // timer = setTimer(Long.parseLong(myTextField) * 1000 + extraTime);
-        return true;
+        return timer != null;
     }
 
     /**
@@ -59,7 +61,6 @@ public class HSTimer {
      * @return true if tier has been swtiched otherwise false.
      */
     public boolean switchTier(int tier) {
-        // Contacts.Tier = tier ??
         return true;
     }
 
@@ -73,6 +74,11 @@ public class HSTimer {
         CountDownTimer newTimer = new CountDownTimer(estimatedTimeArrival, COUNT_DOWN_INTERVAL) {
             @Override
             public void onTick(long millisUntilFinished) {
+                long millis = millisUntilFinished;
+                String hms =  String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(millis),
+                        TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)),
+                                TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MICROSECONDS.toMinutes(millis)));
+                System.out.println(hms);
                 /**
                  * Waiting for XML fields
                  * myTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
@@ -83,8 +89,8 @@ public class HSTimer {
             public void onFinish() {
                 /**
                  * Waiting for XML fields
-                 * myTextField.setText("Enter Password");
-                 * timer = setTimer(5 minutes);
+                 * Reset Timer if User does not enter password
+                 *
                  */
             }
         };
