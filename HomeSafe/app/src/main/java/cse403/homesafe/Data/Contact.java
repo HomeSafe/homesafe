@@ -137,4 +137,17 @@ public class Contact {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+    @Override
+    public String toString() {
+        String res =  "[" + name + " (" + cid + ") Tier: " + tier;
+        if(email != null && email.length() != 0) {
+            res += " | " + email;
+        }
+        if(phoneNumber != null && phoneNumber.length() != 0) {
+            res += " | " + phoneNumber;
+        }
+        res += "]";
+        return res;
+    }
 }
