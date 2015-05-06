@@ -11,7 +11,7 @@ import cse403.homesafe.Data.Contact;
 public class SMS implements Message {
 
     // Instance of SMS
-    private static SMS _instance = new SMS();
+    private static final SMS _instance = new SMS();
     private SmsManager smsManager;
 
     // Private singleton constructor
@@ -35,6 +35,10 @@ public class SMS implements Message {
      */
     @Override
     public void sendMessage(Contact recipient, android.location.Location location, String customMessage) {
+        String message = "";
 
+        message += "Location: " + location.toString() + "Message: " + customMessage;
+
+        smsManager.sendTextMessage(recipient.getPhoneNumber(), null, message, null, null);
     }
 }
