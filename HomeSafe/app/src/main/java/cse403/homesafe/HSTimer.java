@@ -14,14 +14,16 @@ public class HSTimer {
     public static final long COUNT_DOWN_INTERVAL = 1000;
 
     private CountDownTimer timer;
+    private Trip currentTrip;
 
     /**
      * Constructs a new HSTimer object.
      *
-     * @param estimatedTimeArrival :
+     * @param estimatedTimeArrival : the time estimated to arrive at the destination
      */
-    public HSTimer(long estimatedTimeArrival) {
-       timer = setTimer(estimatedTimeArrival);
+    public HSTimer(long estimatedTimeArrival, Trip currentTrip) {
+        timer = setTimer(estimatedTimeArrival);
+        this.currentTrip = currentTrip;
     }
 
     /**
@@ -50,18 +52,9 @@ public class HSTimer {
      * @return true if the timer has been extended otherwise false.
      */
     public boolean extendTimer(long extraTime) {
-        // timer = setTimer(Long.parseLong(myTextField) * 1000 + extraTime);
+        // long timeRemaining = Long.parseLong(myTextField) ;
+        // timer = setTimer(timeRemaining + extraTime);
         return timer != null;
-    }
-
-    /**
-     * Switches tier level.
-     *
-     * @param tier : the tier level.
-     * @return true if tier has been swtiched otherwise false.
-     */
-    public boolean switchTier(int tier) {
-        return true;
     }
 
     /**
@@ -77,21 +70,17 @@ public class HSTimer {
                 long millis = millisUntilFinished;
                 String hms =  String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(millis),
                         TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)),
-                                TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MICROSECONDS.toMinutes(millis)));
+                        TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MICROSECONDS.toMinutes(millis)));
                 System.out.println(hms);
                 /**
                  * Waiting for XML fields
-                 * myTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
+                 * myTextField.setText("seconds remaining: " + hms);
                  */
             }
 
             @Override
             public void onFinish() {
-                /**
-                 * Waiting for XML fields
-                 * Reset Timer if User does not enter password
-                 *
-                 */
+                currentTrip.timerEndAction();
             }
         };
         return newTimer;
