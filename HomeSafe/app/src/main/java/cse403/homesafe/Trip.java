@@ -1,19 +1,28 @@
 package cse403.homesafe;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.support.v7.app.ActionBarActivity;
+import android.widget.EditText;
+
 import cse403.homesafe.Data.Contacts;
 import cse403.homesafe.Data.Location;
+import cse403.homesafe.Data.SecurityData;
 import cse403.homesafe.Messaging.Messenger;
 
 /**
  * Holds methods to perform various activities during the trip.
  */
-public class Trip {
+public class Trip extends ActionBarActivity {
 
     private int tier;
     private Location startLocation;
     private Location endLocation;
     private HSTimer timer;
     private boolean arrived;
+
+    private String enteredPassword;
 
     /**
      * Constructor
@@ -45,14 +54,20 @@ public class Trip {
      * Callback action for timer when time is up. Prompt for extend or end trip
      */
     public void timerEndAction() {
-
+        while (true) {
+            boolean correct = verifyPassword();
+            if (correct) {
+                extendTime();
+                break;
+            }
+        }
     }
 
     /**
      * Extend time to arrive at destination
      */
-    public void extendTime(long extraTime) {
-        timer.extendTimer(extraTime);
+    public void extendTime() {
+        timer.extendTimer(promptForExtendTime());
     }
 
     /**
@@ -67,16 +82,44 @@ public class Trip {
      * @return password entered by user
      */
     private String promptForPassword() {
-        return null;
+        final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+        alert.setTitle("Unlock");
+        alert.setMessage("Please Enter Password");
+
+        // Set an EditText view to get user input
+        final EditText input = new EditText(this);
+        alert.setView(input);
+
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                enteredPassword = input.getText().toString();
+                alert.notify();
+            }
+        });
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                enteredPassword = null;
+            }
+        });
+
+        alert.show();
+        try {
+            alert.wait();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return enteredPassword;
     }
 
     /**
      * Verify password given against stored passwords
-     * @param password  Password entered by user
      * @return          True if given password matches stored password, false otherwise
      */
-    private boolean verifyPassword(String password) {
-        return false;
+    private boolean verifyPassword() {
+        String pw = promptForPassword();
+        return SecurityData.getInstance().checkPwdRegular(pw);
     }
 
     /**
@@ -86,5 +129,4 @@ public class Trip {
     private long promptForExtendTime() {
         return 0;
     }
-
 }

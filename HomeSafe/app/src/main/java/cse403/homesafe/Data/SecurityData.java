@@ -1,19 +1,26 @@
 package cse403.homesafe.Data;
 
 /**
- * Created by Vivek on 4/28/15, modified by Ethan
+ * Created by Vivek on 4/28/15, modified by Ethan, Jacob
  *
  *  A securityData object stores passwords for both regular and emergency
  *  situation. It also provides functionality to check both passwords
- *  and increase the panic model.
+ *  and increase the panic model. Since SecuritData is a singleton, use
+ *  getInstance() to use its methods.
  */
 public class SecurityData {
     private String regularPwd;
     private String emergPwd;
 
+    private static SecurityData instance;
+
+    static {
+        //TODO: Read passwords from db
+        instance = new SecurityData(null, null);
+    }
 
     // Representation invariant:
-    // SecurityData must not be null;
+    // All fields must not be null;
 
     /**
      * constructor
@@ -21,9 +28,16 @@ public class SecurityData {
      * @param emergPwd  password for emergency situation
      * @throws IllegalArgumentException if regularPwd or emergPwd is null
      */
-    public SecurityData(String regularPwd, String emergPwd) {
+    private SecurityData(String regularPwd, String emergPwd) {
         this.regularPwd = regularPwd;
         this.emergPwd = emergPwd;
+    }
+
+    /*
+     * @return An instance of the SecurityData singleton.
+     */
+    public static SecurityData getInstance() {
+        return instance;
     }
 
     /**
@@ -32,8 +46,10 @@ public class SecurityData {
      * @return  true if password is correct, negative if incorrect
      * @throws IllegalArgumentException if regularPwd is null
      */
-    protected boolean checkPwdRegular(String regularPwd) {
-        return false;
+    public boolean checkPwdRegular(String regularPwd) {
+        if (regularPwd == null)
+            throw new IllegalArgumentException("Null regular password.");
+        return regularPwd.equals(this.regularPwd);
     }
 
     /**
@@ -42,8 +58,10 @@ public class SecurityData {
      * @return  true if password is correct, negative if incorrect
      * @throws IllegalArgumentException if emergPwd is null
      */
-    protected boolean checkPwdEmergency(String emergPwd) {
-        return false;
+    public boolean checkPwdEmergency(String emergPwd) {
+        if (regularPwd == null)
+            throw new IllegalArgumentException("Null emerg password.");
+        return emergPwd.equals(this.emergPwd);
     }
 
     /**
