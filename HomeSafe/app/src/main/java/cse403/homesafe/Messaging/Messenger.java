@@ -4,7 +4,7 @@ import java.util.List;
 
 import cse403.homesafe.Data.Contact;
 import cse403.homesafe.Data.Contacts;
-import cse403.homesafe.Data.Location;  // May substitute with android.location.Location
+import android.location.Location;  // May substitute with android.location.Location
 
 /**
  * Handles the sending of messages by the retrieving appropriate contacts and sending
@@ -22,7 +22,7 @@ public class Messenger {
      * @param location  Last known user location
      */
     public static void sendNotifications (Contacts.Tier tier, Location location) {
-        Contacts contacts = new Contacts();
+        Contacts contacts = Contacts.getInstance();
         List<Contact> contactsNotified = contacts.getContactsInTier(tier);
         for (Contact c : contactsNotified) {
             if (!c.getEmail().equals(""))  // TODO (Alex): Change to '!= null' if Contact changes behavior
