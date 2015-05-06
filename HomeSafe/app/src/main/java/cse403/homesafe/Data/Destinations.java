@@ -1,5 +1,7 @@
 package cse403.homesafe.Data;
 
+import android.location.Location;
+
 import java.util.LinkedList;
 
 /**
@@ -36,7 +38,7 @@ public class Destinations {
      * @return      True if adding Location is successful, false otherwise
      */
     public boolean addDestination(Location loc) {
-        return false;
+        return destinations.add(loc);
     }
 
     /**
@@ -45,6 +47,11 @@ public class Destinations {
      * @return      True if removing Location is successful, false otherwise
      */
     public boolean removeDestination(Location loc) {
-        return false;
+        return destinations.remove(loc);
     }
+
+    public LinkedList<Location> getDestinations() {
+        return destinations;
+    }
+
 }
