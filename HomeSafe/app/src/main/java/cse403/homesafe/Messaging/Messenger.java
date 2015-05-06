@@ -4,7 +4,12 @@ import java.util.List;
 
 import cse403.homesafe.Data.Contact;
 import cse403.homesafe.Data.Contacts;
+import cse403.homesafe.Utility.ContextHolder;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Location;  // May substitute with android.location.Location
+import android.preference.PreferenceManager;
 
 /**
  * Handles the sending of messages by the retrieving appropriate contacts and sending
@@ -22,6 +27,15 @@ public class Messenger {
      * @param location  Last known user location
      */
     public static void sendNotifications (Contacts.Tier tier, Location location) {
+        Context currentContext = ContextHolder.getContext();
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(currentContext);
+        String customMessage = preferences.getString("customMessage", null);
+
+        if (customMessage == null) {
+            throw new RuntimeException("No custom message found");
+        }
+
         Contacts contacts = Contacts.getInstance();
         List<Contact> contactsNotified = contacts.getContactsInTier(tier);
         for (Contact c : contactsNotified) {

@@ -10,19 +10,57 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 
 import cse403.homesafe.Data.Contact;
+import cse403.homesafe.Utility.ContextHolder;
+
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.mail.util.ByteArrayDataSource;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.security.AccessController;
+import java.security.Security;
+import java.util.Properties;
+
+import java.security.AccessController;
+import java.security.Provider;
 
 /**
  * Abstraction that serves as the interface for sending emails through TODO: Decide email service
  */
-public class Email extends Service implements Message {
+public class Email extends javax.mail.Authenticator implements cse403.homesafe.Messaging.Message {
 
-    private static Email _instance = new Email();
+    private String mailhost = "smtp.gmail.com";
+    private String user;
+    private String password;
+    private Session session;
 
-    private Email() { }
+    private static Email _instance;
 
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
+    private Email(String user, String password) {
+        this.user = user;
+        this.password = password;
+
+        Properties props = new Properties();
+        props.setProperty("mail.transport.protocol", "smtp");
+        props.setProperty("mail.host", mailhost);
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.port", "465");
+        props.put("mail.smtp.socketFactory.port", "465");
+        props.put("mail.smtp.socketFactory.class",
+                "javax.net.ssl.SSLSocketFactory");
+        props.put("mail.smtp.socketFactory.fallback", "false");
+        props.setProperty("mail.smtp.quitwait", "false");
+
+        session = Session.getDefaultInstance(props, this);
     }
 
     /**
@@ -30,6 +68,8 @@ public class Email extends Service implements Message {
      * @return Instance of Email
      */
     public static Email getInstance() {
+        if (_instance == null)
+            _instance = new Email("homesafealerts@gmail.com", "eminatorlak");
         return _instance;
     }
 
@@ -40,24 +80,54 @@ public class Email extends Service implements Message {
      * @param customMessage Customized message to be sent
      */
     public void sendMessage(Contact recipient, Location location, String customMessage) {
+        String recipientEmail = recipient.getEmail();
 
-        Context context = getApplicationContext();  // Current application context
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);  // Lookup preferences
-        String userName = prefs.getString("name", null);  // Lookup user's name in preferences, return null if not found
-        if (userName == null)
-            throw new RuntimeException("User's name was not set");
+        Context currentContext = ContextHolder.getContext();
 
-        String emailSubject = userName + " May Need Your Help";
-        String emailBody = userName + " was using HomeSafe, a walking safety app. They set a destination but"
-                + " have not checked in with the app. Their last known coordinates were (" + location.getLatitude() + ", "
-                + location.getLongitude() + "). You should check in with them.";
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(currentContext);
+        String userFirstName = preferences.getString("firstName", null);
+        String userLastName = preferences.getString("lastName", null);
 
-        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
-        emailIntent.setType("text/plain");
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, emailSubject);
-        emailIntent.putExtra(Intent.EXTRA_TEXT, emailBody);
-        emailIntent.setData(Uri.parse("mailto:" + recipient.getEmail()));
-        emailIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(emailIntent);
+        if (userFirstName == null || userLastName == null)
+            throw new RuntimeException("User's first or last name is missing.");
+
+
+        String subject = userFirstName + " " + userLastName + " May Need Your Help";
+        String body = userFirstName + " was using HomeSafe, a walking safety app.\n\n They were"
+                + " using the app to get to a destination, but did not check in with the app."
+                + " As a result, this is an automated email being sent to all of " + userFirstName
+                + "'s contacts. Their last know location is (" + location.getLatitude() + ", "
+                + location.getLongitude() + "). You may need to check in with " + userFirstName + "."
+                + "\n\n" + userFirstName + " says: " + customMessage;
+
+        try {
+            sendMail(subject, body, "homesafealerts@gmail.com", recipientEmail);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
+    protected PasswordAuthentication getPasswordAuthentication() {
+        return new PasswordAuthentication(user, password);
+    }
+
+    private synchronized void sendMail(String subject, String body, String sender, String recipients) throws Exception {
+        try{
+            MimeMessage message = new MimeMessage(session);
+            DataHandler handler = new DataHandler(new ByteArrayDataSource(body.getBytes(), "text/plain"));
+            message.setSender(new InternetAddress(sender));
+            message.setSubject(subject);
+            message.setDataHandler(handler);
+            if (recipients.indexOf(',') > 0)
+                message.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(recipients));
+            else
+                message.setRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(recipients));
+            Transport.send(message);
+        }catch(Exception e){
+
+        }
+    }
+
+
 }
+
