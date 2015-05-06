@@ -20,6 +20,7 @@ public class HSTimer {
      * Constructs a new HSTimer object.
      *
      * @param estimatedTimeArrival : the time estimated to arrive at the destination
+     * @param currentTrip : the reference to the trip that this timer belongs to
      */
     public HSTimer(long estimatedTimeArrival, Trip currentTrip) {
         timer = setTimer(estimatedTimeArrival);
@@ -81,6 +82,7 @@ public class HSTimer {
             @Override
             public void onFinish() {
                 currentTrip.timerEndAction();
+                this.cancel();
             }
         };
         return newTimer;
