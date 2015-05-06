@@ -3,18 +3,17 @@ package cse403.homesafe;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 public class StartScreenActivity extends ActionBarActivity {
@@ -26,6 +25,7 @@ public class StartScreenActivity extends ActionBarActivity {
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     private String[] navList;
+    private Button buttonStart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +34,14 @@ public class StartScreenActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         mTitle = mDrawerTitle = getTitle();
+        buttonStart = (Button)findViewById(R.id.button);
         navList = getResources().getStringArray(R.array.menu_array);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.navList);
 
         addDrawerItems();
         setupDrawer();
+        setupButton();
 
         // enable ActionBar app icon to behave as action to toggle nav drawer
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -57,20 +59,21 @@ public class StartScreenActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //TODO hardcoded case, needs a switch to go to three different screens
-                Intent i = null;
-
-                    if (position == 0) {
-                        i = new Intent(StartScreenActivity.this, ContactsActivity.class);
-                    }
-                    else if (position == 1) {
-                        i = new Intent(StartScreenActivity.this, FavLocationsActivity.class);
-                    }
-                    startActivity(i);
-                }
+                Intent i = new Intent(StartScreenActivity.this, ContactsActivity.class);
 //                i.putExtra("string", Yourlist.get(pos).sms);
-
+                startActivity(i);
 //                finish();
+            }
+        });
+    }
 
+    private void setupButton() {
+        buttonStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), Trip.class);
+                startActivity(i);
+            }
         });
     }
 
@@ -80,12 +83,14 @@ public class StartScreenActivity extends ActionBarActivity {
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
+                getSupportActionBar().setTitle("Menu");
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
+                getSupportActionBar().setTitle("HomeSafe");
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
@@ -111,14 +116,13 @@ public class StartScreenActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // The action bar home/up action should open or close the drawer.
         // ActionBarDrawerToggle will take care of this.
+
         // Activate the navigation drawer toggle
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
         switch(item.getItemId()) {
-
             default:
-                Log.d("", "heheheh Item id is: " + item.getItemId());
                 return super.onOptionsItemSelected(item);
         }
     }
