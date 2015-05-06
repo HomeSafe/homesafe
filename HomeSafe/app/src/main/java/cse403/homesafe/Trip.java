@@ -3,11 +3,13 @@ package cse403.homesafe;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.v7.app.ActionBarActivity;
 import android.widget.EditText;
+import android.location.Location;
 
 import cse403.homesafe.Data.Contacts;
-import cse403.homesafe.Data.Location;
 import cse403.homesafe.Data.SecurityData;
 import cse403.homesafe.Messaging.Messenger;
 
@@ -24,15 +26,21 @@ public class Trip extends ActionBarActivity {
 
     private String enteredPassword;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
+        super.onCreate(savedInstanceState, persistentState);
+    }
+
     /**
      * Constructor
      * @param endLocation   Destination location
      * @param delay         Estimated time to arrive at destination
      */
     public Trip(Location endLocation, long delay) {
-        this.endLocation = endLocation;
-        timer = new HSTimer(delay);
+        this.endLocation = null;
+        timer = new HSTimer(delay, this);
         arrived = false;
+        timerEndAction();
     }
 
     /**
@@ -54,13 +62,13 @@ public class Trip extends ActionBarActivity {
      * Callback action for timer when time is up. Prompt for extend or end trip
      */
     public void timerEndAction() {
-        while (true) {
+        //while (true) {
             boolean correct = verifyPassword();
             if (correct) {
                 extendTime();
-                break;
+        //        break;
             }
-        }
+        //}
     }
 
     /**
@@ -94,7 +102,6 @@ public class Trip extends ActionBarActivity {
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 enteredPassword = input.getText().toString();
-                alert.notify();
             }
         });
 
@@ -105,11 +112,6 @@ public class Trip extends ActionBarActivity {
         });
 
         alert.show();
-        try {
-            alert.wait();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         return enteredPassword;
     }
 
