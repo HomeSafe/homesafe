@@ -40,7 +40,7 @@ public class SMS implements Message {
     @Override
     public void sendMessage(Contact recipient, android.location.Location location, String customMessage) {
         String message = "";
-        Context context = ContextHolder.getInstance().getContext();
+        Context context = ContextHolder.getContext();
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         String userName = preferences.getString("name", null);
 
