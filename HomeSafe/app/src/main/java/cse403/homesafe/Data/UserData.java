@@ -11,4 +11,6 @@ public class UserData {
     private Contacts contacts;
     private SecurityData securityData;
     private Destinations destinations;
+
+
 }
