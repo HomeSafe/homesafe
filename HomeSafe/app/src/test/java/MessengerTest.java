@@ -1,8 +1,11 @@
+import android.location.Location;
+
 import junit.framework.TestCase;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import cse403.homesafe.Data.Contacts;
 import cse403.homesafe.Messaging.Messenger;
 
 /**
@@ -17,7 +20,6 @@ public class MessengerTest extends TestCase {
 
     @Test
     public void testSendNotifications() {
-        Messenger.sendNotifications();
         // assertEquals();
     }
 }
