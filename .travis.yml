@@ -7,14 +7,3 @@ android:
 
 script:
     - ./HomeSafe/gradlew test
-
-notifications:
-    email:
-        - dliuxy94@uw.edu
-        - jahrndez@uw.edu
-        - jestelle@uw.edu
-        - kitsonl@uw.edu
-        - leaf94@uw.edu
-        - luluyi@uw.edu
-        - rcfox@uw.edu
-        - paramv@uw.edu
