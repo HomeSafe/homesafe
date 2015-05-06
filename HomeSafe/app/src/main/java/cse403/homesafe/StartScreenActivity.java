@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 public class StartScreenActivity extends ActionBarActivity {
@@ -24,6 +25,7 @@ public class StartScreenActivity extends ActionBarActivity {
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     private String[] navList;
+    private Button buttonStart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,12 +34,14 @@ public class StartScreenActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         mTitle = mDrawerTitle = getTitle();
+        buttonStart = (Button)findViewById(R.id.button);
         navList = getResources().getStringArray(R.array.menu_array);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.navList);
 
         addDrawerItems();
         setupDrawer();
+        setupButton();
 
         // enable ActionBar app icon to behave as action to toggle nav drawer
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -55,10 +59,20 @@ public class StartScreenActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //TODO hardcoded case, needs a switch to go to three different screens
-                Intent i= new Intent(StartScreenActivity.this, ContactsActivity.class);
+                Intent i = new Intent(StartScreenActivity.this, ContactsActivity.class);
 //                i.putExtra("string", Yourlist.get(pos).sms);
                 startActivity(i);
 //                finish();
+            }
+        });
+    }
+
+    private void setupButton() {
+        buttonStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), Trip.class);
+                startActivity(i);
             }
         });
     }
