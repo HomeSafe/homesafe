@@ -1,8 +1,12 @@
 package cse403.homesafe.Messaging;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.telephony.SmsManager;
 
 import cse403.homesafe.Data.Contact;
+import cse403.homesafe.Utility.ContextHolder;
 
 /**
  * Abstraction that serves as the interface for sending text messages
@@ -36,8 +40,16 @@ public class SMS implements Message {
     @Override
     public void sendMessage(Contact recipient, android.location.Location location, String customMessage) {
         String message = "";
+        Context context = ContextHolder.getInstance().getContext();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String userName = preferences.getString("name", null);
 
-        message += "Location: " + location.toString() + "Message: " + customMessage;
+        if (userName == null) {
+            throw new RuntimeException("No user name found.");
+        }
+
+        message = "This user may need your help.\n";
+        message += "User: " + userName + "\nLocation: " + location.toString() + "\nMessage: " + customMessage;
 
         smsManager.sendTextMessage(recipient.getPhoneNumber(), null, message, null, null);
     }
