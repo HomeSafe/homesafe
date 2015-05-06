@@ -12,6 +12,7 @@ public class FavLocationsActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fav_locations);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override

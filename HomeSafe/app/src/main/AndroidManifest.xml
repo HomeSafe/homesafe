@@ -34,8 +34,12 @@
                 android:value=".StartScreenActivity" />
         </activity>
         <activity
+            android:exported="true"
             android:name=".FavLocationsActivity"
             android:label="@string/title_activity_fav_locations" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".StartScreenActivity" />
         </activity>
         <activity
             android:name=".SettingsActivity"

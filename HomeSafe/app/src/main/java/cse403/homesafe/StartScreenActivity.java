@@ -3,10 +3,12 @@ package cse403.homesafe;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -55,11 +57,20 @@ public class StartScreenActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //TODO hardcoded case, needs a switch to go to three different screens
-                Intent i= new Intent(StartScreenActivity.this, ContactsActivity.class);
+                Intent i = null;
+
+                    if (position == 0) {
+                        i = new Intent(StartScreenActivity.this, ContactsActivity.class);
+                    }
+                    else if (position == 1) {
+                        i = new Intent(StartScreenActivity.this, FavLocationsActivity.class);
+                    }
+                    startActivity(i);
+                }
 //                i.putExtra("string", Yourlist.get(pos).sms);
-                startActivity(i);
+
 //                finish();
-            }
+
         });
     }
 
@@ -69,14 +80,12 @@ public class StartScreenActivity extends ActionBarActivity {
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                getSupportActionBar().setTitle("Menu");
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-                getSupportActionBar().setTitle("HomeSafe");
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
@@ -102,13 +111,14 @@ public class StartScreenActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // The action bar home/up action should open or close the drawer.
         // ActionBarDrawerToggle will take care of this.
-
         // Activate the navigation drawer toggle
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
         switch(item.getItemId()) {
+
             default:
+                Log.d("", "heheheh Item id is: " + item.getItemId());
                 return super.onOptionsItemSelected(item);
         }
     }
