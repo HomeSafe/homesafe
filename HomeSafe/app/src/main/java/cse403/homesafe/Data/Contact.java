@@ -44,7 +44,7 @@ public class Contact {
      * @param tier The tier of the new Contact (ONE, TWO, THREE)
      */
     public Contact(String name, String phoneNumber, Contacts.Tier tier) {
-        this(name, "", phoneNumber, tier);
+        this(name, null, phoneNumber, tier);
     }
 
     /**
@@ -52,7 +52,7 @@ public class Contact {
      * @param name The name of the new Contact
      */
     public Contact(String name) {
-        this(name, "", "", Contacts.Tier.ONE);
+        this(name, null, null, Contacts.Tier.ONE);
     }
 
     /**
