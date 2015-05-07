@@ -140,6 +140,8 @@ public class Contact {
 
     @Override
     public String toString() {
+        // Currently toString will return a String of the form
+        // [NAME (CID) Tier: TIER | EMAIL | PHONE]
         String res =  "[" + name + " (" + cid + ") Tier: " + tier;
         if(email != null && email.length() != 0) {
             res += " | " + email;
