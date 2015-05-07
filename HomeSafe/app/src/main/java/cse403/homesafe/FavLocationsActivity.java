@@ -13,6 +13,7 @@ public class FavLocationsActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fav_locations);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Favorite Locations");
     }
 
     @Override
