@@ -59,10 +59,16 @@ public class StartScreenActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //TODO hardcoded case, needs a switch to go to three different screens
-                Intent i = new Intent(StartScreenActivity.this, ContactsActivity.class);
+                Intent i;
+                if(position == 0){
+                    i = new Intent(StartScreenActivity.this, ContactsActivity.class);
+                } else if(position == 1){
+                    i = new Intent(StartScreenActivity.this, FavLocationsActivity.class);
+                } else {
+                    i = new Intent(StartScreenActivity.this, SettingsActivity.class);
+                }
 //                i.putExtra("string", Yourlist.get(pos).sms);
                 startActivity(i);
-//                finish();
             }
         });
     }
