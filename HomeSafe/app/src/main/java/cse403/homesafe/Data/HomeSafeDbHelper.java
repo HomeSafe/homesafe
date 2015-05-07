@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
- * Created by yellowleaf on 5/5/15.
+ * Created by Ethan on 5/5/15.
  */
 public class HomeSafeDbHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
