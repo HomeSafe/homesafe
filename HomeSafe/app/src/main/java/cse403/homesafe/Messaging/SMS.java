@@ -49,7 +49,11 @@ public class SMS implements Message {
         }
 
         message = "This user may need your help.\n";
-        message += "User: " + userName + "\nLocation: " + location.toString() + "\nMessage: " + customMessage;
+        message += "User: " + userName + "\nLocation: " + location.toString();
+
+        if (!customMessage.isEmpty()) {
+            message += "\nMessage: " + customMessage;
+        }
 
         smsManager.sendTextMessage(recipient.getPhoneNumber(), null, message, null, null);
     }

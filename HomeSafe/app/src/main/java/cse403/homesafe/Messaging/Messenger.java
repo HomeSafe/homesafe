@@ -36,13 +36,15 @@ public class Messenger {
             throw new RuntimeException("No custom message found");
         }
 
+        customMessage = customMessage.trim();
+
         Contacts contacts = Contacts.getInstance();
         List<Contact> contactsNotified = contacts.getContactsInTier(tier);
         for (Contact c : contactsNotified) {
             if (!c.getEmail().equals(""))  // TODO (Alex): Change to '!= null' if Contact changes behavior
-                email.sendMessage(c, location, null);  // Change customMessage parameter to appropriate in SharedPreferences
+                email.sendMessage(c, location, customMessage);  // Change customMessage parameter to appropriate in SharedPreferences
             if (!c.getPhoneNumber().equals(""))  // TODO (Alex): Change to '!= null' if Contact changes behavior
-                sms.sendMessage(c, location, null);
+                sms.sendMessage(c, location, customMessage);
         }
     }
 }
