@@ -1,6 +1,7 @@
 package cse403.homesafe.Data;
 
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * A ContactsActivity object represents the collection
@@ -9,7 +10,7 @@ import java.util.LinkedList;
  * This class provides functionality for adding and removing contacts.
  */
 public class Contacts{
-    private LinkedList<Contact> contacts;
+    private List<Contact> contacts;
     private static Contacts instance = new Contacts();
 
     /**
@@ -69,11 +70,11 @@ public class Contacts{
      * @param tier The desired Tier of the returned objects
      * @return A LinkedList<Contact> which contains all Contact objects with the given Tier
      */
-    public LinkedList<Contact> getContactsInTier(Contacts.Tier tier) {
+    public List<Contact> getContactsInTier(Contacts.Tier tier) {
         if (tier != Tier.ONE && tier != Tier.TWO && tier != Tier.THREE) {
             return null;
         }
-        LinkedList<Contact> result = new LinkedList<Contact>();
+        List<Contact> result = new LinkedList<Contact>();
         for(Contact c : contacts) {
             if(c.getTier() == tier) {
                 result.add(c);

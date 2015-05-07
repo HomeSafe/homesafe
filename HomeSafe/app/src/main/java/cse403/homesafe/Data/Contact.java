@@ -9,7 +9,7 @@ package cse403.homesafe.Data;
  * the alert level at which this Contact should be notified.
  */
 public class Contact {
-    private int cid;
+    private long cid;
     private Contacts.Tier tier;
     private String name;
     private String email;
@@ -34,7 +34,6 @@ public class Contact {
         this.email = email;
         this.phoneNumber = email;
 
-        cid = (name + phoneNumber).hashCode();
     }
 
     /**
@@ -59,7 +58,7 @@ public class Contact {
      * Returns the Contact ID of this contact
      * @return This contact's Contact ID
      */
-    public int getCid() {
+    public long getCid() {
         return cid;
     }
 
@@ -67,7 +66,7 @@ public class Contact {
      * Sets the Contact ID of this contact
      * @param cid the new integer Contact ID to use for this contact
      */
-    public void setCid(int cid) {
+    public void setCid(long cid) {
         this.cid = cid;
     }
 
