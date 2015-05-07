@@ -42,6 +42,7 @@ public class Email extends javax.mail.Authenticator implements cse403.homesafe.M
     private String user;
     private String password;
     private Session session;
+    private Properties props;
 
     private static Email _instance;
 
@@ -49,7 +50,7 @@ public class Email extends javax.mail.Authenticator implements cse403.homesafe.M
         this.user = user;
         this.password = password;
 
-        Properties props = new Properties();
+        props = new Properties();
         props.setProperty("mail.transport.protocol", "smtp");
         props.setProperty("mail.host", mailhost);
         props.put("mail.smtp.auth", "true");
@@ -84,12 +85,15 @@ public class Email extends javax.mail.Authenticator implements cse403.homesafe.M
 
         Context currentContext = ContextHolder.getContext();
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(currentContext);
-        String userFirstName = preferences.getString("firstName", null);
-        String userLastName = preferences.getString("lastName", null);
+//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(currentContext);
+//        String userFirstName = preferences.getString("firstName", null);
+//        String userLastName = preferences.getString("lastName", null);
 
-        if (userFirstName == null || userLastName == null)
-            throw new RuntimeException("User's first or last name is missing.");
+        String userFirstName = "Joe";
+        String userLastName = "Doe";
+
+//        if (userFirstName == null || userLastName == null)
+//            throw new RuntimeException("User's first or last name is missing.");
 
 
         String subject = userFirstName + " " + userLastName + " May Need Your Help";
