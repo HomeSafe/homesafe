@@ -32,7 +32,7 @@ public class Contact {
         this.tier = tier;
         this.name = name;
         this.email = email;
-        this.phoneNumber = email;
+        this.phoneNumber = phoneNumber;
 
     }
 
