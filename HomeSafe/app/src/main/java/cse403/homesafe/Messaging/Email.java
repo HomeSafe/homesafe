@@ -1,42 +1,30 @@
 package cse403.homesafe.Messaging;
 
-import android.app.Service;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.location.Location;
-import android.net.Uri;
-import android.os.IBinder;
-import android.preference.PreferenceManager;
+
+import android.util.Log;
 
 import cse403.homesafe.Data.Contact;
 import cse403.homesafe.Utility.ContextHolder;
 
 import javax.activation.DataHandler;
-import javax.activation.DataSource;
+import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
-import javax.mail.Message;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.util.ByteArrayDataSource;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.security.AccessController;
-import java.security.Security;
 import java.util.Properties;
 
-import java.security.AccessController;
-import java.security.Provider;
-
 /**
- * Abstraction that serves as the interface for sending emails through TODO: Decide email service
+ * Abstraction that serves as the interface for sending emails through HomeSafe's
  */
 public class Email extends javax.mail.Authenticator implements cse403.homesafe.Messaging.Message {
+
+    private static final String TAG = "Email";
 
     private String mailhost = "smtp.gmail.com";
     private String user;
@@ -46,6 +34,8 @@ public class Email extends javax.mail.Authenticator implements cse403.homesafe.M
 
     private static Email _instance;
 
+    // Private constructor which initializes the instance Properties
+    // and sets user/password
     private Email(String user, String password) {
         this.user = user;
         this.password = password;
@@ -75,7 +65,7 @@ public class Email extends javax.mail.Authenticator implements cse403.homesafe.M
     }
 
     /**
-     * Sends email to recipient
+     * Sends email to recipient with specified Location and specified custom message.
      * @param recipient     Recipient of the intended message
      * @param location      Last location of user
      * @param customMessage Customized message to be sent
@@ -83,7 +73,7 @@ public class Email extends javax.mail.Authenticator implements cse403.homesafe.M
     public void sendMessage(Contact recipient, Location location, String customMessage) {
         String recipientEmail = recipient.getEmail();
 
-        Context currentContext = ContextHolder.getContext();
+        Context currentContext = ContextHolder.getContext();  // TODO: Ensure Context has been set from main activity
 
 //        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(currentContext);
 //        String userFirstName = preferences.getString("firstName", null);
@@ -111,6 +101,7 @@ public class Email extends javax.mail.Authenticator implements cse403.homesafe.M
         }
     }
 
+    // Authentication for email
     protected PasswordAuthentication getPasswordAuthentication() {
         return new PasswordAuthentication(user, password);
     }
@@ -127,8 +118,8 @@ public class Email extends javax.mail.Authenticator implements cse403.homesafe.M
             else
                 message.setRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(recipients));
             Transport.send(message);
-        }catch(Exception e){
-
+        } catch (MessagingException e){
+            Log.e(TAG, "Unable to send message.");
         }
     }
 
