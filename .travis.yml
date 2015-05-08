@@ -7,3 +7,10 @@ android:
 
 script:
     - ./HomeSafe/gradlew test
+
+notifications:
+    email:
+        recipients:
+          - homesafeapp@googlegroups.com
+        on_success: change
+        on_success: change
