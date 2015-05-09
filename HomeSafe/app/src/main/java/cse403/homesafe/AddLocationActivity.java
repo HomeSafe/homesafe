@@ -1,9 +1,13 @@
 package cse403.homesafe;
 
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 
 public class AddLocationActivity extends ActionBarActivity {
@@ -12,15 +16,18 @@ public class AddLocationActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_location);
-        getSupportActionBar().setTitle("Add new location");
         //TODO setting button discard changes
-    }
+        ActionBar mActionBar = getSupportActionBar();
+        mActionBar.setDisplayShowHomeEnabled(false);
+        mActionBar.setDisplayShowTitleEnabled(false);
+        LayoutInflater mInflater = LayoutInflater.from(this);
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_add_location, menu);
-        return true;
+        View mCustomView = mInflater.inflate(R.layout.actionbar_custom, null);
+        TextView mTitleTextView = (TextView) mCustomView.findViewById(R.id.title);
+        mTitleTextView.setText("Add new location");
+        //TODO version of Edit contact
+        mActionBar.setCustomView(mCustomView);
+        mActionBar.setDisplayShowCustomEnabled(true);
     }
 
     @Override
