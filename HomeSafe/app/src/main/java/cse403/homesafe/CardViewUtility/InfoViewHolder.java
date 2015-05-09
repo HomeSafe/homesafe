@@ -7,13 +7,13 @@ import android.widget.TextView;
 
 import cse403.homesafe.R;
 
-public class ContactViewHolder extends RecyclerView.ViewHolder {
+public class InfoViewHolder extends RecyclerView.ViewHolder {
 
     protected TextView titleText;
     protected TextView contentText;
     protected CardView card;
 
-    public ContactViewHolder(View itemView) {
+    public InfoViewHolder(View itemView) {
         super(itemView);
         titleText = (TextView) itemView.findViewById(R.id.name);
         //add more attribute here

@@ -11,26 +11,26 @@ import java.util.List;
 import cse403.homesafe.Data.Contact;
 import cse403.homesafe.R;
 
-public class MyRecyclerAdapter extends RecyclerView.Adapter<ContactViewHolder> {
+public class ContactRecyclerAdapter extends RecyclerView.Adapter<InfoViewHolder> {
 
     private List<Contact> contacts;
 
-    public MyRecyclerAdapter(List<Contact> contacts) {
+    public ContactRecyclerAdapter(List<Contact> contacts) {
         this.contacts = new ArrayList<Contact>();
         this.contacts.addAll(contacts);
     }
 
     @Override
-    public ContactViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public InfoViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
                 inflate(R.layout.card_view, viewGroup, false);
 
-        return new ContactViewHolder(itemView);
+        return new InfoViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(ContactViewHolder contactViewHolder, int i) {
+    public void onBindViewHolder(InfoViewHolder contactViewHolder, int i) {
         Contact contact = contacts.get(i);
         contactViewHolder.titleText.setText(contact.getName());
 //        contactViewHolder.contentText.setText(contact.getPhoneNumber());

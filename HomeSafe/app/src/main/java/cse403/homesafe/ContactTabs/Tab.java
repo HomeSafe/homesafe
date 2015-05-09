@@ -12,11 +12,11 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
-import cse403.homesafe.CardViewUtility.MyRecyclerAdapter;
+import cse403.homesafe.CardViewUtility.ContactRecyclerAdapter;
 import cse403.homesafe.Data.Contact;
 import cse403.homesafe.R;
 
-public class Tab1 extends Fragment {
+public class Tab extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -26,34 +26,19 @@ public class Tab1 extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(c);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(new MyRecyclerAdapter(generateContacts()));
-
-
+        recyclerView.setAdapter(new ContactRecyclerAdapter(generateContacts()));
         return view;
     }
 
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_test);
-//
-//        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerList);
-//        LinearLayoutManager llm = new LinearLayoutManager(this);
-//        llm.setOrientation(LinearLayoutManager.VERTICAL);
-//        recyclerView.setLayoutManager(llm);
-//
-//        recyclerView.setAdapter(new MyRecyclerAdapter(generateContacts()));
-//    }
-
     private ArrayList<Contact> generateContacts() {
-        ArrayList<Contact> palettes = new ArrayList<>();
-        palettes.add(new Contact("Luyi"));
-        palettes.add(new Contact("Luyi"));
-        palettes.add(new Contact("Luyi"));
-        palettes.add(new Contact("Luyi"));
-        palettes.add(new Contact("Luyi"));
-        palettes.add(new Contact("Luyi"));
-        palettes.add(new Contact("Luyi"));
-        return palettes;
+        ArrayList<Contact> contacts = new ArrayList<>();
+        contacts.add(new Contact("Luyi"));
+        contacts.add(new Contact("Luyi"));
+        contacts.add(new Contact("Luyi"));
+        contacts.add(new Contact("Luyi"));
+        contacts.add(new Contact("Luyi"));
+        contacts.add(new Contact("Luyi"));
+        contacts.add(new Contact("Luyi"));
+        return contacts;
     }
 }

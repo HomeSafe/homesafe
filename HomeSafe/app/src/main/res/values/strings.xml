@@ -12,15 +12,13 @@
     <string name="drawer_close">Drawer Closed</string>
     <string name="title_activity_contacts">Contacts</string>
 
-    <string name="hello_world">Hello world!</string>
-    <string name="title_activity_test">Test</string>
-
     <string name="title_activity_trip">Trip</string>
 
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
     <string name="title_activity_fav_locations">FavLocations</string>
-    <string name="person_name">Luyi</string>
-    <string name="person_phone">Luyi</string>
+    <string name="title_activity_add_contact">AddContactActivity</string>
+    <string name="title_activity_add_location">addLocationActivity</string>
+    <string name="action_accept">accept</string>
 </resources>

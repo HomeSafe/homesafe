@@ -3,26 +3,15 @@
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MainActivity"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto">
+    tools:context="cse403.homesafe.FavLocationsActivity">
 
-    <cse403.homesafe.ContactTabs.SlidingTabLayout
-        android:id="@+id/tabs"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerList"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:elevation="2dp"
-        android:background="@color/primary"/>
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/pager"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:layout_weight="1">
-    </android.support.v4.view.ViewPager>
+        android:layout_height="match_parent" />
 
     <com.melnykov.fab.FloatingActionButton
-        android:id="@+id/contacts_fab"
+        android:id="@+id/location_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
@@ -31,5 +20,4 @@
         android:tint="@android:color/white"
         fab:fab_colorNormal="@color/accent"
         />
-
 </FrameLayout>

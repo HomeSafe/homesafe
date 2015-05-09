@@ -1,5 +1,6 @@
 package cse403.homesafe;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.view.ViewPager;
@@ -8,6 +9,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +27,7 @@ import static cse403.homesafe.Data.HomeSafeContract.*;
 
 public class ContactsActivity extends ActionBarActivity {
     private final String TAG = "ContactsActivity";
+    FloatingActionButton fab;
 
     ViewPager pager;
     ViewPagerAdapter adapter;
@@ -64,6 +69,9 @@ public class ContactsActivity extends ActionBarActivity {
         // Setting the ViewPager For the SlidingTabsLayout
         tabs.setViewPager(pager);
         tabs.setElevation(8); //red is fine, only for api21
+
+        fab = (FloatingActionButton) findViewById(R.id.contacts_fab);
+        setUpFab();
     }
 
     @Override
@@ -114,6 +122,16 @@ public class ContactsActivity extends ActionBarActivity {
 
         }
 
+    }
+
+    private void setUpFab(){
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ContactsActivity.this, AddContactActivity.class);
+                startActivity(i);
+            }
+        });
     }
 
     private boolean saveContactToDb(Contact contact) {

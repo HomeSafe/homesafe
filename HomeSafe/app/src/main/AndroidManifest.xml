@@ -34,8 +34,8 @@
                 android:value=".StartScreenActivity" />
         </activity>
         <activity
-            android:exported="true"
             android:name=".FavLocationsActivity"
+            android:exported="true"
             android:label="@string/title_activity_fav_locations" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -46,8 +46,12 @@
             android:label="@string/title_activity_settings" >
         </activity>
         <activity
-            android:name=".Trip"
-            android:label="@string/title_activity_trip" >
+            android:name=".AddContactActivity"
+            android:label="@string/title_activity_add_contact" >
+        </activity>
+        <activity
+            android:name=".AddLocationActivity"
+            android:label="@string/title_activity_add_location" >
         </activity>
     </application>
 

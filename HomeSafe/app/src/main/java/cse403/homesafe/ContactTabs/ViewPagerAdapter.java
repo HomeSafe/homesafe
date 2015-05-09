@@ -25,18 +25,17 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
         if(position == 0) // if the position is 0 we are returning the First tab
         {
-            Tab1 tab1 = new Tab1();
-            return tab1;
+            Tab tab = new Tab();
+            return tab;
         }
         else if(position == 1)
         {
-            Tab2 tab2 = new Tab2();
-            return tab2;
+            Tab tab = new Tab();
+            return tab;
         } else {
-            Tab3 tab3 = new Tab3();
-            return tab3;
+            Tab tab = new Tab();
+            return tab;
         }
-
     }
 
     // This method return the titles for the Tabs in the Tab Strip
