@@ -59,17 +59,9 @@ public class DbFactory {
     public static boolean retrieveFromDb(HomeSafeDbHelper mDbHelper) {
         try {
             SQLiteDatabase db = mDbHelper.getReadableDatabase();
-            String[] projection = {
-                    HomeSafeContract.ContactEntry._ID,
-                    HomeSafeContract.ContactEntry.COLUMN_NAME,
-                    HomeSafeContract.ContactEntry.COLUMN_EMAIL,
-                    HomeSafeContract.ContactEntry.COLUMN_PHONE,
-                    HomeSafeContract.ContactEntry.COLUMN_TIER,
-            };
-
             Cursor c = db.query(
                     HomeSafeContract.ContactEntry.TABLE_NAME,  // The table to query
-                    projection,                               // The columns to return
+                    null,                       // The columns to return
                     null,                                // The columns for the WHERE clause
                     null,                            // The values for the WHERE clause
                     null,                                     // don't group the rows
@@ -77,7 +69,7 @@ public class DbFactory {
                     null                                 // The sort order
             );
 
-            while (!c.isLast()) {
+            while (c.moveToNext()) {
                 long id = c.getLong(c.getColumnIndexOrThrow(HomeSafeContract.ContactEntry._ID));
                 String name = c.getString(c.getColumnIndexOrThrow(HomeSafeContract.ContactEntry.COLUMN_NAME));
                 String email = c.getString(c.getColumnIndexOrThrow(HomeSafeContract.ContactEntry.COLUMN_EMAIL));
