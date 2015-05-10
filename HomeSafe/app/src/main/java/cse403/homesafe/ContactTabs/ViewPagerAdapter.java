@@ -25,16 +25,16 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
         if(position == 0) // if the position is 0 we are returning the First tab
         {
-            Tab tab = new Tab();
+            Tab1 tab = new Tab1();
             return tab;
         }
         else if(position == 1)
         {
-            Tab tab = new Tab();
+            Tab2 tab = new Tab2();
             return tab;
         } else {
-            Tab tab = new Tab();
-            return tab;
+            Tab3 tab1 = new Tab3();
+            return tab1;
         }
     }
 

@@ -50,6 +50,10 @@
             android:label="@string/title_activity_add_contact" >
         </activity>
         <activity
+            android:name=".AddLocationActivity"
+            android:label="@string/title_activity_add_location" >
+        </activity>
+        <activity
             android:name="Trip">
         </activity>
         <activity

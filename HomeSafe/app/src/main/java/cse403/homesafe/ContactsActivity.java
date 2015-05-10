@@ -26,14 +26,12 @@ import cse403.homesafe.Data.HomeSafeDbHelper;
 import static cse403.homesafe.Data.HomeSafeContract.*;
 
 public class ContactsActivity extends ActionBarActivity {
-    private final String TAG = "ContactsActivity";
     FloatingActionButton fab;
 
     ViewPager pager;
     ViewPagerAdapter adapter;
     SlidingTabLayout tabs;
     HomeSafeDbHelper mDbHelper;
-    Contacts mContactList;
     CharSequence Titles[]={"Tier 1","Tier 2", "Tier 3"};
     int Numboftabs = 3;
 
@@ -42,7 +40,6 @@ public class ContactsActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts);
         mDbHelper = new HomeSafeDbHelper(this);
-        mContactList = mContactList.getInstance();
         // Creating The Toolbar and setting it as the Toolbar for the activity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setElevation(0);

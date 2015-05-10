@@ -9,14 +9,13 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import cse403.homesafe.Data.Contact;
 import cse403.homesafe.R;
 
 
 /**
  * Created by luluyi on 5/8/15.
  */
-public class LocationRecyclerAdapter extends RecyclerView.Adapter<InfoViewHolder> {
+public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationViewHolder> {
 
     private List<Location> locations;
 
@@ -26,19 +25,19 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<InfoViewHolder
     }
 
     @Override
-    public InfoViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public LocationViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
-                inflate(R.layout.card_view, viewGroup, false);
+                inflate(R.layout.location_card_view, viewGroup, false);
 
-        return new InfoViewHolder(itemView);
+        return new LocationViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(InfoViewHolder contactViewHolder, int i) {
+    public void onBindViewHolder(LocationViewHolder locationViewHolder, int i) {
         Location location = locations.get(i);
         //TODO I need the location name
-        contactViewHolder.titleText.setText(location.getProvider());
+        locationViewHolder.name.setText(location.getProvider());
 //        contactViewHolder.contentText.setText(contact.getPhoneNumber());
 //        contactViewHolder.card.setCardBackgroundColor(contact.getIntValue());
     }

@@ -7,9 +7,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import cse403.homesafe.Data.Contact;
 import cse403.homesafe.Data.Contacts;
@@ -23,13 +26,12 @@ public class AddContactActivity extends ActionBarActivity {
     HomeSafeDbHelper mDbHelper;
     Contacts mContactList;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_contact);
         mDbHelper = new HomeSafeDbHelper(this);
-        mContactList = mContactList.getInstance();
+        mContactList = Contacts.getInstance();
         //TODO setting button discard changes
         ActionBar mActionBar = getSupportActionBar();
         mActionBar.setDisplayShowHomeEnabled(false);
@@ -59,8 +61,20 @@ public class AddContactActivity extends ActionBarActivity {
         saveContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Contact contact = null;
-                Contacts.Tier tier = null;
+                EditText mEditName = (EditText)findViewById(R.id.name_text);
+                EditText mEditPhone = (EditText)findViewById(R.id.phone_text);
+                EditText mEditEmail = (EditText)findViewById(R.id.email_text);
+                EditText mEditTier = (EditText)findViewById(R.id.tier_text);
+                int tierNum = Integer.parseInt(mEditTier.getText().toString());
+                Contacts.Tier tier;
+                if(tierNum == 1){
+                    tier = Contacts.Tier.ONE;
+                } else if(tierNum == 2){
+                    tier = Contacts.Tier.TWO;
+                } else {
+                    tier = Contacts.Tier.THREE;
+                }
+                Contact contact = new Contact(mEditName.getText().toString(), mEditEmail.getText().toString(), mEditPhone.getText().toString(), tier);
                 mContactList.addContact(contact, tier);
                 DbFactory.addContactToDb(contact, mDbHelper);
                 Intent i = new Intent(AddContactActivity.this, ContactsActivity.class);

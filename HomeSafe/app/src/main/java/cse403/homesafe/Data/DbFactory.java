@@ -11,8 +11,8 @@ import android.util.Log;
  */
 public class DbFactory {
     private static final String TAG = "DataBase Factory";
-    private static Contacts mContactList;
-    private static Destinations mDestinationList;
+    private static Contacts mContactList = Contacts.getInstance();
+    private static Destinations mDestinationList = Destinations.getInstance();
 
     public static boolean addContactToDb(Contact contact, HomeSafeDbHelper mDbHelper){
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
