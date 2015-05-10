@@ -16,6 +16,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
+import cse403.homesafe.Data.Contacts;
+import cse403.homesafe.Data.DbFactory;
+import cse403.homesafe.Data.Destinations;
+import cse403.homesafe.Data.HomeSafeDbHelper;
+
 public class StartScreenActivity extends ActionBarActivity {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -26,12 +31,19 @@ public class StartScreenActivity extends ActionBarActivity {
     private CharSequence mTitle;
     private String[] navList;
     private Button buttonStart;
+    private HomeSafeDbHelper mDbHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_screen);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+
+        // Retrieve data from database
+        mDbHelper = new HomeSafeDbHelper(this);
+        DbFactory.retrieveFromDb(mDbHelper);
 
         mTitle = mDrawerTitle = getTitle();
         buttonStart = (Button)findViewById(R.id.button);

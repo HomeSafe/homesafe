@@ -42,7 +42,6 @@ public class ContactsActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts);
         mDbHelper = new HomeSafeDbHelper(this);
-        retrieveFromDb();
         mContactList = mContactList.getInstance();
         // Creating The Toolbar and setting it as the Toolbar for the activity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -76,52 +75,9 @@ public class ContactsActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        retrieveFromDb();
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_contacts, menu);
         return true;
-    }
-
-    private boolean retrieveFromDb() {
-        try {
-            SQLiteDatabase db = mDbHelper.getReadableDatabase();
-            String[] projection = {
-                    ContactEntry._ID,
-                    ContactEntry.COLUMN_NAME,
-                    ContactEntry.COLUMN_EMAIL,
-                    ContactEntry.COLUMN_PHONE,
-                    ContactEntry.COLUMN_TIER,
-            };
-
-            Cursor c = db.query(
-                    ContactEntry.TABLE_NAME,  // The table to query
-                    projection,                               // The columns to return
-                    null,                                // The columns for the WHERE clause
-                    null,                            // The values for the WHERE clause
-                    null,                                     // don't group the rows
-                    null,                                     // don't filter by row groups
-                    null                                 // The sort order
-            );
-
-            while (!c.isLast()) {
-                long id = c.getLong(c.getColumnIndexOrThrow(ContactEntry._ID));
-                String name = c.getString(c.getColumnIndexOrThrow(ContactEntry.COLUMN_NAME));
-                String email = c.getString(c.getColumnIndexOrThrow(ContactEntry.COLUMN_EMAIL));
-                String phone = c.getString(c.getColumnIndexOrThrow(ContactEntry.COLUMN_PHONE));
-                String TierString = c.getString(c.getColumnIndexOrThrow(ContactEntry.COLUMN_TIER));
-                Contacts.Tier tier = Contacts.Tier.valueOf(TierString);
-                Contact newContact = new Contact(name, email, phone, tier);
-                newContact.setCid(id);
-                mContactList.addContact(newContact, newContact.getTier());
-            }
-            Log.d(TAG, "Retrieve contacts info from Database successfully");
-            return true;
-        } catch (Exception e) {
-            Log.e(TAG, "Retrieve contacts info from Database failed");
-            return false;
-
-        }
-
     }
 
     private void setUpFab(){
@@ -132,25 +88,6 @@ public class ContactsActivity extends ActionBarActivity {
                 startActivity(i);
             }
         });
-    }
-
-    private boolean saveContactToDb(Contact contact) {
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
-        // Create a new map of values, where column names are the keys
-        ContentValues values = new ContentValues();
-        values.put(ContactEntry.COLUMN_NAME, contact.getName());
-        values.put(ContactEntry.COLUMN_EMAIL, contact.getEmail());
-        values.put(ContactEntry.COLUMN_PHONE, contact.getPhoneNumber());
-        values.put(ContactEntry.COLUMN_TIER, contact.getTier().name());
-
-        // Insert the new row, returning the primary key value of the new row
-        long newRowId;
-        newRowId = db.insert(
-                ContactEntry.TABLE_NAME,
-                null,
-                values);
-        contact.setCid(newRowId);
-        return true;
     }
 
     @Override

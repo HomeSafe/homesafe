@@ -1,14 +1,18 @@
 package cse403.homesafe.Data;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
+import android.util.Log;
 
 /**
  * Created by yellowleaf on 5/10/15.
  */
 public class DbFactory {
-    HomeSafeDbHelper mDbHelper;
+    private static final String TAG = "DataBase Factory";
+    private static Contacts mContactList;
+    private static Destinations mDestinationList;
 
     public static boolean addContactToDb(Contact contact, HomeSafeDbHelper mDbHelper){
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
@@ -50,5 +54,48 @@ public class DbFactory {
         return true;
         */
         return true;
+    }
+
+    public static boolean retrieveFromDb(HomeSafeDbHelper mDbHelper) {
+        try {
+            SQLiteDatabase db = mDbHelper.getReadableDatabase();
+            String[] projection = {
+                    HomeSafeContract.ContactEntry._ID,
+                    HomeSafeContract.ContactEntry.COLUMN_NAME,
+                    HomeSafeContract.ContactEntry.COLUMN_EMAIL,
+                    HomeSafeContract.ContactEntry.COLUMN_PHONE,
+                    HomeSafeContract.ContactEntry.COLUMN_TIER,
+            };
+
+            Cursor c = db.query(
+                    HomeSafeContract.ContactEntry.TABLE_NAME,  // The table to query
+                    projection,                               // The columns to return
+                    null,                                // The columns for the WHERE clause
+                    null,                            // The values for the WHERE clause
+                    null,                                     // don't group the rows
+                    null,                                     // don't filter by row groups
+                    null                                 // The sort order
+            );
+
+            while (!c.isLast()) {
+                long id = c.getLong(c.getColumnIndexOrThrow(HomeSafeContract.ContactEntry._ID));
+                String name = c.getString(c.getColumnIndexOrThrow(HomeSafeContract.ContactEntry.COLUMN_NAME));
+                String email = c.getString(c.getColumnIndexOrThrow(HomeSafeContract.ContactEntry.COLUMN_EMAIL));
+                String phone = c.getString(c.getColumnIndexOrThrow(HomeSafeContract.ContactEntry.COLUMN_PHONE));
+                String TierString = c.getString(c.getColumnIndexOrThrow(HomeSafeContract.ContactEntry.COLUMN_TIER));
+                Contacts.Tier tier = Contacts.Tier.valueOf(TierString);
+                Contact newContact = new Contact(name, email, phone, tier);
+                newContact.setCid(id);
+                mContactList.addContact(newContact, newContact.getTier());
+            }
+            Log.d(TAG, "Retrieve contacts info from Database successfully");
+            return true;
+        } catch (Exception e) {
+            Log.e(TAG, "Retrieve contacts info from Database failed");
+            e.printStackTrace();
+            return false;
+
+        }
+
     }
 }
