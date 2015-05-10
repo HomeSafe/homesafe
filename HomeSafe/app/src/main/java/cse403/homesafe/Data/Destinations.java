@@ -3,6 +3,7 @@ package cse403.homesafe.Data;
 import android.location.Location;
 
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * A Destinations object represents the collection
@@ -11,7 +12,7 @@ import java.util.LinkedList;
  * This class provides functionality for adding and removing Location.
  */
 public class Destinations {
-    private LinkedList<Location> destinations;
+    private List<Location> destinations;
     private static Destinations instance = new Destinations();
 
     // Representation invariant:
@@ -50,7 +51,7 @@ public class Destinations {
         return destinations.remove(loc);
     }
 
-    public LinkedList<Location> getDestinations() {
+    public List<Location> getDestinations() {
         return destinations;
     }
 
