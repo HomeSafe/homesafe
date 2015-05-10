@@ -15,6 +15,7 @@ public class HSTimer {
 
     private CountDownTimer timer;
     private Trip currentTrip;
+    private boolean hasStarted;
 
     /**
      * Constructs a new HSTimer object.
@@ -25,6 +26,7 @@ public class HSTimer {
     public HSTimer(long estimatedTimeArrival, Trip currentTrip) {
         timer = setTimer(estimatedTimeArrival);
         this.currentTrip = currentTrip;
+        hasStarted = false;
     }
 
     /**
@@ -34,6 +36,7 @@ public class HSTimer {
      */
     public boolean startTimer() {
         timer.start();
+        hasStarted = true;
         return timer != null;
     }
 
@@ -44,6 +47,7 @@ public class HSTimer {
      */
     public boolean endTimer() {
         timer.onFinish();
+        hasStarted = false;
         return timer == null;
     }
 
@@ -56,6 +60,13 @@ public class HSTimer {
         // long timeRemaining = Long.parseLong(myTextField) ;
         // timer = setTimer(timeRemaining + extraTime);
         return timer != null;
+    }
+
+    /*
+     * @return true if timer has been started.
+     */
+    public boolean hasStarted() {
+        return hasStarted;
     }
 
     /**

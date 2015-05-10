@@ -16,7 +16,7 @@ public class SecurityData {
 
     static {
         //TODO: Read passwords from db
-        instance = new SecurityData(null, null);
+        instance = new SecurityData("hunter2", "1234");
     }
 
     // Representation invariant:
@@ -44,7 +44,6 @@ public class SecurityData {
      * check if the password of regular situation is correct or not
      * @param regularPwd     password for regular situation
      * @return  true if password is correct, negative if incorrect
-     * @throws IllegalArgumentException if regularPwd is null
      */
     public boolean checkPwdRegular(String regularPwd) {
         if (regularPwd == null)
@@ -56,11 +55,8 @@ public class SecurityData {
      * check if the password of emergency situation is correct or not
      * @param emergPwd     password for emergency situation
      * @return  true if password is correct, negative if incorrect
-     * @throws IllegalArgumentException if emergPwd is null
      */
     public boolean checkPwdEmergency(String emergPwd) {
-        if (regularPwd == null)
-            throw new IllegalArgumentException("Null emerg password.");
         return emergPwd.equals(this.emergPwd);
     }
 

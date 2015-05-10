@@ -3,11 +3,18 @@ package cse403.homesafe;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.widget.EditText;
 import android.location.Location;
+import android.widget.TimePicker;
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 import cse403.homesafe.Data.Contacts;
 import cse403.homesafe.Data.SecurityData;
@@ -18,78 +25,35 @@ import cse403.homesafe.Messaging.Messenger;
  */
 public class Trip extends ActionBarActivity {
 
-    private int tier;
-    private Location startLocation;
     private Location endLocation;
     private HSTimer timer;
     private boolean arrived;
 
-    private String enteredPassword;
-
     @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
-    }
-
-    /**
-     * Constructor
-     * @param endLocation   Destination location
-     * @param delay         Estimated time to arrive at destination
-     */
-    public Trip(Location endLocation, long delay) {
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.trip);
         this.endLocation = null;
-        timer = new HSTimer(delay, this);
-        arrived = false;
-        timerEndAction();
+        this.timer = new HSTimer(0, this);
+        this.arrived = false;
+        promptForDestinion();
+        promptForExtendTime();
     }
 
-    /**
-     * Start trip using existing settings
-     */
-    public void startTrip() {
-        timer.startTimer();
+    /* User selects a location using a map. */
+    private void promptForDestinion() {
+
     }
 
-    /**
-     * End trip, program prompt for password to end trip.
-     * @return  True if successfully ended trip
-     */
-    public boolean endTrip() {
-        return timer.endTimer();
-    }
-
-    /**
-     * Callback action for timer when time is up. Prompt for extend or end trip
-     */
+    /* This should be called when the timer elapses. */
     public void timerEndAction() {
-        //while (true) {
-            boolean correct = verifyPassword();
-            if (correct) {
-                extendTime();
-        //        break;
-            }
-        //}
+        promptForPassword();
     }
 
     /**
-     * Extend time to arrive at destination
+     * Prompt user for password. Send entered password to appropriate callback.
      */
-    public void extendTime() {
-        timer.extendTimer(promptForExtendTime());
-    }
-
-    /**
-     * Actions to execute when user ignores timer. Notify contacts.
-     */
-    public void userIgnoredTimerAction() {
-
-    }
-
-    /**
-     * Prompt user for password.
-     * @return password entered by user
-     */
-    private String promptForPassword() {
+    private void promptForPassword() {
         final AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
         alert.setTitle("Unlock");
@@ -97,38 +61,52 @@ public class Trip extends ActionBarActivity {
 
         // Set an EditText view to get user input
         final EditText input = new EditText(this);
+        input.setBackgroundColor(0xFFAAAAAA);
         alert.setView(input);
 
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                enteredPassword = input.getText().toString();
-            }
-        });
-
-        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                enteredPassword = null;
+                String enteredPassword = input.getText().toString();
+                if (SecurityData.getInstance().checkPwdRegular(enteredPassword)) {
+                    promptForExtendTime();
+                } else {
+                    promptForPassword();
+                }
             }
         });
 
         alert.show();
-        return enteredPassword;
-    }
-
-    /**
-     * Verify password given against stored passwords
-     * @return          True if given password matches stored password, false otherwise
-     */
-    private boolean verifyPassword() {
-        String pw = promptForPassword();
-        return SecurityData.getInstance().checkPwdRegular(pw);
     }
 
     /**
      * Prompt user to input a time to extend trip for.
-     * @return  Time to extend trip for in milliseconds
+     * Timer will be extended this amount of time.
      */
-    private long promptForExtendTime() {
-        return 0;
+    private void promptForExtendTime() {
+        final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+        alert.setTitle("Trip Time");
+        alert.setMessage("Expected Trip Time");
+
+        // Set an EditText view to get user input
+        final TimePicker input = new TimePicker(this);
+        input.setBackgroundColor(0xFFAAAAAA);
+        input.setIs24HourView(true);
+        input.setCurrentHour(0);
+        input.setCurrentMinute(0);
+        alert.setView(input);
+
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                int minutes = input.getCurrentMinute();
+                int hours = input.getCurrentHour();
+                timer.extendTimer(1000 * (60 * minutes + 3600 * hours));
+                if (!timer.hasStarted()) {
+                    timer.startTimer();
+                }
+            }
+        });
+
+        alert.show();
     }
 }
