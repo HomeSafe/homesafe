@@ -11,15 +11,25 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import cse403.homesafe.Data.Contact;
+import cse403.homesafe.Data.Contacts;
+import cse403.homesafe.Data.DbFactory;
+import cse403.homesafe.Data.HomeSafeDbHelper;
+
 
 public class AddContactActivity extends ActionBarActivity {
     Button discardChange;
     ImageView saveContact;
+    HomeSafeDbHelper mDbHelper;
+    Contacts mContactList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_contact);
+        mDbHelper = new HomeSafeDbHelper(this);
+        mContactList = mContactList.getInstance();
         //TODO setting button discard changes
         ActionBar mActionBar = getSupportActionBar();
         mActionBar.setDisplayShowHomeEnabled(false);
@@ -49,6 +59,10 @@ public class AddContactActivity extends ActionBarActivity {
         saveContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Contact contact = null;
+                Contacts.Tier tier = null;
+                mContactList.addContact(contact, tier);
+                DbFactory.addContactToDb(contact, mDbHelper);
                 Intent i = new Intent(AddContactActivity.this, ContactsActivity.class);
                 Toast.makeText(AddContactActivity.this, "Added Contact", Toast.LENGTH_SHORT).show();
                 startActivity(i);
