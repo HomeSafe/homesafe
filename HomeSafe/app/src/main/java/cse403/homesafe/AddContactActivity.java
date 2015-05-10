@@ -1,16 +1,20 @@
 package cse403.homesafe;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class AddContactActivity extends ActionBarActivity {
+    Button discardChange;
+    ImageView saveContact;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,20 +32,28 @@ public class AddContactActivity extends ActionBarActivity {
         //TODO version of Edit contact
         mActionBar.setCustomView(mCustomView);
         mActionBar.setDisplayShowCustomEnabled(true);
+        discardChange = (Button)findViewById(R.id.discard);
+        saveContact = (ImageView) findViewById(R.id.save_menu_item);
+        setUpButton();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    private void setUpButton(){
+        discardChange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(AddContactActivity.this, ContactsActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
+        saveContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(AddContactActivity.this, ContactsActivity.class);
+                Toast.makeText(AddContactActivity.this, "Added Contact", Toast.LENGTH_SHORT).show();
+                startActivity(i);
+                finish();
+            }
+        });
     }
 }
