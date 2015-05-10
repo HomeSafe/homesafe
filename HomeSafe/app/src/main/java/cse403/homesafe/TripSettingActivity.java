@@ -1,5 +1,6 @@
 package cse403.homesafe;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,7 +14,7 @@ import android.widget.TimePicker;
 
 public class TripSettingActivity extends ActionBarActivity {
 
-    Spinner destinations;
+    Button destinations;
     TimePicker ETA;
     Button startTrip;
 
@@ -23,11 +24,13 @@ public class TripSettingActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trip_setting);
 
-        //destinations = (Spinner) findViewById(R.id.spinnerDestination);
-        //String[] locations = null; // TODO : get the locations
-        //ArrayAdapter<String> adapterLocation = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, locations);
-        //adapterLocation.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //destinations.setAdapter(adapterLocation);
+        destinations = (Button) findViewById(R.id.spinnerDestination);
+        destinations.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO show popup menu that uses PlacePicker and a dropdown for favorite locations
+            }
+        });
 
         ETA = (TimePicker) findViewById(R.id.spinnerETA);
         ETA.setIs24HourView(true);
