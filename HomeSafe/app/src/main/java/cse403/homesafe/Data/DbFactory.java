@@ -49,5 +49,6 @@ public class DbFactory {
         contact.setCid(newRowId);
         return true;
         */
+        return true;
     }
 }
