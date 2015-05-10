@@ -26,4 +26,5 @@
     <string name="contact_phone_hint">Phone Number</string>
     <string name="contact_email_hint">Email</string>
     <string name="location_address_hint">Address</string>
+    <string name="title_activity_maps">Map</string>
 </resources>
