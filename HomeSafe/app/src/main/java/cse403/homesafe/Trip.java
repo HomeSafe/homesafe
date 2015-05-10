@@ -36,13 +36,7 @@ public class Trip extends ActionBarActivity {
         this.endLocation = null;
         this.timer = new HSTimer(0, this);
         this.arrived = false;
-        promptForDestinion();
         promptForExtendTime();
-    }
-
-    /* User selects a location using a map. */
-    private void promptForDestinion() {
-
     }
 
     /* This should be called when the timer elapses. */
@@ -86,7 +80,7 @@ public class Trip extends ActionBarActivity {
         final AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
         alert.setTitle("Trip Time");
-        alert.setMessage("Expected Trip Time");
+        alert.setMessage("How much longer do you need?");
 
         // Set an EditText view to get user input
         final TimePicker input = new TimePicker(this);

@@ -52,6 +52,9 @@
         <activity
             android:name="Trip">
         </activity>
+        <activity
+            android:name="TripSettingActivity">
+        </activity>
     </application>
 
 </manifest>

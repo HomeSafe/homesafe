@@ -77,7 +77,7 @@ public class StartScreenActivity extends ActionBarActivity {
         buttonStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(StartScreenActivity.this, Trip.class);
+                Intent i = new Intent(StartScreenActivity.this, TripSettingActivity.class);
                 startActivity(i);
             }
         });

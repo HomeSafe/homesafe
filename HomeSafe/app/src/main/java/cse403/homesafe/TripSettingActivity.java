@@ -8,12 +8,13 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TimePicker;
 
 
 public class TripSettingActivity extends ActionBarActivity {
 
     Spinner destinations;
-    Spinner ETA;
+    TimePicker ETA;
     Button startTrip;
 
 
@@ -22,23 +23,22 @@ public class TripSettingActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trip_setting);
 
-        destinations = (Spinner) findViewById(R.id.spinnerDestination);
-        String[] locations = null; // TODO : get the locations
-        ArrayAdapter<String> adapterLocation = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, locations);
-        adapterLocation.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        destinations.setAdapter(adapterLocation);
+        //destinations = (Spinner) findViewById(R.id.spinnerDestination);
+        //String[] locations = null; // TODO : get the locations
+        //ArrayAdapter<String> adapterLocation = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, locations);
+        //adapterLocation.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //destinations.setAdapter(adapterLocation);
 
-        ETA = (Spinner) findViewById(R.id.spinnerETA);
-        String[] times = {"1", "2", "3"}; // TODO : decide on time intervals
-        ArrayAdapter<String> adapterETA = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, times);
-        adapterETA.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        ETA.setAdapter(adapterETA);
+        ETA = (TimePicker) findViewById(R.id.spinnerETA);
+        ETA.setIs24HourView(true);
+        ETA.setCurrentHour(0);
+        ETA.setCurrentMinute(0);
 
         startTrip = (Button) findViewById(R.id.startTripButton);
         startTrip.setOnClickListener(
                 new Button.OnClickListener() {
                     public void onClick(View w) {
-                        String allocatedTime = ETA.getSelectedItem() + "";
+                        String allocatedTime = ETA.getCurrentMinute() + "";
                         // TODO : mapping from destination name to actual Location object?
                         //Trip currentTrip = new Trip(destinations.getSelectedItem(), Long.parseLong(allocatedTime));
                     }

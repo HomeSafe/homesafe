@@ -35,7 +35,7 @@
         android:layout_below="@+id/spinnerDestination"
         android:layout_centerHorizontal="true" />
 
-    <Spinner
+    <TimePicker
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/spinnerETA"
