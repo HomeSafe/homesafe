@@ -1,5 +1,7 @@
 package cse403.homesafe;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -10,6 +12,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+
+import java.util.ArrayList;
 
 
 public class TripSettingActivity extends ActionBarActivity {
@@ -24,11 +28,35 @@ public class TripSettingActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trip_setting);
 
+        final TripSettingActivity that = this;
         destinations = (Button) findViewById(R.id.spinnerDestination);
         destinations.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO show popup menu that uses PlacePicker and a dropdown for favorite locations
+                final AlertDialog.Builder alert = new AlertDialog.Builder(that);
+
+                alert.setTitle("Destination");
+                alert.setMessage("Choose a destination from the map or from favorites:");
+
+                // Set an EditText view to get user input
+                final Spinner input = new Spinner(that);
+                ArrayList<String> list = new ArrayList<String>();
+                list.add("The HUB");
+                list.add("Grandma's House");
+                list.add("The Bar");
+                ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(that,
+                        android.R.layout.simple_spinner_item, list);
+                input.setAdapter(dataAdapter);
+                input.setBackgroundColor(0xFFAAAAAA);
+                alert.setView(input);
+
+                alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        //TODO
+                    }
+                });
+
+                alert.show();
             }
         });
 
