@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.util.Log;
 
+import static cse403.homesafe.Data.HomeSafeContract.*;
+
 /**
  * Created by yellowleaf on 5/10/15.
  */
@@ -18,15 +20,15 @@ public class DbFactory {
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
-        values.put(HomeSafeContract.ContactEntry.COLUMN_NAME, contact.getName());
-        values.put(HomeSafeContract.ContactEntry.COLUMN_EMAIL, contact.getEmail());
-        values.put(HomeSafeContract.ContactEntry.COLUMN_PHONE, contact.getPhoneNumber());
-        values.put(HomeSafeContract.ContactEntry.COLUMN_TIER, contact.getTier().name());
+        values.put(ContactEntry.COLUMN_NAME, contact.getName());
+        values.put(ContactEntry.COLUMN_EMAIL, contact.getEmail());
+        values.put(ContactEntry.COLUMN_PHONE, contact.getPhoneNumber());
+        values.put(ContactEntry.COLUMN_TIER, contact.getTier().name());
 
         // Insert the new row, returning the primary key value of the new row
         long newRowId;
         newRowId = db.insert(
-                HomeSafeContract.ContactEntry.TABLE_NAME,
+                ContactEntry.TABLE_NAME,
                 null,
                 values);
         contact.setCid(newRowId);
@@ -60,7 +62,7 @@ public class DbFactory {
         try {
             SQLiteDatabase db = mDbHelper.getReadableDatabase();
             Cursor c = db.query(
-                    HomeSafeContract.ContactEntry.TABLE_NAME,  // The table to query
+                    ContactEntry.TABLE_NAME,  // The table to query
                     null,                       // The columns to return
                     null,                                // The columns for the WHERE clause
                     null,                            // The values for the WHERE clause
@@ -70,11 +72,11 @@ public class DbFactory {
             );
 
             while (c.moveToNext()) {
-                long id = c.getLong(c.getColumnIndexOrThrow(HomeSafeContract.ContactEntry._ID));
-                String name = c.getString(c.getColumnIndexOrThrow(HomeSafeContract.ContactEntry.COLUMN_NAME));
-                String email = c.getString(c.getColumnIndexOrThrow(HomeSafeContract.ContactEntry.COLUMN_EMAIL));
-                String phone = c.getString(c.getColumnIndexOrThrow(HomeSafeContract.ContactEntry.COLUMN_PHONE));
-                String TierString = c.getString(c.getColumnIndexOrThrow(HomeSafeContract.ContactEntry.COLUMN_TIER));
+                long id = c.getLong(c.getColumnIndexOrThrow(ContactEntry._ID));
+                String name = c.getString(c.getColumnIndexOrThrow(ContactEntry.COLUMN_NAME));
+                String email = c.getString(c.getColumnIndexOrThrow(ContactEntry.COLUMN_EMAIL));
+                String phone = c.getString(c.getColumnIndexOrThrow(ContactEntry.COLUMN_PHONE));
+                String TierString = c.getString(c.getColumnIndexOrThrow(ContactEntry.COLUMN_TIER));
                 Contacts.Tier tier = Contacts.Tier.valueOf(TierString);
                 Contact newContact = new Contact(name, email, phone, tier);
                 newContact.setCid(id);
@@ -89,5 +91,26 @@ public class DbFactory {
 
         }
 
+    }
+
+    public static void updateContact(Contact contact, HomeSafeDbHelper mDbHelper) {
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+
+        // New value for one column
+        ContentValues values = new ContentValues();
+        values.put(ContactEntry.COLUMN_NAME, contact.getName());
+        values.put(ContactEntry.COLUMN_EMAIL, contact.getEmail());
+        values.put(ContactEntry.COLUMN_PHONE, contact.getPhoneNumber());
+        values.put(ContactEntry.COLUMN_TIER, contact.getTier().name());
+
+        // Which row to update, based on the ID
+        String selection = ContactEntry._ID + " LIKE ?";
+        String[] selectionArgs = { String.valueOf(contact.getCid()) };
+
+        int count = db.update(
+                ContactEntry.TABLE_NAME,
+                values,
+                selection,
+                selectionArgs);
     }
 }

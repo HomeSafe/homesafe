@@ -72,7 +72,14 @@
             android:name=".AddLocationActivity"
             android:label="@string/title_activity_add_location" >
         </activity>
-
+        <activity
+            android:name=".EditLocationActivity"
+            android:label=".EditLocationActivity" >
+        </activity>
+        <activity
+            android:name=".EditContactActivity"
+            android:label=".EditContactActivity" >
+        </activity>
         <activity android:name=".Trip" >
         </activity>
         <activity android:name=".TripSettingActivity" >
@@ -84,11 +91,14 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/google_maps_key" />
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
+        <activity
+            android:name=".HSTimerActivity"
+            android:label="@string/title_activity_hstimer" >
+        </activity>
     </application>
 
 </manifest>

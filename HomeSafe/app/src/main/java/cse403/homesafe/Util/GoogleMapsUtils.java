@@ -1,21 +1,20 @@
 package cse403.homesafe.Util;
 
+import android.location.Geocoder;
 import android.location.Location;
 import android.util.Log;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.net.URLConnection;
+
+import javax.json.JsonArray;
+import javax.json.JsonReader;
+import javax.json.Json;
+import javax.json.JsonObject;
+
 
 /**
  * GoogleMapsUtils wraps API calls to the Google maps and
@@ -24,6 +23,8 @@ import java.net.URLConnection;
 public class GoogleMapsUtils {
 
     private static final String TAG = "GoogleMapsUtils";
+    private static final String GOOGLE_GEOCODER_URL = "http://maps.google.com/maps/api/geocode/json?address=";
+    private static final String GOOGLE_DIRECTIONS_URL = "http://maps.googleapis.com/maps/api/directions/json?origin=";
 
     /**
      * Prevent this from being instantiated. This is a
@@ -36,11 +37,23 @@ public class GoogleMapsUtils {
     /**
      * Returns the estimated DistanceAndTime between these two objects.
      * Uses the Google Maps API
-     * @param loc1
-     * @param loc2
+     * @param origin
+     * @param dest
      * @return a DistandAndTime object which represents the distane and time between these Locations.
      */
-    public static DistanceAndTime getDistanceAndTime(Location loc1, Location loc2) {
+    public static DistanceAndTime getDistanceAndTime(Location origin, Location dest) {
+        try {
+            URL url = new URL(GOOGLE_DIRECTIONS_URL + origin.getLatitude() + "," + origin.getLongitude()
+                    + "&destination=" + dest.getLatitude() + "," + dest.getLongitude());
+            
+            URLConnection urlConnection = url.openConnection();
+            InputStream inputStream = urlConnection.getInputStream();
+        } catch (MalformedURLException e) {
+            Log.e(TAG, "");
+        } catch (IOException e) {
+            Log.e(TAG, "ioexception");
+        }
+
         // insert API call here
         return null;
     }
@@ -52,56 +65,43 @@ public class GoogleMapsUtils {
      * @return Location of the address. Null if the HTTP request failed.
      */
     public static Location addressToLocation(String address) {
+
         StringBuilder jsonString = new StringBuilder();
-        HttpPost httppost = new HttpPost("http://maps.google.com/maps/api/geocode/json?address=" + address + "&sensor=false");
-        HttpClient client = new DefaultHttpClient();
-        HttpResponse response;
+        Location result = null;
         try {
-            response = client.execute(httppost);
-            HttpEntity entity = response.getEntity();
-            InputStream inputStream = entity.getContent();
+            URL url = new URL(GOOGLE_GEOCODER_URL + address);
+            URLConnection urlConnection = url.openConnection();
+            InputStream inputStream = urlConnection.getInputStream();
             int b;
-            while ((b = inputStream.read()) != -1) {
-                jsonString.append((char) b);
-            }
-
-            try {
-                JSONObject httpJsonResult = new JSONObject(jsonString.toString());
-
-                return getLatLong(httpJsonResult);
-            } catch (JSONException e) {
-                Log.e(TAG, "JSONObject wasn't able to be made");
-            }
-
-        } catch (ClientProtocolException e) {
-            Log.e(TAG, "Error in HTTP with Google Directions API");
-        } catch (IOException e) {
-
-        }
-        return null;
+            JsonReader reader = Json.createReader(inputStream);
+            JsonObject jsonObj = reader.readObject();
+            System.out.println("Json:\n" + jsonObj.toString());
+            result = getLatLong(jsonObj);
+        } catch (MalformedURLException e) {
+            Log.e(TAG, "malformedUTL");
+        } catch (IOException e) {}
+        System.out.println("Returning: " + result);
+        return result;
     }
 
-    private static Location getLatLong(JSONObject jsonObject) {
+    private static Location getLatLong(JsonObject jsonObject) {
 
         double longitude, latitude;
-        try {
 
-            longitude = ((JSONArray)jsonObject.get("results")).getJSONObject(0)
-                    .getJSONObject("geometry").getJSONObject("location")
-                    .getDouble("lng");
+        longitude = jsonObject.getJsonArray("results").getJsonObject(0)
+                .getJsonObject("geometry").getJsonObject("location")
+                .getJsonNumber("lng").doubleValue();
+        System.out.println("long is " + longitude);
+        latitude = jsonObject.getJsonArray("results").getJsonObject(0)
+                .getJsonObject("geometry").getJsonObject("location")
+                .getJsonNumber("lat").doubleValue();
+        System.out.println("lat is " + latitude);
 
-            latitude = ((JSONArray)jsonObject.get("results")).getJSONObject(0)
-                    .getJSONObject("geometry").getJSONObject("location")
-                    .getDouble("lat");
-
-            Location result = new Location("");
-            result.setLongitude(longitude);
-            result.setLatitude(latitude);
-            return result;
-        } catch (JSONException e) {
-            Log.e(TAG, "JSON exception while retrieving lat/long from JSON object");
-            return null;
-        }
+        Location result = new Location("address-to-loc");
+        result.setLongitude(32.5);
+        result.setLatitude(latitude);
+        System.out.println("RESULT: " + result.getLatitude() + " | " + result.getLongitude() + " | " + result.getProvider());
+        return result;
     }
 
 
