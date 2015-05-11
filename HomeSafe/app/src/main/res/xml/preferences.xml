@@ -1,11 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <EditTextPreference
-        android:key="firstName"
-        android:title="@string/preferences_title_first_name" />
-    <EditTextPreference
-        android:key="lastName"
-        android:title="@string/preferences_title_last_name" />
-
+    <PreferenceCategory
+        android:title="@string/preferences_category_title_user_info"
+        android:key="pref_user_info_settings">
+        <EditTextPreference
+            android:key="firstName"
+            android:title="@string/preferences_title_first_name"
+            android:dialogTitle="Enter your first name"
+            android:textColor="#000"
+            android:inputType="textCapWords"
+            android:selectAllOnFocus="true" />
+        <EditTextPreference
+            android:key="lastName"
+            android:title="@string/preferences_title_last_name"
+            android:dialogTitle="Enter your last name"
+            android:textColor="#000"
+            android:inputType="textCapWords"
+            android:selectAllOnFocus="true" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/preferences_category_title_security"
+        android:key="pref_security_settings">
+        <EditTextPreference
+            android:key="pin"
+            android:textColor="#000"
+            android:title="@string/preferences_title_password"
+            android:dialogTitle="Enter a 4-digit passcode"
+            android:defaultValue=""
+            android:password="true"
+            android:selectAllOnFocus="true"
+            android:inputType="numberPassword" />
+    </PreferenceCategory>
 </PreferenceScreen>

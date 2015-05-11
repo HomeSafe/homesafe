@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="preferences_category_title_user_info">User Information</string>
     <string name="preferences_title_first_name">First Name</string>
     <string name="preferences_title_last_name">Last Name</string>
+    <string name="preferences_category_title_security">Security</string>
+    <string name="preferences_title_password">Passcode</string>
 </resources>
