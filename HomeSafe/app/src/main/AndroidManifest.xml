@@ -61,7 +61,7 @@
                 android:value=".StartScreenActivity" />
         </activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name=".Settings.SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
         <activity

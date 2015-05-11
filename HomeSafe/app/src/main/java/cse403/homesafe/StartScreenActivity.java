@@ -18,6 +18,7 @@ import android.widget.ListView;
 
 import cse403.homesafe.Data.DbFactory;
 import cse403.homesafe.Data.HomeSafeDbHelper;
+import cse403.homesafe.Settings.SettingsActivity;
 
 public class StartScreenActivity extends ActionBarActivity {
     private DrawerLayout mDrawerLayout;

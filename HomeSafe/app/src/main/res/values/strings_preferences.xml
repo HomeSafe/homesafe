@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="preferences_title_first_name">First Name</string>
+    <string name="preferences_title_last_name">Last Name</string>
+</resources>
