@@ -38,14 +38,18 @@ public class GoogleMapsUtils {
      * Uses the Google Maps API
      * @param origin
      * @param dest
-     * @return a DistandAndTime object which represents the distane and time between these Locations.
+     * @return a DistanceAndTime object which represents the distane and time between these Locations.
      */
-    public static DistanceAndTime getDistanceAndTime(Location origin, Location dest) {
+    public static void getDistanceAndTime(Location origin, Location dest, HomeSafeCallback callback) {
         try {
             URL url = new URL("http://maps.googleapis.com/maps/api/directions/json?origin=" + origin.getLatitude() +
             "," + origin.getLongitude() + "&destination=" + dest.getLatitude() + "," + dest.getLongitude());
             URLConnection urlConnection = url.openConnection();
             InputStream inputStream = urlConnection.getInputStream();
+            JsonReader reader = Json.createReader(inputStream);
+            JsonObject jsonObj = reader.readObject();
+            System.out.println("Json:\n" + jsonObj.toString());
+            // TODO(Vivek) finish this implementation
         } catch (MalformedURLException e) {
             Log.e(TAG, "");
         } catch (IOException e) {
@@ -53,33 +57,34 @@ public class GoogleMapsUtils {
         }
 
         // insert API call here
-        return null;
+        callback.callback(null);
     }
 
     /**
      * Sends the specified address to Google Directions API and returns a Location object with
      * the appropriate latitude/longitude parameters.
+     * Location of the address is returned via parameter to callback. Null if the HTTP request failed.
      * @param address Address from which Location will be derived.
-     * @return Location of the address. Null if the HTTP request failed.
      */
-    public static Location addressToLocation(String address) {
-
-        StringBuilder jsonString = new StringBuilder();
-        Location result = null;
-        try {
-            URL url = new URL("http://maps.google.com/maps/api/geocode/json?address=" + address);
-            URLConnection urlConnection = url.openConnection();
-            InputStream inputStream = urlConnection.getInputStream();
-            int b;
-            JsonReader reader = Json.createReader(inputStream);
-            JsonObject jsonObj = reader.readObject();
-            System.out.println("Json:\n" + jsonObj.toString());
-            result = getLatLong(jsonObj);
-        } catch (MalformedURLException e) {
-            Log.e(TAG, "malformedUTL");
-        } catch (IOException e) {}
-        System.out.println("Returning: " + result);
-        return result;
+    public static void addressToLocation(final String address, final HomeSafeCallback callback) {
+        new Thread(new Runnable() {
+            public void run() {
+                Location result = null;
+                try {
+                    URL url = new URL("http://maps.google.com/maps/api/geocode/json?address=" + address);
+                    URLConnection urlConnection = url.openConnection();
+                    InputStream inputStream = urlConnection.getInputStream();
+                    JsonReader reader = Json.createReader(inputStream);
+                    JsonObject jsonObj = reader.readObject();
+                    System.out.println("Json:\n" + jsonObj.toString());
+                    result = getLatLong(jsonObj);
+                } catch (MalformedURLException e) {
+                    Log.e(TAG, "malformedUTL");
+                } catch (IOException e) {}
+                System.out.println("Returning: " + result);
+                callback.callback(result);
+            }
+        }).start();
     }
 
     private static Location getLatLong(JsonObject jsonObject) {

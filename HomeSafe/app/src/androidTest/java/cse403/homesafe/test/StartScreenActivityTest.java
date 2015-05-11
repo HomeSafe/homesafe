@@ -6,7 +6,10 @@ import android.test.suitebuilder.annotation.MediumTest;
 
 import cse403.homesafe.StartScreenActivity;
 import android.location.Location;
+import android.util.Log;
+
 import cse403.homesafe.Util.GoogleMapsUtils;
+import cse403.homesafe.Util.HomeSafeCallback;
 
 
 /**
@@ -29,11 +32,23 @@ public class StartScreenActivityTest extends ActivityUnitTestCase<StartScreenAct
     }
 
     @MediumTest
-    public void testAddressToLocation() {
-        System.out.println("Starting testAddressToLocation");
+    public void testAddressToLocation() throws InterruptedException{
+        Log.i("StartScreenActivityTest","Starting testAddressToLocation");
         String input = "2220_e_aloha_st_wa";
-        Location result = GoogleMapsUtils.addressToLocation(input);
-        System.out.print(result.toString());
+        final Object lock = new Object();
+        synchronized (lock) {
+
+            GoogleMapsUtils.addressToLocation(input, new HomeSafeCallback() {
+                @Override
+                public void callback(Object obj) {
+                    Log.d("StartScreenActivityTest", obj.toString());
+                    synchronized (lock) {
+                        lock.notifyAll();
+                    }
+                }
+            });
+            lock.wait();
+        }
         assertEquals(true, true);
     }
 
