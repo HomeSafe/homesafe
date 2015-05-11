@@ -26,6 +26,7 @@ public class EditContactActivity extends ActionBarActivity {
     HomeSafeDbHelper mDbHelper;
     Contacts mContactList;
     Button deleteContact;
+    long cid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,7 @@ public class EditContactActivity extends ActionBarActivity {
         String name = intent.getStringExtra("NAME");
         String phone = intent.getStringExtra("PHONE");
         String email = intent.getStringExtra("EMAIL");
+        cid = intent.getLongExtra("CID", 0);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_contact);
@@ -86,8 +88,8 @@ public class EditContactActivity extends ActionBarActivity {
                     tier = Contacts.Tier.THREE;
                 }
                 Contact contact = new Contact(mEditName.getText().toString(), mEditEmail.getText().toString(), mEditPhone.getText().toString(), tier);
-                mContactList.addContact(contact, tier);
-                DbFactory.addContactToDb(contact, mDbHelper);
+                contact.setCid(cid);
+                DbFactory.updateContact(contact, mDbHelper);
                 Intent i = new Intent(EditContactActivity.this, ContactsActivity.class);
                 Toast.makeText(EditContactActivity.this, "Edited Contact " + mEditName.getText(), Toast.LENGTH_SHORT).show();
                 startActivity(i);
