@@ -23,7 +23,8 @@ import javax.json.JsonObject;
 public class GoogleMapsUtils {
 
     private static final String TAG = "GoogleMapsUtils";
-    private static final String API_KEY = "AIzaSyCwJ1fLRapClAn9-vkr-UOovPqHhuEaxdo";
+    private static final String GOOGLE_GEOCODER_URL = "http://maps.google.com/maps/api/geocode/json?address=";
+    private static final String GOOGLE_DIRECTIONS_URL = "http://maps.googleapis.com/maps/api/directions/json?origin=";
 
     /**
      * Prevent this from being instantiated. This is a
@@ -42,8 +43,9 @@ public class GoogleMapsUtils {
      */
     public static DistanceAndTime getDistanceAndTime(Location origin, Location dest) {
         try {
-            URL url = new URL("http://maps.googleapis.com/maps/api/directions/json?origin=" + origin.getLatitude() +
-            "," + origin.getLongitude() + "&destination=" + dest.getLatitude() + "," + dest.getLongitude());
+            URL url = new URL(GOOGLE_DIRECTIONS_URL + origin.getLatitude() + "," + origin.getLongitude()
+                    + "&destination=" + dest.getLatitude() + "," + dest.getLongitude());
+            
             URLConnection urlConnection = url.openConnection();
             InputStream inputStream = urlConnection.getInputStream();
         } catch (MalformedURLException e) {
@@ -67,7 +69,7 @@ public class GoogleMapsUtils {
         StringBuilder jsonString = new StringBuilder();
         Location result = null;
         try {
-            URL url = new URL("http://maps.google.com/maps/api/geocode/json?address=" + address);
+            URL url = new URL(GOOGLE_GEOCODER_URL + address);
             URLConnection urlConnection = url.openConnection();
             InputStream inputStream = urlConnection.getInputStream();
             int b;
