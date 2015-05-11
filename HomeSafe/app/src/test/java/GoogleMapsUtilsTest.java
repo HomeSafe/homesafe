@@ -21,7 +21,7 @@ public class GoogleMapsUtilsTest extends TestCase {
     public void testAddressToLocation() {
         System.out.println("Starting testAddressToLocation");
         String input = "2220_e_aloha_st_wa";
-        Location result = GoogleMapsUtils.addressToLocation("");
+        Location result = GoogleMapsUtils.addressToLocation(input);
         System.out.print(result.toString());
         assertEquals(true, true);
     }
