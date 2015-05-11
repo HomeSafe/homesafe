@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Location;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -27,6 +29,9 @@ public class TripSettingActivity extends ActionBarActivity {
     Button destinations;
     TimePicker ETA;
     Button startTrip;
+    Location destination;
+
+    int PLACE_PICKER_REQUEST = 1;
 
 
     @Override
@@ -95,6 +100,18 @@ public class TripSettingActivity extends ActionBarActivity {
 
                 }
         );
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PLACE_PICKER_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                //TODO actually do something with the
+                Place place = PlacePicker.getPlace(data, this);
+                destination = new Location("lolwut?");
+                destination.setLatitude(place.getLatLng().latitude);
+                destination.setLongitude(place.getLatLng().longitude);
+            }
+        }
     }
 
     @Override
