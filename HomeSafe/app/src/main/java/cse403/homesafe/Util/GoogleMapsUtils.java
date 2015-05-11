@@ -1,5 +1,6 @@
 package cse403.homesafe.Util;
 
+import android.location.Geocoder;
 import android.location.Location;
 import android.util.Log;
 
@@ -13,8 +14,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.net.URLConnection;
 
 /**
@@ -24,6 +28,7 @@ import java.net.URLConnection;
 public class GoogleMapsUtils {
 
     private static final String TAG = "GoogleMapsUtils";
+    private static final String API_KEY = "AIzaSyCwJ1fLRapClAn9-vkr-UOovPqHhuEaxdo";
 
     /**
      * Prevent this from being instantiated. This is a
@@ -52,32 +57,27 @@ public class GoogleMapsUtils {
      * @return Location of the address. Null if the HTTP request failed.
      */
     public static Location addressToLocation(String address) {
+
         StringBuilder jsonString = new StringBuilder();
-        HttpPost httppost = new HttpPost("http://maps.google.com/maps/api/geocode/json?address=" + address + "&sensor=false");
-        HttpClient client = new DefaultHttpClient();
-        HttpResponse response;
         try {
-            response = client.execute(httppost);
-            HttpEntity entity = response.getEntity();
-            InputStream inputStream = entity.getContent();
+            URL url = new URL("http://maps.google.com/maps/api/geocode/json?address=" + address);
+            URLConnection urlConnection = url.openConnection();
+            InputStream inputStream = urlConnection.getInputStream();
             int b;
             while ((b = inputStream.read()) != -1) {
                 jsonString.append((char) b);
             }
-
             try {
+                System.out.println(jsonString.toString());
                 JSONObject httpJsonResult = new JSONObject(jsonString.toString());
-
                 return getLatLong(httpJsonResult);
             } catch (JSONException e) {
                 Log.e(TAG, "JSONObject wasn't able to be made");
             }
+        } catch (MalformedURLException e) {
+            Log.e(TAG, "");
+        } catch (IOException e) {}
 
-        } catch (ClientProtocolException e) {
-            Log.e(TAG, "Error in HTTP with Google Directions API");
-        } catch (IOException e) {
-
-        }
         return null;
     }
 
