@@ -28,4 +28,9 @@
     <string name="contact_tier_hint">Tier</string>
     <string name="location_address_hint">Address</string>
     <string name="title_activity_maps">Map</string>
+    <string name="title_activity_hstimer">HSTimerActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+
+    <string name="add_time">Choose How Much Time To Add</string>
 </resources>
