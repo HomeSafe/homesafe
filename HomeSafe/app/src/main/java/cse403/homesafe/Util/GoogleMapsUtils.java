@@ -41,11 +41,22 @@ public class GoogleMapsUtils {
     /**
      * Returns the estimated DistanceAndTime between these two objects.
      * Uses the Google Maps API
-     * @param loc1
-     * @param loc2
+     * @param origin
+     * @param dest
      * @return a DistandAndTime object which represents the distane and time between these Locations.
      */
-    public static DistanceAndTime getDistanceAndTime(Location loc1, Location loc2) {
+    public static DistanceAndTime getDistanceAndTime(Location origin, Location dest) {
+        try {
+            URL url = new URL("http://maps.googleapis.com/maps/api/directions/json?origin=" + origin.getLatitude() +
+            "," + origin.getLongitude() + "&destination=" + dest.getLatitude() + "," + dest.getLongitude());
+            URLConnection urlConnection = url.openConnection();
+            InputStream inputStream = urlConnection.getInputStream();
+        } catch (MalformedURLException e) {
+            Log.e(TAG, "");
+        } catch (IOException e) {
+            Log.e(TAG, "ioexception");
+        }
+
         // insert API call here
         return null;
     }
