@@ -4,22 +4,17 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.util.Log;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+
+import javax.json.JsonArray;
+import javax.json.JsonReader;
+import javax.json.Json;
+import javax.json.JsonObject;
+
 
 /**
  * GoogleMapsUtils wraps API calls to the Google maps and
@@ -70,49 +65,41 @@ public class GoogleMapsUtils {
     public static Location addressToLocation(String address) {
 
         StringBuilder jsonString = new StringBuilder();
+        Location result = null;
         try {
             URL url = new URL("http://maps.google.com/maps/api/geocode/json?address=" + address);
             URLConnection urlConnection = url.openConnection();
             InputStream inputStream = urlConnection.getInputStream();
             int b;
-            while ((b = inputStream.read()) != -1) {
-                jsonString.append((char) b);
-            }
-            try {
-                System.out.println(jsonString.toString());
-                JSONObject httpJsonResult = new JSONObject(jsonString.toString());
-                return getLatLong(httpJsonResult);
-            } catch (JSONException e) {
-                Log.e(TAG, "JSONObject wasn't able to be made");
-            }
+            JsonReader reader = Json.createReader(inputStream);
+            JsonObject jsonObj = reader.readObject();
+            System.out.println("Json:\n" + jsonObj.toString());
+            result = getLatLong(jsonObj);
         } catch (MalformedURLException e) {
-            Log.e(TAG, "");
+            Log.e(TAG, "malformedUTL");
         } catch (IOException e) {}
-
-        return null;
+        System.out.println("Returning: " + result);
+        return result;
     }
 
-    private static Location getLatLong(JSONObject jsonObject) {
+    private static Location getLatLong(JsonObject jsonObject) {
 
         double longitude, latitude;
-        try {
 
-            longitude = ((JSONArray)jsonObject.get("results")).getJSONObject(0)
-                    .getJSONObject("geometry").getJSONObject("location")
-                    .getDouble("lng");
+        longitude = jsonObject.getJsonArray("results").getJsonObject(0)
+                .getJsonObject("geometry").getJsonObject("location")
+                .getJsonNumber("lng").doubleValue();
+        System.out.println("long is " + longitude);
+        latitude = jsonObject.getJsonArray("results").getJsonObject(0)
+                .getJsonObject("geometry").getJsonObject("location")
+                .getJsonNumber("lat").doubleValue();
+        System.out.println("lat is " + latitude);
 
-            latitude = ((JSONArray)jsonObject.get("results")).getJSONObject(0)
-                    .getJSONObject("geometry").getJSONObject("location")
-                    .getDouble("lat");
-
-            Location result = new Location("");
-            result.setLongitude(longitude);
-            result.setLatitude(latitude);
-            return result;
-        } catch (JSONException e) {
-            Log.e(TAG, "JSON exception while retrieving lat/long from JSON object");
-            return null;
-        }
+        Location result = new Location("address-to-loc");
+        result.setLongitude(32.5);
+        result.setLatitude(latitude);
+        System.out.println("RESULT: " + result.getLatitude() + " | " + result.getLongitude() + " | " + result.getProvider());
+        return result;
     }
 
 

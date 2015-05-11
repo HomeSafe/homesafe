@@ -14,6 +14,7 @@ public class ContactViewHolder extends RecyclerView.ViewHolder {
     protected TextView phone;
     protected TextView email;
     protected TextView tier;
+    protected long cid;
 
     public ContactViewHolder(View itemView) {
         super(itemView);
@@ -26,6 +27,7 @@ public class ContactViewHolder extends RecyclerView.ViewHolder {
                 // item clicked
                 Intent i = new Intent(v.getContext(), EditContactActivity.class);
 //                Toast.makeText(v.getContext(), name.getText().toString(), Toast.LENGTH_SHORT).show();
+                i.putExtra("CID", cid);
                 i.putExtra("NAME", name.getText().toString());
                 i.putExtra("PHONE", phone.getText().toString());
                 i.putExtra("EMAIL", email.getText().toString());
