@@ -18,7 +18,9 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:textColor="@android:color/black"
-        android:background="#9E9E9E" />
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:background="@drawable/ripple" />
 
     <com.rengwuxian.materialedittext.MaterialEditText
         android:layout_width="match_parent"

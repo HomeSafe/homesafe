@@ -16,9 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
-import cse403.homesafe.Data.Contacts;
 import cse403.homesafe.Data.DbFactory;
-import cse403.homesafe.Data.Destinations;
 import cse403.homesafe.Data.HomeSafeDbHelper;
 
 public class StartScreenActivity extends ActionBarActivity {

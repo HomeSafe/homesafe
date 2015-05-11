@@ -29,7 +29,6 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationViewHo
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
                 inflate(R.layout.location_card_view, viewGroup, false);
-
         return new LocationViewHolder(itemView);
     }
 

@@ -7,5 +7,6 @@
     <color name="window_background">#FFFFFF</color>
     <color name="navi_bar">#A5D6A7</color>
     <color name="accent">#FFCC80</color>
-
+    <color name="buttonColor">#BDBDBD</color>
+    <color name="buttonHighlightColor">#F5F5F5</color>
 </resources>

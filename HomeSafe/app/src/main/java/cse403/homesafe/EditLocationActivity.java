@@ -1,7 +1,6 @@
 package cse403.homesafe;
 
 import android.content.Intent;
-import android.media.Image;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -15,14 +14,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class AddLocationActivity extends ActionBarActivity {
+public class EditLocationActivity extends ActionBarActivity {
     Button discardChange;
     ImageView saveLocation;
+    Button deleteLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_location);
+        setContentView(R.layout.activity_edit_location);
+        Intent intent = getIntent();
+        String name = intent.getStringExtra("NAME");
+        String address = intent.getStringExtra("ADDRESS");
+        //TODO auto fill later
         ActionBar mActionBar = getSupportActionBar();
         mActionBar.setDisplayShowHomeEnabled(false);
         mActionBar.setDisplayShowTitleEnabled(false);
@@ -30,7 +34,7 @@ public class AddLocationActivity extends ActionBarActivity {
 
         View mCustomView = mInflater.inflate(R.layout.actionbar_custom, null);
         TextView mTitleTextView = (TextView) mCustomView.findViewById(R.id.title);
-        mTitleTextView.setText("Add new location");
+        mTitleTextView.setText("Edit location");
         mActionBar.setCustomView(mCustomView);
         mActionBar.setDisplayShowCustomEnabled(true);
         discardChange = (Button)findViewById(R.id.discard);
@@ -42,7 +46,7 @@ public class AddLocationActivity extends ActionBarActivity {
         discardChange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(AddLocationActivity.this, FavLocationsActivity.class);
+                Intent i = new Intent(EditLocationActivity.this, FavLocationsActivity.class);
                 startActivity(i);
                 finish();
             }
@@ -50,11 +54,12 @@ public class AddLocationActivity extends ActionBarActivity {
         saveLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(AddLocationActivity.this, ContactsActivity.class);
-                Toast.makeText(AddLocationActivity.this, "Added Location", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(EditLocationActivity.this, ContactsActivity.class);
+                Toast.makeText(EditLocationActivity.this, "Edited Location", Toast.LENGTH_SHORT).show();
                 startActivity(i);
                 finish();
             }
         });
+//        deleteLocation.setOnClickListener();
     }
 }

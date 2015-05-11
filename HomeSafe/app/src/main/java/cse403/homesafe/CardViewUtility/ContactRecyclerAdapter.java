@@ -1,14 +1,18 @@
 package cse403.homesafe.CardViewUtility;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import cse403.homesafe.AddContactActivity;
 import cse403.homesafe.Data.Contact;
+import cse403.homesafe.EditContactActivity;
 import cse403.homesafe.R;
 
 public class ContactRecyclerAdapter extends RecyclerView.Adapter<ContactViewHolder> {
@@ -25,14 +29,13 @@ public class ContactRecyclerAdapter extends RecyclerView.Adapter<ContactViewHold
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
                 inflate(R.layout.contact_card_view, viewGroup, false);
-
         return new ContactViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(ContactViewHolder contactViewHolder, int i) {
         Contact contact = contacts.get(i);
-        contactViewHolder.titleText.setText(contact.getName());
+        contactViewHolder.name.setText(contact.getName());
         contactViewHolder.phone.setText(contact.getPhoneNumber());
         contactViewHolder.email.setText(contact.getEmail());
     }
