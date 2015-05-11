@@ -15,7 +15,6 @@ public class Destination {
 
     // ****** Representation Invariant
     // name must not be null
-    // location must not be null
 
     public Destination (Location location, String name) {
         this.location = location;
@@ -48,7 +47,7 @@ public class Destination {
 
     /**
      * Assigns the passed in Location as the location of this Destination
-     * @param location
+     * @param location new Location
      */
     public void setLocation(Location location) {
         this.location = location;
