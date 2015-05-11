@@ -12,6 +12,7 @@ import android.location.Location;
 public class Destination {
     private Location location;
     private String name;
+    private long did;
 
     // ****** Representation Invariant
     // name must not be null
@@ -51,5 +52,21 @@ public class Destination {
      */
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    /**
+     * Assigns the passed in did as the id of this Destination
+     * @param did   the id of this Destination
+     */
+    public void setDid(long did) {
+        this.did = did;
+    }
+
+    /**
+     * Returns the id of this Destination
+     * @return  the id of this Destination
+     */
+    public long getDid() {
+        return this.did;
     }
 }
