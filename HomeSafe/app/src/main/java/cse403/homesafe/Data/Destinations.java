@@ -2,6 +2,7 @@ package cse403.homesafe.Data;
 
 import android.location.Location;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * This class provides functionality for adding and removing Location.
  */
 public class Destinations {
-    private List<Location> destinations;
+    private List<Destination> destinations;
     private static Destinations instance = new Destinations();
 
     // Representation invariant:
@@ -23,7 +24,7 @@ public class Destinations {
      * private constructor for singleton.
      */
     private Destinations() {
-        destinations = new LinkedList<Location>();
+        destinations = new ArrayList<Destination>();
     }
 
     public static Destinations getInstance() {
@@ -34,24 +35,24 @@ public class Destinations {
     }
 
     /**
-     * Adds a Location to Destinations
-     * @param loc   Location to add
+     * Adds a Destination to Destinations
+     * @param destination   Destination to add
      * @return      True if adding Location is successful, false otherwise
      */
-    public boolean addDestination(Location loc) {
-        return destinations.add(loc);
+    public boolean addDestination(Destination destination) {
+        return destinations.add(destination);
     }
 
     /**
-     * Removes a Location from Destinations
-     * @param loc   Location to remove
+     * Removes a Destination from Destinations
+     * @param destination   Destination to remove
      * @return      True if removing Location is successful, false otherwise
      */
-    public boolean removeDestination(Location loc) {
-        return destinations.remove(loc);
+    public boolean removeDestination(Destination destination) {
+        return destinations.remove(destination);
     }
 
-    public List<Location> getDestinations() {
+    public List<Destination> getDestinations() {
         return destinations;
     }
 
