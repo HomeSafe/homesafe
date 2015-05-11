@@ -72,6 +72,14 @@
             android:name=".AddLocationActivity"
             android:label="@string/title_activity_add_location" >
         </activity>
+        <activity
+            android:name=".EditLocationActivity"
+            android:label=".EditLocationActivity" >
+        </activity>
+        <activity
+            android:name=".EditContactActivity"
+            android:label=".EditContactActivity" >
+        </activity>
 
         <activity android:name=".Trip" >
         </activity>
