@@ -99,6 +99,10 @@
             android:name=".HSTimerActivity"
             android:label="@string/title_activity_hstimer" >
         </activity>
+        <activity
+            android:name=".ArrivalScreenActivity"
+            android:label="@string/title_activity_arrival_screen" >
+        </activity>
     </application>
 
 </manifest>
