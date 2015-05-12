@@ -16,15 +16,18 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
 import java.util.ArrayList;
 
 
-public class TripSettingActivity extends ActionBarActivity {
+public class TripSettingActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     Button destinations;
     TimePicker ETA;
@@ -33,6 +36,9 @@ public class TripSettingActivity extends ActionBarActivity {
 
     int PLACE_PICKER_REQUEST = 1;
 
+    GoogleApiClient mGoogleApiClient;
+    Location mLastLocation;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +46,7 @@ public class TripSettingActivity extends ActionBarActivity {
         setContentView(R.layout.activity_trip_setting);
 
         final TripSettingActivity that = this;
-        destinations = (Button) findViewById(R.id.spinnerDestination);
+        destinations = (Button) findViewById(R.id.setDestinationButton);
         destinations.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,17 +67,17 @@ public class TripSettingActivity extends ActionBarActivity {
                 input.setBackgroundColor(0xFFAAAAAA);
                 alert.setView(input);
 
-                int PLACE_PICKER_REQUEST = 1;
-                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-
-                Context context = getApplicationContext();
-                try {
-                    startActivityForResult(builder.build(context), PLACE_PICKER_REQUEST);
-                } catch (GooglePlayServicesRepairableException e) {
-                    e.printStackTrace();
-                } catch (GooglePlayServicesNotAvailableException e) {
-                    e.printStackTrace();
-                }
+//                int PLACE_PICKER_REQUEST = 1;
+//                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+//
+//                Context context = getApplicationContext();
+//                try {
+//                    startActivityForResult(builder.build(context), PLACE_PICKER_REQUEST);
+//                } catch (GooglePlayServicesRepairableException e) {
+//                    e.printStackTrace();
+//                } catch (GooglePlayServicesNotAvailableException e) {
+//                    e.printStackTrace();
+//                }
 
 
                 alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -134,5 +140,34 @@ public class TripSettingActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+        if (mLastLocation != null) {
+            //mLatitudeText.setText(String.valueOf(mLastLocation.getLatitude()));
+            //mLongitudeText.setText(String.valueOf(mLastLocation.getLongitude()));
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        // TODO
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        // TODO
     }
 }
