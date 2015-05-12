@@ -5,11 +5,11 @@ import android.test.ActivityUnitTestCase;
 import android.test.suitebuilder.annotation.MediumTest;
 
 import cse403.homesafe.StartScreenActivity;
-import android.location.Location;
+
 import android.util.Log;
 
 import cse403.homesafe.Util.GoogleMapsUtils;
-import cse403.homesafe.Util.HomeSafeCallback;
+import cse403.homesafe.Util.GoogleMapsUtilsCallback;
 
 
 /**
@@ -38,7 +38,7 @@ public class StartScreenActivityTest extends ActivityUnitTestCase<StartScreenAct
         final Object lock = new Object();
         synchronized (lock) {
 
-            GoogleMapsUtils.addressToLocation(input, new HomeSafeCallback() {
+            GoogleMapsUtils.addressToLocation(input, new GoogleMapsUtilsCallback() {
                 @Override
                 public void callback(Object obj) {
                     Log.d("StartScreenActivityTest", obj.toString());

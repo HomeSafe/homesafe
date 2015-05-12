@@ -16,22 +16,29 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
 import java.util.ArrayList;
 
 
-public class TripSettingActivity extends ActionBarActivity {
+public class TripSettingActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     Button destinations;
     TimePicker ETA;
     Button startTrip;
     Location destination;
+    Button newLocation;
 
     int PLACE_PICKER_REQUEST = 1;
+
+    GoogleApiClient mGoogleApiClient;
+    Location mLastLocation;
 
 
     @Override
@@ -40,14 +47,14 @@ public class TripSettingActivity extends ActionBarActivity {
         setContentView(R.layout.activity_trip_setting);
 
         final TripSettingActivity that = this;
-        destinations = (Button) findViewById(R.id.spinnerDestination);
+        destinations = (Button) findViewById(R.id.favoriteLocationButton);
         destinations.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final AlertDialog.Builder alert = new AlertDialog.Builder(that);
 
-                alert.setTitle("Destination");
-                alert.setMessage("Choose a destination from the map or from favorites:");
+                alert.setTitle("Set Destination");
+                alert.setMessage("Choose a destination from favorites:");
 
                 // Set an EditText view to get user input
                 final Spinner input = new Spinner(that);
@@ -61,6 +68,25 @@ public class TripSettingActivity extends ActionBarActivity {
                 input.setBackgroundColor(0xFFAAAAAA);
                 alert.setView(input);
 
+                alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        // TODO
+                    }
+                });
+                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        dialog.cancel();
+                    }
+                });
+
+                alert.show();
+            }
+        });
+
+        newLocation = (Button) findViewById(R.id.button4);
+        newLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 int PLACE_PICKER_REQUEST = 1;
                 PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
 
@@ -72,15 +98,6 @@ public class TripSettingActivity extends ActionBarActivity {
                 } catch (GooglePlayServicesNotAvailableException e) {
                     e.printStackTrace();
                 }
-
-
-                alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        //TODO
-                    }
-                });
-
-                alert.show();
             }
         });
 
@@ -134,5 +151,34 @@ public class TripSettingActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+        if (mLastLocation != null) {
+            //mLatitudeText.setText(String.valueOf(mLastLocation.getLatitude()));
+            //mLongitudeText.setText(String.valueOf(mLastLocation.getLongitude()));
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        // TODO
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        // TODO
     }
 }

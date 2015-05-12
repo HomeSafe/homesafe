@@ -1,6 +1,5 @@
 package cse403.homesafe.Util;
 
-import android.location.Geocoder;
 import android.location.Location;
 import android.util.Log;
 
@@ -10,7 +9,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
-import javax.json.JsonArray;
 import javax.json.JsonReader;
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -27,25 +25,16 @@ public class GoogleMapsUtils {
     private static final String GOOGLE_DIRECTIONS_URL = "http://maps.googleapis.com/maps/api/directions/json?origin=";
 
     /**
-     * Prevent this from being instantiated. This is a
-     * Class of static methods.
-     */
-//    private GoogleMapsUtils() {
-//        // nothing
-//    }
-
-    /**
      * Returns the estimated DistanceAndTime between these two objects.
      * Uses the Google Maps API
      * @param origin
      * @param dest
      * @return a DistanceAndTime object which represents the distane and time between these Locations.
      */
-    public static void getDistanceAndTime(Location origin, Location dest, HomeSafeCallback callback) {
+    public static void getDistanceAndTime(Location origin, Location dest, GoogleMapsUtilsCallback listener) {
         try {
             URL url = new URL(GOOGLE_DIRECTIONS_URL + origin.getLatitude() + "," + origin.getLongitude()
-                    + "&destination=" + dest.getLatitude() + "," + dest.getLongitude());
-            
+                    + "&destination=" + dest.getLatitude() + "," + dest.getLongitude() + "&mode=walking");
             URLConnection urlConnection = url.openConnection();
             InputStream inputStream = urlConnection.getInputStream();
             JsonReader reader = Json.createReader(inputStream);
@@ -59,7 +48,7 @@ public class GoogleMapsUtils {
         }
 
         // insert API call here
-        callback.callback(null);
+        listener.callback(null);
     }
 
     /**
@@ -68,7 +57,7 @@ public class GoogleMapsUtils {
      * Location of the address is returned via parameter to callback. Null if the HTTP request failed.
      * @param address Address from which Location will be derived.
      */
-    public static void addressToLocation(final String address, final HomeSafeCallback callback) {
+    public static void addressToLocation(final String address, final GoogleMapsUtilsCallback listener) {
         new Thread(new Runnable() {
             public void run() {
                 StringBuilder jsonString = new StringBuilder();
@@ -77,7 +66,6 @@ public class GoogleMapsUtils {
                     URL url = new URL(GOOGLE_GEOCODER_URL + address);
                     URLConnection urlConnection = url.openConnection();
                     InputStream inputStream = urlConnection.getInputStream();
-                    int b;
                     JsonReader reader = Json.createReader(inputStream);
                     JsonObject jsonObj = reader.readObject();
                     System.out.println("Json:\n" + jsonObj.toString());
@@ -86,7 +74,7 @@ public class GoogleMapsUtils {
                     Log.e(TAG, "malformedUTL");
                 } catch (IOException e) {}
                 System.out.println("Returning: " + result);
-                callback.callback(result);
+                listener.callback(result);
             }
         }).start();
     }
@@ -109,6 +97,17 @@ public class GoogleMapsUtils {
         result.setLatitude(latitude);
         System.out.println("RESULT: " + result.getLatitude() + " | " + result.getLongitude() + " | " + result.getProvider());
         return result;
+    }
+
+    private static double getDistance(JsonObject jsonObject) {
+
+        double METERS_TO_MILES = 1609.34;
+
+        double distance;
+
+//        distance = jsonObject.getJsonArray("routes").getJsonArray("legs")
+//                .get
+        return 0;
     }
 
 
