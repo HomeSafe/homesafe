@@ -42,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Favorites"
-        android:id="@+id/button2"
+        android:id="@+id/favoriteLocationButton"
         android:layout_below="@+id/textView2"
         android:layout_alignRight="@+id/spinnerETA"
         android:layout_alignEnd="@+id/spinnerETA" />
@@ -52,7 +52,7 @@
         android:layout_height="wrap_content"
         android:text="Add New "
         android:id="@+id/button4"
-        android:layout_alignTop="@+id/button2"
+        android:layout_alignTop="@+id/favoriteLocationButton"
         android:layout_alignLeft="@+id/spinnerETA"
         android:layout_alignStart="@+id/spinnerETA" />
 
@@ -65,7 +65,6 @@
         android:textSize="20dp"
         android:id="@+id/currentDestinationText"
         android:layout_marginTop="66dp"
-        android:layout_below="@+id/button2"
         android:layout_alignLeft="@+id/button4"
         android:layout_alignStart="@+id/button4" />
 

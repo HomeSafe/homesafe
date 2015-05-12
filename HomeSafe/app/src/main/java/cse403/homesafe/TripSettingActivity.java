@@ -46,14 +46,14 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
         setContentView(R.layout.activity_trip_setting);
 
         final TripSettingActivity that = this;
-        destinations = (Button) findViewById(R.id.setDestinationButton);
+        destinations = (Button) findViewById(R.id.favoriteLocationButton);
         destinations.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final AlertDialog.Builder alert = new AlertDialog.Builder(that);
 
-                alert.setTitle("Destination");
-                alert.setMessage("Choose a destination from the map or from favorites:");
+                alert.setTitle("Set Destination");
+                alert.setMessage("Choose a destination from favorites:");
 
                 // Set an EditText view to get user input
                 final Spinner input = new Spinner(that);
@@ -82,7 +82,12 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
 
                 alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        //TODO
+                        // TODO
+                    }
+                });
+                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        dialog.cancel();
                     }
                 });
 
