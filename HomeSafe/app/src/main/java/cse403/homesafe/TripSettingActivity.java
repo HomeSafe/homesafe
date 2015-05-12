@@ -113,6 +113,8 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
                         String allocatedTime = ETA.getCurrentMinute() + "";
                         // TODO : mapping from destination name to actual Location object?
                         //Trip currentTrip = new Trip(destinations.getSelectedItem(), Long.parseLong(allocatedTime));
+
+                        startActivity(new Intent(TripSettingActivity.this, HSTimerActivity.class));
                     }
 
                 }
