@@ -73,9 +73,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Set ETA"
+        android:text="Hours : Minutes"
         android:textColor="#000000"
         android:textSize="20dp"
+        android:layout_above="@+id/spinnerETA"
         android:id="@+id/textView3"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
