@@ -36,9 +36,7 @@ public class MessengerTest extends TestCase {
 
     @Test
     public void testSendNotifications() {
-
-        Messenger.sendNotifications(Contacts.Tier.ONE, new Location("provider"));
-
+        Messenger.sendNotifications(Contacts.Tier.ONE, new Location("provider"), context);
     }
 }
 

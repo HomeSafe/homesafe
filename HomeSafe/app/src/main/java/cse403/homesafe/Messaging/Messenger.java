@@ -26,10 +26,9 @@ public class Messenger {
      * @param tier Tier of contacts to be notified
      * @param location  Last known user location
      */
-    public static void sendNotifications (Contacts.Tier tier, Location location) {
-        Context currentContext = ContextHolder.getContext();
+    public static void sendNotifications (Contacts.Tier tier, Location location, Context context) {
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(currentContext);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         String customMessage = preferences.getString("customMessage", null);
 
         if (customMessage == null) {
@@ -42,9 +41,9 @@ public class Messenger {
         List<Contact> contactsNotified = contacts.getContactsInTier(tier);
         for (Contact c : contactsNotified) {
             if (!c.getEmail().equals(""))  // TODO (Alex): Change to '!= null' if Contact changes behavior
-                email.sendMessage(c, location, customMessage);  // Change customMessage parameter to appropriate in SharedPreferences
+                email.sendMessage(c, location, customMessage, context);  // Change customMessage parameter to appropriate in SharedPreferences
             if (!c.getPhoneNumber().equals(""))  // TODO (Alex): Change to '!= null' if Contact changes behavior
-                sms.sendMessage(c, location, customMessage);
+                sms.sendMessage(c, location, customMessage, context);
         }
     }
 }
