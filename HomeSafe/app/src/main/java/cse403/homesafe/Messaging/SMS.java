@@ -55,6 +55,6 @@ public class SMS implements Message {
             message += "\nMessage: " + customMessage;
         }
 
-        smsManager.sendTextMessage(recipient.getPhoneNumber(), null, message, null, null);
+        smsManager.sendTextMessage("+1" + recipient.getPhoneNumber(), null, message, null, null);
     }
 }

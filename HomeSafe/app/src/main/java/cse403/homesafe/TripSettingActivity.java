@@ -110,11 +110,10 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
         startTrip.setOnClickListener(
                 new Button.OnClickListener() {
                     public void onClick(View w) {
-                        String allocatedTime = ETA.getCurrentMinute() + "";
-                        // TODO : mapping from destination name to actual Location object?
-                        //Trip currentTrip = new Trip(destinations.getSelectedItem(), Long.parseLong(allocatedTime));
-
-                        startActivity(new Intent(TripSettingActivity.this, HSTimerActivity.class));
+                        long time = 1000 * (ETA.getCurrentHour() * 3600 + ETA.getCurrentMinute() * 60);
+                        Intent i = new Intent(getApplicationContext(), HSTimerActivity.class);
+                        i.putExtra("timefromuser", time);
+                        startActivity(i);
                     }
 
                 }
