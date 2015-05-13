@@ -33,6 +33,7 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
     TimePicker ETA;
     Button startTrip;
     Location destination;
+    Button newLocation;
 
     int PLACE_PICKER_REQUEST = 1;
 
@@ -67,19 +68,6 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
                 input.setBackgroundColor(0xFFAAAAAA);
                 alert.setView(input);
 
-//                int PLACE_PICKER_REQUEST = 1;
-//                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-//
-//                Context context = getApplicationContext();
-//                try {
-//                    startActivityForResult(builder.build(context), PLACE_PICKER_REQUEST);
-//                } catch (GooglePlayServicesRepairableException e) {
-//                    e.printStackTrace();
-//                } catch (GooglePlayServicesNotAvailableException e) {
-//                    e.printStackTrace();
-//                }
-
-
                 alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         // TODO
@@ -92,6 +80,24 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
                 });
 
                 alert.show();
+            }
+        });
+
+        newLocation = (Button) findViewById(R.id.button4);
+        newLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int PLACE_PICKER_REQUEST = 1;
+                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+
+                Context context = getApplicationContext();
+                try {
+                    startActivityForResult(builder.build(context), PLACE_PICKER_REQUEST);
+                } catch (GooglePlayServicesRepairableException e) {
+                    e.printStackTrace();
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
