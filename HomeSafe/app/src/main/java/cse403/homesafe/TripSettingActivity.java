@@ -25,15 +25,23 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import cse403.homesafe.Data.Destination;
+import cse403.homesafe.Data.Destinations;
+import cse403.homesafe.Util.DistanceAndTime;
+import cse403.homesafe.Util.GoogleMapsUtilsCallback;
 
 
-public class TripSettingActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class TripSettingActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleMapsUtilsCallback {
 
     Button destinations;
     TimePicker ETA;
     Button startTrip;
     Location destination;
     Button newLocation;
+
+    DistanceAndTime distAndTime;
 
     int PLACE_PICKER_REQUEST = 1;
 
@@ -58,12 +66,13 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
 
                 // Set an EditText view to get user input
                 final Spinner input = new Spinner(that);
-                ArrayList<String> list = new ArrayList<String>();
-                list.add("The HUB");
-                list.add("Grandma's House");
-                list.add("The Bar");
+                List<Destination> destinationList = Destinations.getInstance().getDestinations();
+                ArrayList<String> stringList = new ArrayList<String>();
+                for (Destination dest : destinationList) {
+                    stringList.add(dest.getName());
+                }
                 ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(that,
-                        android.R.layout.simple_spinner_item, list);
+                        android.R.layout.simple_spinner_item, stringList);
                 input.setAdapter(dataAdapter);
                 input.setBackgroundColor(0xFFAAAAAA);
                 alert.setView(input);
@@ -181,5 +190,17 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         // TODO
+    }
+
+    @Override
+    public void onGetDistanceAndTime(Object obj) {
+
+    }
+
+    @Override
+    public void onAddressToLocation(Object obj) {
+        if (obj instanceof DistanceAndTime) {
+            distAndTime = (DistanceAndTime) obj;
+        }
     }
 }
