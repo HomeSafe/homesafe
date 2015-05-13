@@ -5,15 +5,16 @@ import android.text.format.Time;
 
 /**
  * Created by Vivek on 5/7/15.
+ * Stores distance and time between an origin and destination location.
  */
 public class DistanceAndTime {
     private double distance;
-    private Time time;
+    private double time;  // In seconds
 
     private Location src;
     private Location dst;
 
-    public DistanceAndTime(Location src, Location dst, double distance, Time time) {
+    public DistanceAndTime(Location src, Location dst, double distance, double time) {
         this.src = src;
         this.dst = dst;
         this.distance = distance;
@@ -34,7 +35,7 @@ public class DistanceAndTime {
      * DistanceAndTime object
      * @return time between locations
      */
-    public Time getTime() {
+    public double getTime() {
         return time;
     }
 

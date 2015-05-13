@@ -1,6 +1,7 @@
 package cse403.homesafe.Util;
 
 import android.location.Location;
+import android.text.format.Time;
 import android.util.Log;
 
 import java.io.IOException;
@@ -31,24 +32,31 @@ public class GoogleMapsUtils {
      * @param dest
      * @return a DistanceAndTime object which represents the distane and time between these Locations.
      */
-    public static void getDistanceAndTime(Location origin, Location dest, GoogleMapsUtilsCallback listener) {
-        try {
-            URL url = new URL(GOOGLE_DIRECTIONS_URL + origin.getLatitude() + "," + origin.getLongitude()
-                    + "&destination=" + dest.getLatitude() + "," + dest.getLongitude() + "&mode=walking");
-            URLConnection urlConnection = url.openConnection();
-            InputStream inputStream = urlConnection.getInputStream();
-            JsonReader reader = Json.createReader(inputStream);
-            JsonObject jsonObj = reader.readObject();
-            System.out.println("Json:\n" + jsonObj.toString());
-            // TODO(Vivek) finish this implementation
-        } catch (MalformedURLException e) {
-            Log.e(TAG, "");
-        } catch (IOException e) {
-            Log.e(TAG, "ioexception");
-        }
+    public static void getDistanceAndTime(final Location origin, final Location dest, final GoogleMapsUtilsCallback listener) {
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    URL url = new URL(GOOGLE_DIRECTIONS_URL + origin.getLatitude() + "," + origin.getLongitude()
+                            + "&destination=" + dest.getLatitude() + "," + dest.getLongitude() + "&mode=walking");
+                    URLConnection urlConnection = url.openConnection();
+                    InputStream inputStream = urlConnection.getInputStream();
+                    JsonReader reader = Json.createReader(inputStream);
+                    JsonObject jsonObj = reader.readObject();
+                    System.out.println("Json:\n" + jsonObj.toString());
 
-        // insert API call here
-        listener.callback(null);
+                    double distance = getDistance(jsonObj);
+                    double time = getTime(jsonObj);
+
+                    DistanceAndTime result = new DistanceAndTime(origin, dest, distance, time);
+                    listener.callback(result);
+                } catch (MalformedURLException e) {
+                    Log.e(TAG, "");
+                } catch (IOException e) {
+                    Log.e(TAG, "ioexception");
+                }
+            }
+        }
+        ).start();
     }
 
     /**
@@ -99,15 +107,28 @@ public class GoogleMapsUtils {
         return result;
     }
 
+    // Returns distance in meters
     private static double getDistance(JsonObject jsonObject) {
-
-        double METERS_TO_MILES = 1609.34;
 
         double distance;
 
-//        distance = jsonObject.getJsonArray("routes").getJsonArray("legs")
-//                .get
-        return 0;
+        distance = jsonObject.getJsonArray("routes").getJsonObject(0)
+                .getJsonArray("legs").getJsonObject(0).getJsonObject("distance")
+                .getJsonNumber("value").doubleValue();
+
+        return distance;
+    }
+
+    // Returns time in seconds
+    private static double getTime(JsonObject jsonObject) {
+
+        double time;
+
+        time = jsonObject.getJsonArray("routes").getJsonObject(0)
+                .getJsonArray("legs").getJsonObject(0).getJsonObject("duration")
+                .getJsonNumber("value").doubleValue();
+
+        return time;
     }
 
 
