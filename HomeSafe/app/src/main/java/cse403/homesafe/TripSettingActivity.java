@@ -7,18 +7,21 @@ import android.content.Intent;
 import android.location.Location;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
@@ -43,18 +46,19 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
     Button startTrip;
     Location destination;
     Button newLocation;
-
     DistanceAndTime distAndTime;
-
     int PLACE_PICKER_REQUEST = 1;
-
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
+    String TAG = "TripSettingActivity";
+
+    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trip_setting);
+
 
         final TripSettingActivity that = this;
         destinations = (Button) findViewById(R.id.favoriteLocationButton);
@@ -68,8 +72,13 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
 
                 // Set an EditText view to get user input
                 final Spinner input = new Spinner(that);
+                Location washington = new Location("UW");
+                washington.setLongitude(122.3080);
+                washington.setLatitude(47.6550);
+                Destination university = new Destination(washington, "UW");
+                Destinations.getInstance().addDestination(university);
                 List<Destination> destinationList = Destinations.getInstance().getDestinations();
-                Map<String, Location> nameToLocation = new HashMap<String, Location>();
+                final Map<String, Location> nameToLocation = new HashMap<String, Location>();
 
                 ArrayList<String> stringList = new ArrayList<String>();
                 for (Destination dest : destinationList) {
@@ -82,9 +91,21 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
                 input.setBackgroundColor(0xFFAAAAAA);
                 alert.setView(input);
 
-                alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                alert.setPositiveButton("Set Destination", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        // TODO
+                        String nameOfDest = input.getSelectedItem() + "";
+                        destination = nameToLocation.get(nameOfDest);
+                        if (checkPlayServices()) {
+                            Log.e(TAG, "Google Play Services is installed");
+                            buildGoogleApiClient();
+                            onStart();
+                        } else {
+                            Log.e(TAG, "Google Play Services is not installed");
+                        }
+
+                        TextView currentDestinationText = (TextView) findViewById(R.id.currentDestinationText);
+                        currentDestinationText.setText(nameOfDest);
+
                     }
                 });
                 alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -140,7 +161,7 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
             if (resultCode == RESULT_OK) {
                 //TODO actually do something with the
                 Place place = PlacePicker.getPlace(data, this);
-                destination = new Location("lolwut?");
+                destination = new Location("New Destination");
                 destination.setLatitude(place.getLatLng().latitude);
                 destination.setLongitude(place.getLatLng().longitude);
             }
@@ -175,26 +196,41 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
+        if (mGoogleApiClient != null) {
+            Log.e(TAG, "Build Complete");
+        } else {
+            Log.e(TAG, "Build Incomplete");
+        }
     }
 
     @Override
     public void onConnected(Bundle connectionHint) {
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
+        Log.e(TAG, "Connected!");
         if (mLastLocation != null) {
             GoogleMapsUtils.getDistanceAndTime(mLastLocation, destination, this);
         }
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        if (mGoogleApiClient != null) {
+            Log.e(TAG, "Connection Started");
+            mGoogleApiClient.connect();
+        }
+    }
+
+    @Override
     public void onConnectionSuspended(int i) {
-        // TODO
+        Log.e(TAG, "Connection Suspended");
 
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        // TODO
+        Log.e(TAG, "Connection Failed");
     }
 
     @Override
@@ -214,4 +250,23 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
 
     @Override
     public void onAddressToLocation(Object obj) { }
+
+
+    private boolean checkPlayServices() {
+        int resultCode = GooglePlayServicesUtil
+                .isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            } else {
+                Toast.makeText(getApplicationContext(),
+                        "This device is not supported.", Toast.LENGTH_LONG)
+                        .show();
+                finish();
+            }
+            return false;
+        }
+        return true;
+    }
 }
