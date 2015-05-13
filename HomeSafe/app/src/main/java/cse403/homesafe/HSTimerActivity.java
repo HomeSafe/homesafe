@@ -53,8 +53,7 @@ public class HSTimerActivity extends ActionBarActivity {
         // Begin the clock with full time and set the stand-in for the text representation.
         txtTimer.setText("00:00");
         pb.setMax(30000 / 1000);
-//        countDownPeriod = Long.getLong(getIntent().getExtras().getString("timefromuser"));        // TODO
-        countDownPeriod = 30000;
+        countDownPeriod = getIntent().getExtras().getLong("timefromuser");
         createTimer();
     }
 
