@@ -2,6 +2,7 @@ package cse403.homesafe;
 //This class is for Start Screen Activity, where it handles the side bar and start trip events
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -16,9 +17,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
+import cse403.homesafe.Data.Contact;
+import cse403.homesafe.Data.Contacts;
 import cse403.homesafe.Data.DbFactory;
 import cse403.homesafe.Data.HomeSafeDbHelper;
+import cse403.homesafe.Messaging.SMS;
 import cse403.homesafe.Settings.SettingsActivity;
+import cse403.homesafe.Utility.ContextHolder;
 
 public class StartScreenActivity extends ActionBarActivity {
     private DrawerLayout mDrawerLayout;
@@ -58,6 +63,10 @@ public class StartScreenActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
+        ContextHolder.setContext(getApplicationContext());
+
+        Contact test = new Contact("Alex", "jahs.herndez@gmail.com", "4259884882", Contacts.Tier.ONE);
+        SMS.getInstance().sendMessage(test, new Location("blah"), "hello");
     }
     private void addDrawerItems() {
         final String[] menuListItems = getResources().getStringArray(R.array.menu_array);
