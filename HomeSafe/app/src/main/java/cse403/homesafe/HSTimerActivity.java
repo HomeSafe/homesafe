@@ -66,7 +66,7 @@ public class HSTimerActivity extends ActionBarActivity {
         pb = (ProgressBar) findViewById(R.id.progressBar);
         // rotates pb when starting up so that the progress bar starts from the bottom of
         // the circle rather than from the side.
-        Animation an = new RotateAnimation(0.0f, 90.0f, 250f, 273f);
+        Animation an = new RotateAnimation(0f, 0f, 0f, 0f);
         an.setFillAfter(true);
         pb.startAnimation(an);
     }

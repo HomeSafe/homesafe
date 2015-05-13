@@ -35,7 +35,7 @@
             android:inputType="numberPassword" />
         <EditTextPreference
             android:key="customMessage"
-            android:textColor="000"
+            android:textColor="#000"
             android:title="@string/preferences_title_custom_message"
             android:dialogTitle="Custom message to be sent to your contacts"
             android:defaultValue="" />
