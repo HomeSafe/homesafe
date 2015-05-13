@@ -45,12 +45,12 @@ public class ArrivalScreenActivity extends ActionBarActivity {
         contactsView.setLayoutManager(rvLayoutManager);
 
         // TODO send out all the emails or SMSs??
-        Email mailer = Email.getInstance();
-        Contacts c = Contacts.getInstance();     // TODO This needs to be the one contacts list belonging to the user
-        for (Contact contact : c.getContactsInTier(Contacts.Tier.ONE)) {
-            contacts.add(contact.getName());
-            mailer.sendMessage(contact, new Location("providername"), "Becky has arrived successfully at her destination");
-        }
+//        Email mailer = Email.getInstance();
+//        Contacts c = Contacts.getInstance();     // TODO This needs to be the one contacts list belonging to the user
+//        for (Contact contact : c.getContactsInTier(Contacts.Tier.ONE)) {
+//            contacts.add(contact.getName());
+//            mailer.sendMessage(contact, new Location("providername"), "Becky has arrived successfully at her destination");
+//        }
 
         // specify an adaoter
         rvAdapter = new ArrivalScreenAdapter(contactsList);
