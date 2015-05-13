@@ -25,11 +25,14 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cse403.homesafe.Data.Destination;
 import cse403.homesafe.Data.Destinations;
 import cse403.homesafe.Util.DistanceAndTime;
+import cse403.homesafe.Util.GoogleMapsUtils;
 import cse403.homesafe.Util.GoogleMapsUtilsCallback;
 
 
@@ -47,7 +50,6 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
 
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,9 +69,12 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
                 // Set an EditText view to get user input
                 final Spinner input = new Spinner(that);
                 List<Destination> destinationList = Destinations.getInstance().getDestinations();
+                Map<String, Location> nameToLocation = new HashMap<String, Location>();
+
                 ArrayList<String> stringList = new ArrayList<String>();
                 for (Destination dest : destinationList) {
                     stringList.add(dest.getName());
+                    nameToLocation.put(dest.getName(), dest.getLocation());
                 }
                 ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(that,
                         android.R.layout.simple_spinner_item, stringList);
@@ -116,6 +121,7 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
         ETA.setCurrentMinute(0);
 
         startTrip = (Button) findViewById(R.id.startTripButton);
+        startTrip.setEnabled(false);
         startTrip.setOnClickListener(
                 new Button.OnClickListener() {
                     public void onClick(View w) {
@@ -176,8 +182,7 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
         if (mLastLocation != null) {
-            //mLatitudeText.setText(String.valueOf(mLastLocation.getLatitude()));
-            //mLongitudeText.setText(String.valueOf(mLastLocation.getLongitude()));
+            GoogleMapsUtils.getDistanceAndTime(mLastLocation, destination, this);
         }
     }
 
@@ -200,6 +205,10 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
             int minutes = ((int) distAndTime.getTime() - hours*3600) / 60;
             ETA.setCurrentHour(hours);
             ETA.setCurrentMinute(minutes);
+
+            if (distAndTime != null && mLastLocation != null) {
+                startTrip.setEnabled(true);
+            }
         }
     }
 
