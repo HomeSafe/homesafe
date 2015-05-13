@@ -31,26 +31,26 @@ public class StartScreenActivityTest extends ActivityUnitTestCase<StartScreenAct
         startIntent = new Intent(Intent.ACTION_MAIN);
     }
 
-    @MediumTest
-    public void testAddressToLocation() throws InterruptedException{
-        Log.i("StartScreenActivityTest","Starting testAddressToLocation");
-        String input = "2220_e_aloha_st_wa";
-        final Object lock = new Object();
-        synchronized (lock) {
-
-            GoogleMapsUtils.addressToLocation(input, new GoogleMapsUtilsCallback() {
-                @Override
-                public void callback(Object obj) {
-                    Log.d("StartScreenActivityTest", obj.toString());
-                    synchronized (lock) {
-                        lock.notifyAll();
-                    }
-                }
-            });
-            lock.wait();
-        }
-        assertEquals(true, true);
-    }
+//    @MediumTest
+//    public void testAddressToLocation() throws InterruptedException{
+//        Log.i("StartScreenActivityTest","Starting testAddressToLocation");
+//        String input = "2220_e_aloha_st_wa";
+//        final Object lock = new Object();
+//        synchronized (lock) {
+//
+//            GoogleMapsUtils.addressToLocation(input, new GoogleMapsUtilsCallback() {
+//                @Override
+//                public void callback(Object obj) {
+//                    Log.d("StartScreenActivityTest", obj.toString());
+//                    synchronized (lock) {
+//                        lock.notifyAll();
+//                    }
+//                }
+//            });
+//            lock.wait();
+//        }
+//        assertEquals(true, true);
+//    }
 
     @MediumTest
     public void testPreconditions() {
