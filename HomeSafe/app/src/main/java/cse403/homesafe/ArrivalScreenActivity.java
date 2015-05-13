@@ -52,7 +52,7 @@ public class ArrivalScreenActivity extends ActionBarActivity {
 //            mailer.sendMessage(contact, new Location("providername"), "Becky has arrived successfully at her destination");
 //        }
         Contact Becky = new Contact("Becky", "spethous@gmail.com", "7735241294", Contacts.Tier.ONE);
-        mailer.sendMessage(Becky, new Location("Google maps"), "Becky has successfully arrived at her destination");
+        mailer.sendMessage(Becky, new Location("Google maps"), "Becky has successfully arrived at her destination", getApplicationContext());
 
         // specify an adaoter
         rvAdapter = new ArrivalScreenAdapter(contactsList);
