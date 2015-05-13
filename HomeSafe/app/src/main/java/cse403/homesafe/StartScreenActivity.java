@@ -8,7 +8,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.telephony.SmsManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -64,8 +63,10 @@ public class StartScreenActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        SmsManager smsManager = SmsManager.getDefault();
-        smsManager.sendTextMessage("+14259884882", null, "sms message", null, null);
+        ContextHolder.setContext(getApplicationContext());
+
+        Contact test = new Contact("Alex", "jahs.herndez@gmail.com", "4259884882", Contacts.Tier.ONE);
+        SMS.getInstance().sendMessage(test, new Location("blah"), "hello");
     }
     private void addDrawerItems() {
         final String[] menuListItems = getResources().getStringArray(R.array.menu_array);
