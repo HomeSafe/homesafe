@@ -2,14 +2,21 @@ import junit.framework.TestCase;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.robolectric.Robolectric;
+import org.robolectric.shadows.ShadowSmsManager;
 
 import cse403.homesafe.Data.Contact;
 import cse403.homesafe.Data.Contacts;
 import cse403.homesafe.Messaging.SMS;
+
+import android.content.Context;
 import android.location.Location;
+import android.telephony.SmsManager;
+
+import static org.mockito.Mockito.*;
 
 /**
- * Created by dliuxy94 on 5/5/15.
+ * Test suite for SMS.java using robolectric and mockito
  */
 public class SMSTest extends TestCase {
 
@@ -17,16 +24,26 @@ public class SMSTest extends TestCase {
     private Contact recipient;
     private Location location;
     private String customMessage;
+    Context context;
 
     @Before
     public void setUp() {
+        context = mock(Context.class);
+
         sms = SMS.getInstance();
-        recipient = new Contact("Foo", null, "4252812879", Contacts.Tier.ONE);
+        recipient = new Contact("Foo", "placeholder", "4252812879", Contacts.Tier.ONE);
         location = new Location("CSE");
+        customMessage = "Hello";
     }
 
     @Test
     public void testSendTextMessage() {
+
         sms.sendMessage(recipient, location, customMessage);
+
+        ShadowSmsManager shadowSmsManager = Robolectric.shadowOf(SmsManager.getDefault());
+        ShadowSmsManager.TextSmsParams lastSentTextMessageParams = shadowSmsManager.getLastSentTextMessageParams();
+
+        assertTrue(lastSentTextMessageParams.getDestinationAddress().equals("+14259884882"));
     }
 }

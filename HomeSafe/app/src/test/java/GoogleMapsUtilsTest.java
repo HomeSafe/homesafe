@@ -1,4 +1,5 @@
 import android.location.Location;
+import android.util.Log;
 
 import junit.framework.TestCase;
 
@@ -6,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cse403.homesafe.Util.GoogleMapsUtils;
+import cse403.homesafe.Util.GoogleMapsUtilsCallback;
 
 /**
  * Unit test case for the various static methods in GoogleMapsUtils
@@ -26,10 +28,27 @@ public class GoogleMapsUtilsTest extends TestCase {
         assertEquals(true, true);
     }
 
-    @Test
-    public void testDistanceAndTime() {
-//                System.out.println("sdfsf");
-    }
+//    @Test
+//    public void testDistanceAndTime() {
+//        String start = "2220+e+aloha+st+wa";
+//        String end = "12711+se+42nd+st+bellevue+wa";
+//        final Object lock = new Object();
+//        synchronized (lock) {
+//
+//            GoogleMapsUtils.getDistanceAndTime(start, end, new GoogleMapsUtilsCallback() {
+//                public void onGetDistanceAndTime(Object obj) {
+//                    synchronized (lock) {
+//                        lock.notifyAll();
+//                    }
+//                }
+//                public void onAddressToLocation(Object obj) {}
+//            });
+//            try {
+//                lock.wait();
+//            } catch (InterruptedException e) {}
+//        }
+//        assertEquals(true, true);
+//    }
 
     @Test
     public void testSendMessage() {

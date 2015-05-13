@@ -12,6 +12,7 @@ buildscript {
 
         // Added here as per https://www.bignerdranch.com/blog/all-in-together-android-studio-gradle-and-robolectric/
         classpath 'com.github.jcandksolutions.gradle:android-unit-test:2.1.1'
+        classpath 'org.robolectric:robolectric-gradle-plugin:1.0.1'
     }
 }
 
