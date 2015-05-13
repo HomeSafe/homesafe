@@ -52,7 +52,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
             listPreference.setSummary(listPreference.getEntry());
         }
         if (preference instanceof EditTextPreference) {
-            if (!preference.getTitle().toString().equals("Passcode")) {
+            if (!preference.getTitle().toString().equals("Passcode")) {  // Don't show if it's the passcode preference
                 EditTextPreference editTextPref = (EditTextPreference) preference;
                 preference.setSummary(editTextPref.getText());
             }
