@@ -194,13 +194,15 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
 
     @Override
     public void onGetDistanceAndTime(Object obj) {
-
+        if (obj instanceof DistanceAndTime) {
+            distAndTime = (DistanceAndTime) obj;
+            int hours = (int) distAndTime.getTime() % 3600;
+            int minutes = ((int) distAndTime.getTime() - hours*3600) / 60;
+            ETA.setCurrentHour(hours);
+            ETA.setCurrentMinute(minutes);
+        }
     }
 
     @Override
-    public void onAddressToLocation(Object obj) {
-        if (obj instanceof DistanceAndTime) {
-            distAndTime = (DistanceAndTime) obj;
-        }
-    }
+    public void onAddressToLocation(Object obj) { }
 }
