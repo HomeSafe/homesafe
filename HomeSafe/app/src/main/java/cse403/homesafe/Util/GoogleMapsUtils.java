@@ -48,7 +48,7 @@ public class GoogleMapsUtils {
                     double time = getTime(jsonObj);
 
                     DistanceAndTime result = new DistanceAndTime(origin, dest, distance, time);
-                    listener.callback(result);
+                    listener.onGetDistanceAndTime(result);
                 } catch (MalformedURLException e) {
                     Log.e(TAG, "");
                 } catch (IOException e) {
@@ -82,7 +82,7 @@ public class GoogleMapsUtils {
                     Log.e(TAG, "malformedUTL");
                 } catch (IOException e) {}
                 System.out.println("Returning: " + result);
-                listener.callback(result);
+                listener.onAddressToLocation(result);
             }
         }).start();
     }

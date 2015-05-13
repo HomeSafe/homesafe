@@ -6,5 +6,6 @@ package cse403.homesafe.Util;
  * connection results finish.
  */
 public interface GoogleMapsUtilsCallback {
-    void callback(Object obj);
+    void onGetDistanceAndTime(Object obj);
+    void onAddressToLocation(Object obj);
 }
