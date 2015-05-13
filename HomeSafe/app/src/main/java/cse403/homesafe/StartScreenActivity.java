@@ -64,9 +64,6 @@ public class StartScreenActivity extends ActionBarActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
 
         ContextHolder.setContext(getApplicationContext());
-
-        Contact test = new Contact("Alex", "jahs.herndez@gmail.com", "4259884882", Contacts.Tier.ONE);
-        SMS.getInstance().sendMessage(test, new Location("blah"), "hello");
     }
     private void addDrawerItems() {
         final String[] menuListItems = getResources().getStringArray(R.array.menu_array);
