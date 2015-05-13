@@ -70,10 +70,8 @@ public class Email extends javax.mail.Authenticator implements cse403.homesafe.M
      * @param location      Last location of user
      * @param customMessage Customized message to be sent
      */
-    public void sendMessage(Contact recipient, Location location, String customMessage) {
+    public void sendMessage(Contact recipient, Location location, String customMessage, Context context) {
         String recipientEmail = recipient.getEmail();
-
-        Context currentContext = ContextHolder.getContext();  // TODO: Ensure Context has been set from main activity
 
 //        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(currentContext);
 //        String userFirstName = preferences.getString("firstName", null);

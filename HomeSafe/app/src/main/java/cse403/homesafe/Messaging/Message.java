@@ -1,6 +1,8 @@
 package cse403.homesafe.Messaging;
 
 import cse403.homesafe.Data.Contact;
+
+import android.content.Context;
 import android.location.Location;
 
 /**
@@ -11,11 +13,12 @@ public interface Message {
 
     /**
      * Sends alert message to the specified recipient through the appropriate subclass
-     * communication channel.
+     * communication channel. Requires caller to pass in application Context. This is
+     * easily achievable using getApplicationContext() from within an Activity.
      * @param recipient Recipient of the intended message
      * @param location Last location of user
      * @param customMessage Message to be send
      */
-    public void sendMessage(Contact recipient, Location location, String customMessage);
+    public void sendMessage(Contact recipient, Location location, String customMessage, Context context);
 
 }
