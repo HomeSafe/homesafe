@@ -3,6 +3,7 @@ package cse403.homesafe.Data;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.location.Location;
 import android.util.Log;
 
 import static cse403.homesafe.Data.HomeSafeContract.*;
@@ -15,7 +16,12 @@ public class DbFactory {
     private static Contacts mContactList = Contacts.getInstance();
     private static Destinations mDestinationList = Destinations.getInstance();
 
-    public static boolean addContactToDb(Contact contact, HomeSafeDbHelper mDbHelper){
+    /**
+     * save a new contact into database with pass in contact
+     * @param contact   contact to be saved in database
+     * @param mDbHelper Database helper
+     */
+    public static void addContactToDb(Contact contact, HomeSafeDbHelper mDbHelper){
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
@@ -31,16 +37,20 @@ public class DbFactory {
                 null,
                 values);
         contact.setCid(newRowId);
-        return true;
     }
 
-    public static boolean addDestinationToDb(Destination destination, HomeSafeDbHelper mDbHelper) {
+    /**
+     * save a new destination into database with pass in destination
+     * @param destination   destination to be saved in database
+     * @param mDbHelper Database helper
+     */
+    public static void addDestinationToDb(Destination destination, HomeSafeDbHelper mDbHelper) {
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
         values.put(LocationEntry.COLUMN_NAME, destination.getName());
-        values.put(LocationEntry.COLUMN_LNG, destination.getLocation().getLongitude());
-        values.put(LocationEntry.COLUMN_LAT, destination.getLocation().getLatitude());
+        values.put(LocationEntry.COLUMN_LNG, String.valueOf(destination.getLocation().getLongitude()));
+        values.put(LocationEntry.COLUMN_LAT, String.valueOf(destination.getLocation().getLatitude()));
 
         // Insert the new row, returning the primary key value of the new row
         long newRowId;
@@ -49,9 +59,12 @@ public class DbFactory {
                 null,
                 values);
         destination.setDid(newRowId);
-        return true;
     }
 
+    /**
+     * retrieve all the contacts info and destinations info from database
+     * @param mDbHelper Database helper
+     */
     public static void retrieveFromDb(HomeSafeDbHelper mDbHelper) {
         // retrieve contact info from database
         try {
@@ -77,18 +90,88 @@ public class DbFactory {
                 newContact.setCid(id);
                 mContactList.addContact(newContact, newContact.getTier());
             }
+            c.close();
             Log.d(TAG, "Retrieve contacts info from Database successfully");
         } catch (Exception e) {
             Log.e(TAG, "Retrieve contacts info from Database failed");
             e.printStackTrace();
         }
 
-        // TODO retrieve favorite destination from database
+        //  retrieve favorite destination from database
+        try {
+            SQLiteDatabase db = mDbHelper.getReadableDatabase();
+            Cursor c = db.query(
+                    LocationEntry.TABLE_NAME,  // The table to query
+                    null,                       // The columns to return
+                    null,                                // The columns for the WHERE clause
+                    null,                            // The values for the WHERE clause
+                    null,                                     // don't group the rows
+                    null,                                     // don't filter by row groups
+                    null                                 // The sort order
+            );
+
+            while (c.moveToNext()) {
+                long id = c.getLong(c.getColumnIndexOrThrow(LocationEntry._ID));
+                String name = c.getString(c.getColumnIndexOrThrow(LocationEntry.COLUMN_NAME));
+                String latitude = c.getString(c.getColumnIndexOrThrow(LocationEntry.COLUMN_LAT));
+                String longitude = c.getString(c.getColumnIndexOrThrow(LocationEntry.COLUMN_LNG));
+                Location newLocation = new Location(String.valueOf(id));
+                newLocation.setLatitude(Double.parseDouble(latitude));
+                newLocation.setLongitude(Double.parseDouble(longitude));
+                Destination newDestination = new Destination(newLocation, name);
+                newDestination.setDid(id);
+                mDestinationList.addDestination(newDestination);
+            }
+            c.close();
+            Log.d(TAG, "Retrieve destinations info from Database successfully");
+        } catch (Exception e) {
+            Log.e(TAG, "Retrieve destinations info from Database failed");
+            e.printStackTrace();
+        }
 
     }
 
-    // TODO updateDestination
-    // TODO deleteDestination
+    /**
+     * update the destination info with pass in Destination object
+     * @param destination   new destination object to be updated according the id of destination
+     * @param mDbHelper database helper
+     */
+    public static void updateDestination(Destination destination, HomeSafeDbHelper mDbHelper) {
+        try {
+            SQLiteDatabase db = mDbHelper.getReadableDatabase();
+
+            // New value for one column
+            ContentValues values = new ContentValues();
+            values.put(LocationEntry.COLUMN_NAME, destination.getName());
+            values.put(LocationEntry.COLUMN_LNG, String.valueOf(destination.getLocation().getLongitude()));
+            values.put(LocationEntry.COLUMN_LAT, String.valueOf(destination.getLocation().getLatitude()));
+
+            // Which row to update, based on the ID
+            String selection = LocationEntry._ID + " LIKE ?";
+            String[] selectionArgs = {String.valueOf(destination.getDid())};
+
+            int count = db.update(
+                    LocationEntry.TABLE_NAME,
+                    values,
+                    selection,
+                    selectionArgs);
+            if (count == 1) {
+                Log.d(TAG, "Update destination info successfully");
+            } else {
+                Log.e(TAG, "Update destination info failed");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, "Retrieve From Database failed");
+        }
+
+    }
+
+    /**
+     * update the contact info with pass in contact object
+     * @param contact   new contact object to be updated according the id of contact
+     * @param mDbHelper database helper
+     */
     public static void updateContact(Contact contact, HomeSafeDbHelper mDbHelper) {
         try {
             SQLiteDatabase db = mDbHelper.getReadableDatabase();
@@ -120,6 +203,26 @@ public class DbFactory {
         }
     }
 
+    /**
+     * Delete destination info backend by pass in destination id
+     * @param did   the id of destination which needs to be deleted
+     * @param mDbHelper database helper
+     */
+    public static void deleteDestinationFromDb(long did, HomeSafeDbHelper mDbHelper) {
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        // Define 'where' part of query.
+        String selection = LocationEntry._ID + " LIKE ?";
+        // Specify arguments in placeholder order.
+        String[] selectionArgs = { String.valueOf(did) };
+        // Issue SQL statement.
+        db.delete(LocationEntry.TABLE_NAME, selection, selectionArgs);
+    }
+
+    /**
+     * Delete contact info backend by pass in contact id
+     * @param cid   the id of contact which needs to be deleted
+     * @param mDbHelper database helper
+     */
     public static void deleteContactFromDb(long cid, HomeSafeDbHelper mDbHelper) {
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         // Define 'where' part of query.
