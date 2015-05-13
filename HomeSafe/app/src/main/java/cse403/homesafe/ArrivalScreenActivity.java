@@ -22,7 +22,7 @@ public class ArrivalScreenActivity extends ActionBarActivity {
     // TODO Need to populate the contact list from the first tier contacts
     private RecyclerView.Adapter rvAdapter;
 
-    private final String[] contactsList = {"Mom", "Dad", "The Dog", "Sister", "Uncle Phil", "Uncle Heime", "Cousin James", "Aunt Susan"};
+    private final String[] contactsList = {"Becky"};
     private Button homescreenBtn;
     private ArrayList<String> contacts;
 
@@ -45,12 +45,14 @@ public class ArrivalScreenActivity extends ActionBarActivity {
         contactsView.setLayoutManager(rvLayoutManager);
 
         // TODO send out all the emails or SMSs??
-//        Email mailer = Email.getInstance();
+        Email mailer = Email.getInstance();
 //        Contacts c = Contacts.getInstance();     // TODO This needs to be the one contacts list belonging to the user
 //        for (Contact contact : c.getContactsInTier(Contacts.Tier.ONE)) {
 //            contacts.add(contact.getName());
 //            mailer.sendMessage(contact, new Location("providername"), "Becky has arrived successfully at her destination");
 //        }
+        Contact Becky = new Contact("Becky", "spethous@gmail.com", "7735241294", Contacts.Tier.ONE);
+        mailer.sendMessage(Becky, new Location("Google maps"), "Becky has successfully arrived at her destination");
 
         // specify an adaoter
         rvAdapter = new ArrivalScreenAdapter(contactsList);

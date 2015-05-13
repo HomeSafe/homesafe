@@ -21,7 +21,7 @@ public class EmailTest extends TestCase {
     @Before
     public void setUp() {
         emailInstance = Email.getInstance();
-        testRecipient = new Contact("Johnny", "jahrndez@uw.edu", "4259884882", Contacts.Tier.ONE);
+        testRecipient = new Contact("Johnny", "spethous@gmail.com", "4259884882", Contacts.Tier.ONE);
         location = new Location("Google Maps");
     }
 
