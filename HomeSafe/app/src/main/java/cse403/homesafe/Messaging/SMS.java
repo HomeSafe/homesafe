@@ -42,17 +42,24 @@ public class SMS implements Message {
         String message = "";
         Context context = ContextHolder.getContext();
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String userName = preferences.getString("name", null);
+        
+        String userFirstName = preferences.getString("firstName", null);
+        String userLastName = preferences.getString("lastName", null);
 
-        if (userName == null) {
-            throw new RuntimeException("No user name found.");
-        }
+        // TODO: At a later time, we may force user to set first and last name before starting any trips.
+        // TODO (cont'd): As such, this check may be unnecessary.
+        userFirstName = (userFirstName == null) ? "" : userFirstName;
+        userLastName = (userLastName == null) ? "" : userLastName;
 
-        message = "This user may need your help.\n";
-        message += "User: " + userName + "\nLocation: " + location.toString();
+        message = userFirstName + userLastName + " may need your help!\n";
+        message += userFirstName + " was using HomeSafe, a walking safety app.\n\n They were"
+                + " using the app to get to a destination, but did not check in with the app."
+                + " As a result, this is an automated email being sent to all of " + userFirstName
+                + "'s contacts. Their last know location is (" + location.getLatitude() + ", "
+                + location.getLongitude() + "). You may need to check in with " + userFirstName + ".";
 
         if (!customMessage.isEmpty()) {
-            message += "\nMessage: " + customMessage;
+            message += "\n\n" + userFirstName + " says: " + customMessage;
         }
 
         smsManager.sendTextMessage("+1" + recipient.getPhoneNumber(), null, message, null, null);
