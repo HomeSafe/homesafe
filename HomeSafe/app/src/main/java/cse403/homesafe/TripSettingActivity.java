@@ -250,6 +250,9 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
 
                     if (distAndTime != null && mLastLocation != null) {
                         startTrip.setEnabled(true);
+                        String estimationMsg = "Your estimated time of arrival is " + hours +
+                                " hours and " + minutes + " minutes.";
+                        Toast.makeText(TripSettingActivity.this, estimationMsg, Toast.LENGTH_SHORT).show();
                     }
                 }
 

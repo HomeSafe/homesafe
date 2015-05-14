@@ -52,6 +52,11 @@ public class HSTimerActivity extends ActionBarActivity {
         // Begin the clock with full time and set the stand-in for the text representation.
         txtTimer.setText("00:00");
         countDownPeriod = getIntent().getExtras().getLong("timefromuser");
+        if (countDownPeriod == 0) {
+            Toast.makeText(HSTimerActivity.this, "You entered 0 time!", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+
         pb.setMax((int) countDownPeriod / 1000);
         createTimer();
     }
