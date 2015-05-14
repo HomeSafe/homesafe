@@ -76,9 +76,9 @@ public class GoogleMapsUtils {
     public static void addressToLocation(final String address, final GoogleMapsUtilsCallback listener) {
         new Thread(new Runnable() {
             public void run() {
-                StringBuilder jsonString = new StringBuilder();
-                Location result = null;
+                Location result;
                 try {
+                    String formattedAddress = address.replace(' ', '+');
                     URL url = new URL(GOOGLE_GEOCODER_URL + address);
                     URLConnection urlConnection = url.openConnection();
                     InputStream inputStream = urlConnection.getInputStream();
