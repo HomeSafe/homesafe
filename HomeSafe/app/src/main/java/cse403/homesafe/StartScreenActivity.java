@@ -107,7 +107,10 @@ public class StartScreenActivity extends ActionBarActivity {
         String userFirstName = preferences.getString("firstName", null);
         String userLastName = preferences.getString("lastName", null);
 
-        return password == null || userFirstName == null || userLastName == null;
+        if (password == null || userFirstName == null || userLastName == null)
+            return false;
+
+        return userFirstName.length() * userLastName.length() * password.length() != 0;
     }
 
     private void setupButton() {
