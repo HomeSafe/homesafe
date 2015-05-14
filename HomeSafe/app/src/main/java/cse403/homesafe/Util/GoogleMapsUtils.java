@@ -79,7 +79,7 @@ public class GoogleMapsUtils {
                 Location result;
                 try {
                     String formattedAddress = address.replace(' ', '+');
-                    URL url = new URL(GOOGLE_GEOCODER_URL + address);
+                    URL url = new URL(GOOGLE_GEOCODER_URL + formattedAddress);
                     URLConnection urlConnection = url.openConnection();
                     InputStream inputStream = urlConnection.getInputStream();
                     JsonReader reader = Json.createReader(inputStream);
