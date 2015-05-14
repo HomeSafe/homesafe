@@ -45,7 +45,7 @@ public class Destination implements GoogleMapsUtilsCallback {
      * @param name name of the location
      * @param address address of the location
      */
-    public Destination (String name, String address) throws InterruptedException {
+    public Destination (String name, String address) {
         this.name = name;
         this.address = address;
 
@@ -55,7 +55,11 @@ public class Destination implements GoogleMapsUtilsCallback {
         // asynchronously.
         synchronized(this) {
             GoogleMapsUtils.addressToLocation(address, this);
-            this.wait(200);
+            try {
+                this.wait(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
