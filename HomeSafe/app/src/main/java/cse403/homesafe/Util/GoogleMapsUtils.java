@@ -18,8 +18,8 @@ import javax.json.JsonObject;
 
 
 /**
- * GoogleMapsUtils wraps API calls to the Google maps and
- * Distance Matrix APIs.
+ * GoogleMapsUtils wraps API calls to the Google Maps Geocode
+ * and Directions APIs.
  */
 public class GoogleMapsUtils {
 
@@ -28,11 +28,12 @@ public class GoogleMapsUtils {
     private static final String GOOGLE_DIRECTIONS_URL = "http://maps.googleapis.com/maps/api/directions/json?origin=";
 
     /**
-     * Returns the estimated DistanceAndTime between these two objects.
-     * Uses the Google Maps API
-     * @param origin
-     * @param dest
-     * @return a DistanceAndTime object which represents the distane and time between these Locations.
+     * Uses the Google Maps API to calculate the duration of a trip on foot
+     * and distance of path. Returns the resulting DistanceAndTime through
+     * a callback to the specified GoogleMapsUtilsCallback listener. If the
+     * Google Maps query returns no results, callback is invoked with null Location.
+     * @param origin Starting Location
+     * @param dest Ending Location
      */
     public static void getDistanceAndTime(final Location origin, final Location dest, final GoogleMapsUtilsCallback listener) {
         new Thread(new Runnable() {
@@ -45,6 +46,9 @@ public class GoogleMapsUtils {
                     InputStream inputStream = urlConnection.getInputStream();
                     JsonReader reader = Json.createReader(inputStream);
                     JsonObject jsonObj = reader.readObject();
+
+                    if (!isValid(jsonObj))  // Check if the query had results
+                        listener.onGetDistanceAndTime(null);
 
                     double distance = getDistance(jsonObj);
                     double time = getTime(jsonObj);
@@ -64,8 +68,9 @@ public class GoogleMapsUtils {
 
     /**
      * Sends the specified address to Google Directions API and returns a Location object with
-     * the appropriate latitude/longitude parameters.
-     * Location of the address is returned via parameter to callback. Null if the HTTP request failed.
+     * the appropriate latitude/longitude parameters through a callback to the specified
+     * GoogleMapsUtilsCallback listener. Null if the HTTP request fails or if the query did
+     * not return any results.
      * @param address Address from which Location will be derived.
      */
     public static void addressToLocation(final String address, final GoogleMapsUtilsCallback listener) {
@@ -79,16 +84,23 @@ public class GoogleMapsUtils {
                     InputStream inputStream = urlConnection.getInputStream();
                     JsonReader reader = Json.createReader(inputStream);
                     JsonObject jsonObj = reader.readObject();
+
+                    if (!isValid(jsonObj))  // Check if the query had results
+                        listener.onAddressToLocation(null);
+
                     result = getLatLong(jsonObj);
+
+                    listener.onAddressToLocation(result);
+
                 } catch (MalformedURLException e) {
                     Log.e(TAG, "malformedUTL");
                 } catch (IOException e) {}
-                System.out.println("Returning: " + result);
-                listener.onAddressToLocation(result);
             }
         }).start();
     }
 
+    // Parses and extracts the Latitude and Longitude from the passed
+    // in JsonObject and returns a new Location object with those parameters.
     private static Location getLatLong(JsonObject jsonObject) {
 
         double longitude, latitude;
@@ -96,17 +108,21 @@ public class GoogleMapsUtils {
         longitude = jsonObject.getJsonArray("results").getJsonObject(0)
                 .getJsonObject("geometry").getJsonObject("location")
                 .getJsonNumber("lng").doubleValue();
-        System.out.println("long is " + longitude);
+
         latitude = jsonObject.getJsonArray("results").getJsonObject(0)
                 .getJsonObject("geometry").getJsonObject("location")
                 .getJsonNumber("lat").doubleValue();
-        System.out.println("lat is " + latitude);
 
         Location result = new Location("address-to-loc");
-        result.setLongitude(32.5);
+        result.setLongitude(longitude);
         result.setLatitude(latitude);
-        System.out.println("RESULT: " + result.getLatitude() + " | " + result.getLongitude() + " | " + result.getProvider());
+
         return result;
+    }
+
+    // Returns true if the query stored in the specified JsonObject yielded results
+    private static boolean isValid(JsonObject jsonObject) {
+        return jsonObject.getJsonString("status").getString().equals("OK");
     }
 
     // Returns distance in meters

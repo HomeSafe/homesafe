@@ -70,33 +70,46 @@ public class Email extends javax.mail.Authenticator implements cse403.homesafe.M
      * @param location      Last location of user
      * @param customMessage Customized message to be sent
      */
-    public void sendMessage(Contact recipient, Location location, String customMessage, Context context) {
-        String recipientEmail = recipient.getEmail();
+    public void sendMessage(final Contact recipient, final Location location, final String customMessage, final Context context) {
+        new Thread(new Runnable() {
+            public void run() {
+                String recipientEmail = recipient.getEmail();
 
 //        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(currentContext);
 //        String userFirstName = preferences.getString("firstName", null);
 //        String userLastName = preferences.getString("lastName", null);
 
-        String userFirstName = "Joe";
-        String userLastName = "Doe";
+                String userFirstName = "Joe";
+                String userLastName = "Doe";
 
 //        if (userFirstName == null || userLastName == null)
 //            throw new RuntimeException("User's first or last name is missing.");
 
 
-        String subject = userFirstName + " " + userLastName + " May Need Your Help";
-        String body = userFirstName + " was using HomeSafe, a walking safety app.\n\n They were"
-                + " using the app to get to a destination, but did not check in with the app."
-                + " As a result, this is an automated email being sent to all of " + userFirstName
-                + "'s contacts. Their last know location is (" + location.getLatitude() + ", "
-                + location.getLongitude() + "). You may need to check in with " + userFirstName + "."
-                + "\n\n" + userFirstName + " says: " + customMessage;
+                String subject = userFirstName + " " + userLastName + " May Need Your Help";
+                String body = userFirstName + " was using HomeSafe, a walking safety app.\n\n They were"
+                        + " using the app to get to a destination, but did not check in with the app."
+                        + " As a result, this is an automated email being sent to all of " + userFirstName
+                        + "'s contacts. Their last know location is (" + location.getLatitude() + ", "
+                        + location.getLongitude() + "). You may need to check in with " + userFirstName + "."
+                        + "\n\n" + userFirstName + " says: " + customMessage;
 
-        try {
-            sendMail(subject, body, "homesafealerts@gmail.com", recipientEmail);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+                Log.e(TAG, "Sending email now...");
+                try
+
+                {
+                    sendMail(subject, body, "homesafealerts@gmail.com", recipientEmail);
+                    Log.e(TAG, "subject is: " + subject);
+                    Log.e(TAG, "body is: " + body);
+                } catch (
+                        Exception e
+                        )
+
+                {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     // Authentication for email
@@ -116,6 +129,7 @@ public class Email extends javax.mail.Authenticator implements cse403.homesafe.M
             else
                 message.setRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(recipients));
             Transport.send(message);
+            Log.e(TAG, "Message sent!");
         } catch (MessagingException e){
             Log.e(TAG, "Unable to send message.");
         }
