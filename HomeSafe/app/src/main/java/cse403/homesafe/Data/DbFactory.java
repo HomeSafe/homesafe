@@ -76,7 +76,7 @@ public class DbFactory {
                 Location newLocation = new Location(String.valueOf(id));
                 newLocation.setLatitude(Double.parseDouble(latitude));
                 newLocation.setLongitude(Double.parseDouble(longitude));
-                Destination newDestination = new Destination(name, address, newLocation);
+                Destination newDestination = new Destination(name, address);
                 newDestination.setDid(id);
                 mDestinationList.addDestination(newDestination);
             }
