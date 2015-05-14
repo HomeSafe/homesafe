@@ -6,7 +6,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.location.Location;
 
 /**
- * Created by Ethan on 5/5/15.
+ * HomeSafeDbHelper is a SQLiteOpenHelper object which
+ * facilitates interaction between user code and SQL database.
  */
 public class HomeSafeDbHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
