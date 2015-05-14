@@ -39,7 +39,7 @@ public class SMSTest extends TestCase {
     @Test
     public void testSendTextMessage() {
 
-        sms.sendMessage(recipient, location, customMessage);
+        sms.sendMessage(recipient, location, customMessage, context);
 
         ShadowSmsManager shadowSmsManager = Robolectric.shadowOf(SmsManager.getDefault());
         ShadowSmsManager.TextSmsParams lastSentTextMessageParams = shadowSmsManager.getLastSentTextMessageParams();

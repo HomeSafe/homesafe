@@ -10,6 +10,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
+import javax.json.JsonArray;
+import javax.json.JsonNumber;
 import javax.json.JsonReader;
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -36,19 +38,20 @@ public class GoogleMapsUtils {
         new Thread(new Runnable() {
             public void run() {
                 try {
+
                     URL url = new URL(GOOGLE_DIRECTIONS_URL + origin.getLatitude() + "," + origin.getLongitude()
                             + "&destination=" + dest.getLatitude() + "," + dest.getLongitude() + "&mode=walking");
                     URLConnection urlConnection = url.openConnection();
                     InputStream inputStream = urlConnection.getInputStream();
                     JsonReader reader = Json.createReader(inputStream);
                     JsonObject jsonObj = reader.readObject();
-                    System.out.println("Json:\n" + jsonObj.toString());
 
                     double distance = getDistance(jsonObj);
                     double time = getTime(jsonObj);
 
                     DistanceAndTime result = new DistanceAndTime(origin, dest, distance, time);
                     listener.onGetDistanceAndTime(result);
+
                 } catch (MalformedURLException e) {
                     Log.e(TAG, "");
                 } catch (IOException e) {
@@ -76,7 +79,6 @@ public class GoogleMapsUtils {
                     InputStream inputStream = urlConnection.getInputStream();
                     JsonReader reader = Json.createReader(inputStream);
                     JsonObject jsonObj = reader.readObject();
-                    System.out.println("Json:\n" + jsonObj.toString());
                     result = getLatLong(jsonObj);
                 } catch (MalformedURLException e) {
                     Log.e(TAG, "malformedUTL");

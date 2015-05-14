@@ -73,7 +73,7 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
                 // Set an EditText view to get user input
                 final Spinner input = new Spinner(that);
                 Location washington = new Location("UW");
-                washington.setLongitude(122.3080);
+                washington.setLongitude(-122.3080);
                 washington.setLatitude(47.6550);
                 Destination university = new Destination(washington, "UW");
                 Destinations.getInstance().addDestination(university);
@@ -234,18 +234,28 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
     }
 
     @Override
-    public void onGetDistanceAndTime(Object obj) {
-        if (obj instanceof DistanceAndTime) {
-            distAndTime = (DistanceAndTime) obj;
-            int hours = (int) distAndTime.getTime() % 3600;
-            int minutes = ((int) distAndTime.getTime() - hours*3600) / 60;
-            ETA.setCurrentHour(hours);
-            ETA.setCurrentMinute(minutes);
+    public void onGetDistanceAndTime(final Object obj) {
 
-            if (distAndTime != null && mLastLocation != null) {
-                startTrip.setEnabled(true);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Log.e(TAG, "onGetDistanceAndTime was called within TripSettingActivity");
+                if (obj instanceof DistanceAndTime) {
+                    distAndTime = (DistanceAndTime) obj;
+                    int hours = (int) distAndTime.getTime() / 3600;
+                    int minutes = ((int) distAndTime.getTime() - hours * 3600) / 60;
+                    ETA.setCurrentHour(hours);
+                    ETA.setCurrentMinute(minutes);
+
+                    if (distAndTime != null && mLastLocation != null) {
+                        startTrip.setEnabled(true);
+                    }
+                }
+
             }
-        }
+        });
+
+
     }
 
     @Override
