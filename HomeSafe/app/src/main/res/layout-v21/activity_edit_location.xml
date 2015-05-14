@@ -33,37 +33,68 @@ tools:context="cse403.homesafe.AddLocationActivity">
         android:paddingRight="10dp"
         android:background="@drawable/ripple"
         android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/view3"
-        android:layout_alignEnd="@+id/view3" />
+        android:layout_alignRight="@+id/state_text"
+        android:layout_alignEnd="@+id/state_text" />
 
-<com.rengwuxian.materialedittext.MaterialEditText
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:hint="@string/contact_name_hint"
-    app:met_floatingLabel="highlight"
-    android:inputType="text"
-    android:id="@+id/view"
-    android:layout_alignParentTop="true"
-    android:layout_alignParentLeft="true"
-    android:layout_alignParentStart="true"
-    android:textSize="40dp"
-    app:met_baseColor="@android:color/black"
-    app:met_primaryColor="@color/accent"
-    app:met_textColorHint="#BDBDBD"/>
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/contact_name_hint"
+        app:met_floatingLabel="highlight"
+        android:inputType="text"
+        android:id="@+id/name_text"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textSize="30dp"
+        app:met_baseColor="@android:color/black"
+        app:met_primaryColor="@color/accent"
+        app:met_textColorHint="#BDBDBD"/>
 
-<com.rengwuxian.materialedittext.MaterialEditText
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:hint="@string/location_address_hint"
-    app:met_floatingLabel="highlight"
-    android:inputType="text"
-    android:id="@+id/view3"
-    android:layout_below="@+id/view"
-    android:layout_alignParentLeft="true"
-    android:layout_alignParentStart="true"
-    android:textSize="30dp"
-    app:met_baseColor="@android:color/black"
-    app:met_primaryColor="@color/accent"
-    app:met_textColorHint="#BDBDBD"/>
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/location_st_address_hint"
+        app:met_floatingLabel="highlight"
+        android:inputType="text"
+        android:id="@+id/st_address_text"
+        android:layout_below="@+id/name_text"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textSize="25dp"
+        app:met_baseColor="@android:color/black"
+        app:met_primaryColor="@color/accent"
+        app:met_textColorHint="#BDBDBD"/>
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/location_city_hint"
+        app:met_floatingLabel="highlight"
+        android:inputType="text"
+        android:id="@+id/city_text"
+        android:layout_below="@+id/st_address_text"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textSize="25dp"
+        app:met_baseColor="@android:color/black"
+        app:met_primaryColor="@color/accent"
+        app:met_textColorHint="#BDBDBD"/>
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/location_state_hint"
+        app:met_floatingLabel="highlight"
+        android:inputType="text"
+        android:id="@+id/state_text"
+        android:layout_below="@+id/city_text"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textSize="25dp"
+        app:met_baseColor="@android:color/black"
+        app:met_primaryColor="@color/accent"
+        app:met_textColorHint="#BDBDBD"/>
+
 
 </RelativeLayout>

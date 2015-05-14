@@ -37,6 +37,11 @@ public class FavLocationsActivity extends ActionBarActivity {
         setUpFab();
     }
 
+    @Override
+    public void onResume(){
+
+    }
+
     private void setUpFab(){
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -28,7 +28,10 @@ public class EditContactActivity extends ActionBarActivity {
     Contacts mContactList;
     Button deleteContact;
     long cid;
-    int position;
+    EditText mEditName;
+    EditText mEditPhone;
+    EditText mEditEmail;
+    EditText mEditTier;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,17 +41,16 @@ public class EditContactActivity extends ActionBarActivity {
         String email = intent.getStringExtra("EMAIL");
         String tier = intent.getStringExtra("TIER");
         cid = intent.getLongExtra("CID", 0);
-        int position = intent.getIntExtra("POSITION", 0);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_contact);
-        EditText mEditName = (EditText)findViewById(R.id.name_text);
+        this.mEditName = (EditText)findViewById(R.id.name_text);
         mEditName.setText(name);
-        EditText mEditPhone = (EditText)findViewById(R.id.phone_text);
+        this.mEditPhone = (EditText)findViewById(R.id.phone_text);
         mEditPhone.setText(phone);
-        EditText mEditEmail = (EditText)findViewById(R.id.email_text);
+        this.mEditEmail = (EditText)findViewById(R.id.email_text);
         mEditEmail.setText(email);
-        EditText mEditTier = (EditText)findViewById(R.id.tier_text);
+        this.mEditTier = (EditText)findViewById(R.id.tier_text);
         mEditTier.setText(tier);
         mDbHelper = new HomeSafeDbHelper(this);
         mContactList = Contacts.getInstance();
@@ -81,13 +83,9 @@ public class EditContactActivity extends ActionBarActivity {
         saveContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText mEditName = (EditText)findViewById(R.id.name_text);
                 String nameStr = mEditName.getText().toString();
-                EditText mEditPhone = (EditText)findViewById(R.id.phone_text);
                 String phoneStr = mEditPhone.getText().toString();
-                EditText mEditEmail = (EditText)findViewById(R.id.email_text);
                 String emailStr = mEditEmail.getText().toString();
-                EditText mEditTier = (EditText)findViewById(R.id.tier_text);
                 String tierStr = mEditTier.getText().toString();
                 if(!nameStr.equals(EMPTY_STR) && !phoneStr.equals(EMPTY_STR) && !emailStr.equals(EMPTY_STR) && !tierStr.equals(EMPTY_STR)) {
                     int tierNum = Integer.parseInt(mEditTier.getText().toString());

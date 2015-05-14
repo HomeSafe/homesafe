@@ -10,12 +10,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 public class AddLocationActivity extends ActionBarActivity {
+    public static final String EMPTY_STR = "";
     Button discardChange;
     ImageView saveLocation;
 
@@ -51,9 +53,25 @@ public class AddLocationActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(AddLocationActivity.this, ContactsActivity.class);
-                Toast.makeText(AddLocationActivity.this, "Added Location", Toast.LENGTH_SHORT).show();
-                startActivity(i);
-                finish();
+                EditText mEditName = (EditText)findViewById(R.id.name_text);
+                String nameText = mEditName.getText().toString();
+                EditText mEditAddress = (EditText) findViewById(R.id.st_address_text);
+                String stAddrText = mEditAddress.getText().toString();
+                EditText mEditCity = (EditText) findViewById(R.id.city_text);
+                String cityText = mEditCity.getText().toString();
+                EditText mEditState = (EditText) findViewById(R.id.state_text);
+                String stateText = mEditState.getText().toString();
+
+                if(!nameText.equals(EMPTY_STR) && !stAddrText.equals(EMPTY_STR) && !cityText.equals(EMPTY_STR) && !stateText.equals(EMPTY_STR)){
+                    String finalAddr = stAddrText + "," + cityText + "," + stateText;
+                    //TODO update db
+                    //TODO update cache
+                    Toast.makeText(AddLocationActivity.this, "Added Location", Toast.LENGTH_SHORT).show();
+                    startActivity(i);
+                    finish();
+                } else {
+                    Toast.makeText(AddLocationActivity.this, "Missing Information", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
