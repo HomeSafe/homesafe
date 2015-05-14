@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -243,6 +244,7 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
         final EditText input = new EditText(that);
         input.setBackgroundColor(0xFFAAAAAA);
         input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+        input.setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
         input.setTransformationMethod(PasswordTransformationMethod.getInstance());
         alert.setView(input);
 
