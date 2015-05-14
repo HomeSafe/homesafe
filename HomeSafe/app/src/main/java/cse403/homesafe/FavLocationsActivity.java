@@ -15,6 +15,7 @@ import com.melnykov.fab.FloatingActionButton;
 import java.util.ArrayList;
 
 import cse403.homesafe.CardViewUtility.LocationRecyclerAdapter;
+import cse403.homesafe.Data.Destinations;
 
 
 public class FavLocationsActivity extends ActionBarActivity {
@@ -31,18 +32,9 @@ public class FavLocationsActivity extends ActionBarActivity {
         linearLM.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLM);
 
-        recyclerView.setAdapter(new LocationRecyclerAdapter(generateLocations()));
+//        recyclerView.setAdapter(new LocationRecyclerAdapter(Destinations.getInstance().getDestinations()));
         fab = (FloatingActionButton) findViewById(R.id.location_fab);
         setUpFab();
-    }
-
-    private ArrayList<Location> generateLocations(){
-        ArrayList<Location> locations = new ArrayList<>();
-        Location loc = new Location("dummyprovider");
-        loc.setLatitude(20.3);
-        loc.setLongitude(52.6);
-        locations.add(loc);
-        return locations;
     }
 
     private void setUpFab(){

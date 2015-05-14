@@ -32,7 +32,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:textSize="40dp"
+        android:textSize="30dp"
         app:met_baseColor="@android:color/black"
         app:met_primaryColor="@color/accent"
         app:met_textColorHint="#BDBDBD"/>
@@ -47,7 +47,7 @@
         android:layout_below="@+id/name_text"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:textSize="30dp"
+        android:textSize="20dp"
         app:met_baseColor="@android:color/black"
         app:met_primaryColor="@color/accent"
         app:met_textColorHint="#BDBDBD"/>
@@ -62,7 +62,7 @@
         android:layout_below="@+id/phone_text"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:textSize="30dp"
+        android:textSize="20dp"
         app:met_baseColor="@android:color/black"
         app:met_primaryColor="@color/accent"
         app:met_textColorHint="#BDBDBD"/>
@@ -74,7 +74,7 @@
         app:met_floatingLabel="highlight"
         android:inputType="textEmailAddress"
         android:id="@+id/tier_text"
-        android:textSize="30dp"
+        android:textSize="20dp"
         app:met_baseColor="@android:color/black"
         app:met_primaryColor="@color/accent"
         app:met_textColorHint="#BDBDBD"
@@ -82,4 +82,12 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
+    <!--<Spinner-->
+        <!--android:id="@+id/tier_spinner"-->
+        <!--style="@style/Widget.MyApp.HeaderBar.Spinner"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/tier_text"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_alignParentStart="true" />-->
 </RelativeLayout>

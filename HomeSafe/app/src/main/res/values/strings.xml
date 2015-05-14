@@ -8,6 +8,11 @@
         <item>Favorite Locations</item>
         <item>Settings</item>
     </string-array>
+    <string-array name="tier_array">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
     <string name="drawer_open">Drawer Opened</string>
     <string name="drawer_close">Drawer Closed</string>
     <string name="title_activity_contacts">Contacts</string>

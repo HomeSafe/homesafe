@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import cse403.homesafe.Data.Destination;
 import cse403.homesafe.R;
 
 
@@ -17,11 +18,11 @@ import cse403.homesafe.R;
  */
 public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationViewHolder> {
 
-    private List<Location> locations;
+    private List<Destination> destinations;
 
     public LocationRecyclerAdapter(List<Location> locations) {
-        this.locations = new ArrayList<Location>();
-        this.locations.addAll(locations);
+        this.destinations = new ArrayList<Destination>();
+        this.destinations.addAll(destinations);
     }
 
     @Override
@@ -34,15 +35,14 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationViewHo
 
     @Override
     public void onBindViewHolder(LocationViewHolder locationViewHolder, int i) {
-        Location location = locations.get(i);
+        Destination destination = destinations.get(i);
         //TODO I need the location name
-        locationViewHolder.name.setText(location.getProvider());
-//        contactViewHolder.contentText.setText(contact.getPhoneNumber());
-//        contactViewHolder.card.setCardBackgroundColor(contact.getIntValue());
+        locationViewHolder.name.setText(destination.getName());
+//        locationViewHolder.address.setText(destination);
     }
 
     @Override
     public int getItemCount() {
-        return locations.size();
+        return destinations.size();
     }
 }
