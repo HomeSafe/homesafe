@@ -1,3 +1,5 @@
+package MessagingTest;
+
 import android.content.Context;
 import android.location.Location;
 import android.telephony.SmsManager;
