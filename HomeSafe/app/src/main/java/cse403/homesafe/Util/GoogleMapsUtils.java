@@ -76,10 +76,10 @@ public class GoogleMapsUtils {
     public static void addressToLocation(final String address, final GoogleMapsUtilsCallback listener) {
         new Thread(new Runnable() {
             public void run() {
-                StringBuilder jsonString = new StringBuilder();
-                Location result = null;
+                Location result;
                 try {
-                    URL url = new URL(GOOGLE_GEOCODER_URL + address);
+                    String formattedAddress = address.replace(' ', '+');
+                    URL url = new URL(GOOGLE_GEOCODER_URL + formattedAddress);
                     URLConnection urlConnection = url.openConnection();
                     InputStream inputStream = urlConnection.getInputStream();
                     JsonReader reader = Json.createReader(inputStream);
