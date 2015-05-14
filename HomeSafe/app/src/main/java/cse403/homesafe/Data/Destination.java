@@ -17,7 +17,7 @@ import cse403.homesafe.Util.GoogleMapsUtilsCallback;
  * goes into a state where getLocation returns null.
  */
 
-public class Destination implements GoogleMapsUtilsCallback{
+public class Destination implements GoogleMapsUtilsCallback {
     private static final String TAG = "Destination";
     private Location location;
     private String name;
@@ -33,9 +33,19 @@ public class Destination implements GoogleMapsUtilsCallback{
 
     // ****** Representation Invariant
     // name must not be null
-    // Location must not be null after callback
+    // If state is NO_LOCATION: location should be null;
+    // if state is READY: location must be a valid location
 
-    public Destination (String name, String address) {
+    /**
+     * Constructs a new Destination object with a name and address.
+     * Dynamically converts the address to geographical coordinates.
+     * While this conversion is in progress, this Destination's state is
+     * NO_LOCATION
+     *
+     * @param name name of the location
+     * @param address address of the location
+     */
+    public Destination (String name, String address) throws InterruptedException {
         this.name = name;
         this.address = address;
 
@@ -43,7 +53,23 @@ public class Destination implements GoogleMapsUtilsCallback{
 
         // addressToLocation converts the address to a Location
         // asynchronously.
-        GoogleMapsUtils.addressToLocation(address, this);
+        synchronized(this) {
+            GoogleMapsUtils.addressToLocation(address, this);
+            this.wait(200);
+        }
+    }
+
+    /**
+     * Constructs a new Destination object with a name, address, and location
+     * @param name name of the location
+     * @param address address of the location
+     * @param location Location object of the address
+     */
+    public Destination (String name, String address, Location location) {
+        this.name = name;
+        this.address = address;
+        this.location = location;
+        state = STATE.READY;
     }
 
     /**
