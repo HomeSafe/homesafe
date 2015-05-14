@@ -128,13 +128,14 @@ public class Destination implements GoogleMapsUtilsCallback{
     // listeners.
     @Override
     public void onAddressToLocation(Object obj) {
-        if (obj instanceof Location) {
-           setLocation((Location) obj);
-           this.notifyAll();
-        } else {
-            state = STATE.ERROR;
-            Log.e(TAG, "Calculate location error");
+        synchronized (this) {
+            if (obj instanceof Location) {
+                setLocation((Location) obj);
+                this.notifyAll();
+            } else {
+                state = STATE.ERROR;
+                Log.e(TAG, "Calculate location error");
+            }
         }
-
     }
 }
