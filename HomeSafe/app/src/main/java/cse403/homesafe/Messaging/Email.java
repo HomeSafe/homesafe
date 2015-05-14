@@ -1,8 +1,10 @@
 package cse403.homesafe.Messaging;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Location;
 
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import cse403.homesafe.Data.Contact;
@@ -56,6 +58,7 @@ public class Email extends javax.mail.Authenticator implements cse403.homesafe.M
 
     /**
      * Get singleton instance of Email
+     *
      * @return Instance of Email
      */
     public static Email getInstance() {
@@ -66,6 +69,7 @@ public class Email extends javax.mail.Authenticator implements cse403.homesafe.M
 
     /**
      * Sends email to recipient with specified Location and specified custom message.
+     *
      * @param recipient     Recipient of the intended message
      * @param location      Last location of user
      * @param customMessage Customized message to be sent
@@ -75,37 +79,24 @@ public class Email extends javax.mail.Authenticator implements cse403.homesafe.M
             public void run() {
                 String recipientEmail = recipient.getEmail();
 
-//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(currentContext);
-//        String userFirstName = preferences.getString("firstName", null);
-//        String userLastName = preferences.getString("lastName", null);
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+                String userFirstName = preferences.getString("firstName", null);
+                String userLastName = preferences.getString("lastName", null);
 
-                String userFirstName = "Joe";
-                String userLastName = "Doe";
-
-//        if (userFirstName == null || userLastName == null)
-//            throw new RuntimeException("User's first or last name is missing.");
+                if (userFirstName == null || userLastName == null)
+                    throw new RuntimeException("User's first or last name is missing.");
 
 
                 String subject = userFirstName + " " + userLastName + " May Need Your Help";
-                String body = userFirstName + " was using HomeSafe, a walking safety app.\n\n They were"
+                String body = userFirstName + " was using HomeSafe, a walking safety app.\n\nThey were"
                         + " using the app to get to a destination, but did not check in with the app."
-                        + " As a result, this is an automated email being sent to all of " + userFirstName
-                        + "'s contacts. Their last know location is (" + location.getLatitude() + ", "
+                        + " As a result, this automated email is being sent to all of " + userFirstName
+                        + "'s contacts. Their last known coordinates are (" + location.getLatitude() + ", "
                         + location.getLongitude() + "). You may need to check in with " + userFirstName + "."
                         + "\n\n" + userFirstName + " says: " + customMessage;
-
-                Log.e(TAG, "Sending email now...");
-                try
-
-                {
+                try {
                     sendMail(subject, body, "homesafealerts@gmail.com", recipientEmail);
-                    Log.e(TAG, "subject is: " + subject);
-                    Log.e(TAG, "body is: " + body);
-                } catch (
-                        Exception e
-                        )
-
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -118,7 +109,7 @@ public class Email extends javax.mail.Authenticator implements cse403.homesafe.M
     }
 
     private synchronized void sendMail(String subject, String body, String sender, String recipients) throws Exception {
-        try{
+        try {
             MimeMessage message = new MimeMessage(session);
             DataHandler handler = new DataHandler(new ByteArrayDataSource(body.getBytes(), "text/plain"));
             message.setSender(new InternetAddress(sender));
@@ -129,8 +120,7 @@ public class Email extends javax.mail.Authenticator implements cse403.homesafe.M
             else
                 message.setRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(recipients));
             Transport.send(message);
-            Log.e(TAG, "Message sent!");
-        } catch (MessagingException e){
+        } catch (MessagingException e) {
             Log.e(TAG, "Unable to send message.");
         }
     }
