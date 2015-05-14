@@ -2,7 +2,6 @@ package cse403.homesafe;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
@@ -12,11 +11,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import cse403.homesafe.Data.Contact;
 import cse403.homesafe.Data.Contacts;
-import cse403.homesafe.Data.SecurityData;
 import cse403.homesafe.Messaging.Email;
 import cse403.homesafe.Messaging.Messenger;
 
@@ -31,7 +28,7 @@ public class DangerActivity extends ActionBarActivity {
 
     private int numAttempts;
 
-    AlertDialog.Builder alert;
+    AlertDialog.Builder alertBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,25 +44,27 @@ public class DangerActivity extends ActionBarActivity {
      * Prompt user for password. Send entered password to appropriate callback.
      */
     private void promptForPassword() {
-        alert = new AlertDialog.Builder(this);
+        alertBuilder = new AlertDialog.Builder(this);
 
-        alert.setTitle("Enter Passcode");
-        alert.setMessage("To Stop Alerts, Enter Correct Passcode");
+        alertBuilder.setTitle("Enter Passcode");
+        alertBuilder.setMessage("To Stop Alerts, Enter Correct Passcode");
 
         // Set an EditText view to get user input
         final EditText input = new EditText(this);
         input.setBackgroundColor(0xFFAAAAAA);
         input.setTransformationMethod(PasswordTransformationMethod.getInstance());
-        alert.setView(input);
+        alertBuilder.setView(input);
 
-        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+        alertBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 String enteredPassword = input.getText().toString();
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                int password = preferences.getInt("pin", -1);
+                String password = preferences.getString("pin", null);
 
-                if (password == -1)
+                if (password == null)
                     Log.e(TAG, "Password wasn't stored or accessed correctly");
+
+                int pincode = Integer.parseInt(password);
 
                 if (enteredPassword.equals(password)) {
 
@@ -75,7 +74,7 @@ public class DangerActivity extends ActionBarActivity {
             }
         });
 
-        alert.show();
+        alertBuilder.show();
     }
 
     /* Creates and starts a new immutableCountDownTimer object.
@@ -92,11 +91,11 @@ public class DangerActivity extends ActionBarActivity {
 //                pb.setProgress(barVal);
 
                 // re-calculate the text display for the timer
-                String hrs = String.format("%02d", seconds / 3600);
-                seconds %= 3600;       // strip off seconds that got converted to hours
-                String mins = String.format("%02d", seconds / 60);
-                seconds %= 60;         // strip off seconds that got converted to minutes
-                String secs = String.format("%02d", seconds % 60);
+//                String hrs = String.format("%02d", seconds / 3600);
+//                seconds %= 3600;       // strip off seconds that got converted to hours
+//                String mins = String.format("%02d", seconds / 60);
+//                seconds %= 60;         // strip off seconds that got converted to minutes
+//                String secs = String.format("%02d", seconds % 60);
 //                txtTimer.setText(hrs + ":" + mins + ":" + secs);
             }
 
@@ -107,9 +106,7 @@ public class DangerActivity extends ActionBarActivity {
 //                Toast.makeText(HSTimerActivity.this, "Your Trip Has Ended", Toast.LENGTH_SHORT).show();
 //                startActivity(new Intent(HSTimerActivity.this, ArrivalScreenActivity.class));
                 // TODO: Remove once Contacts is properly populated and Messenger becomes functional
-                Email mailer = Email.getInstance();
-                Contact testContact = new Contact("Alex", "jahrndez@uw.edu", "4259884882", Contacts.Tier.ONE);
-                mailer.sendMessage(testContact, new Location("test"), "test message", getApplicationContext(), Messenger.MessageType.DANGER);
+
             }
 
         }.start();
