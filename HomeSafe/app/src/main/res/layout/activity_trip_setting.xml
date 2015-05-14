@@ -14,9 +14,9 @@
         android:text="Start Trip"
         android:id="@+id/startTripButton"
         android:textSize="25dp"
-
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textColor="#FFFFFF" />
 
     <TimePicker
         android:layout_width="wrap_content"
@@ -46,7 +46,8 @@
         android:id="@+id/favoriteLocationButton"
         android:layout_below="@+id/textView2"
         android:layout_alignRight="@+id/spinnerETA"
-        android:layout_alignEnd="@+id/spinnerETA" />
+        android:layout_alignEnd="@+id/spinnerETA"
+        android:textColor="#FFFFFF" />
 
     <Button
         android:layout_width="wrap_content"
@@ -55,7 +56,8 @@
         android:id="@+id/button4"
         android:layout_alignTop="@+id/favoriteLocationButton"
         android:layout_alignLeft="@+id/spinnerETA"
-        android:layout_alignStart="@+id/spinnerETA" />
+        android:layout_alignStart="@+id/spinnerETA"
+        android:textColor="#FFFFFF" />
 
     <TextView
         android:layout_width="wrap_content"
