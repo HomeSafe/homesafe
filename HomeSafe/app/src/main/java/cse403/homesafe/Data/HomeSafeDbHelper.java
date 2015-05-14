@@ -3,6 +3,7 @@ package cse403.homesafe.Data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.location.Location;
 
 /**
  * Created by Ethan on 5/5/15.
@@ -30,6 +31,7 @@ public class HomeSafeDbHelper extends SQLiteOpenHelper {
                                                         + HomeSafeContract.LocationEntry._ID + " INTEGER PRIMARY KEY,"
                                                         + HomeSafeContract.LocationEntry.COLUMN_LID + INT_TYPE + COMMA_SEP
                                                         + HomeSafeContract.LocationEntry.COLUMN_NAME + TEXT_TYPE + COMMA_SEP
+                                                        + HomeSafeContract.LocationEntry.COLUMN_ADDRESS + TEXT_TYPE + COMMA_SEP
                                                         + HomeSafeContract.LocationEntry.COLUMN_LAT + TEXT_TYPE + COMMA_SEP
                                                         + HomeSafeContract.LocationEntry.COLUMN_LNG + TEXT_TYPE + " )";
 

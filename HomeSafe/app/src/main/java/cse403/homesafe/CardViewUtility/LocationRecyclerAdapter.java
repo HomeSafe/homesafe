@@ -20,7 +20,7 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationViewHo
 
     private List<Destination> destinations;
 
-    public LocationRecyclerAdapter(List<Location> locations) {
+    public LocationRecyclerAdapter(List<Destination> locations) {
         this.destinations = new ArrayList<Destination>();
         this.destinations.addAll(destinations);
     }

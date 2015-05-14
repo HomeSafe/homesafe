@@ -37,7 +37,8 @@
             android:layout_alignRight="@+id/textView"
             android:layout_alignEnd="@+id/textView"
             android:textSize="30dp"
-            android:background="@color/primary_dark"/>
+            android:background="@color/primary_dark"
+            android:textColor="#FFFFFF" />
 
     </RelativeLayout>
 

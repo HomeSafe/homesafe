@@ -16,50 +16,6 @@ public class DbFactory {
     private static Contacts mContactList = Contacts.getInstance();
     private static Destinations mDestinationList = Destinations.getInstance();
 
-    /**
-     * save a new contact into database with pass in contact
-     * @param contact   contact to be saved in database
-     * @param mDbHelper Database helper
-     */
-    public static void addContactToDb(Contact contact, HomeSafeDbHelper mDbHelper){
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
-        // Create a new map of values, where column names are the keys
-        ContentValues values = new ContentValues();
-        values.put(ContactEntry.COLUMN_NAME, contact.getName());
-        values.put(ContactEntry.COLUMN_EMAIL, contact.getEmail());
-        values.put(ContactEntry.COLUMN_PHONE, contact.getPhoneNumber());
-        values.put(ContactEntry.COLUMN_TIER, contact.getTier().name());
-
-        // Insert the new row, returning the primary key value of the new row
-        long newRowId;
-        newRowId = db.insert(
-                ContactEntry.TABLE_NAME,
-                null,
-                values);
-        contact.setCid(newRowId);
-    }
-
-    /**
-     * save a new destination into database with pass in destination
-     * @param destination   destination to be saved in database
-     * @param mDbHelper Database helper
-     */
-    public static void addDestinationToDb(Destination destination, HomeSafeDbHelper mDbHelper) {
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
-        // Create a new map of values, where column names are the keys
-        ContentValues values = new ContentValues();
-        values.put(LocationEntry.COLUMN_NAME, destination.getName());
-        values.put(LocationEntry.COLUMN_LNG, String.valueOf(destination.getLocation().getLongitude()));
-        values.put(LocationEntry.COLUMN_LAT, String.valueOf(destination.getLocation().getLatitude()));
-
-        // Insert the new row, returning the primary key value of the new row
-        long newRowId;
-        newRowId = db.insert(
-                LocationEntry.TABLE_NAME,
-                null,
-                values);
-        destination.setDid(newRowId);
-    }
 
     /**
      * retrieve all the contacts info and destinations info from database
@@ -113,12 +69,14 @@ public class DbFactory {
             while (c.moveToNext()) {
                 long id = c.getLong(c.getColumnIndexOrThrow(LocationEntry._ID));
                 String name = c.getString(c.getColumnIndexOrThrow(LocationEntry.COLUMN_NAME));
+                String address = c.getString(c.getColumnIndexOrThrow(LocationEntry.COLUMN_ADDRESS));
                 String latitude = c.getString(c.getColumnIndexOrThrow(LocationEntry.COLUMN_LAT));
                 String longitude = c.getString(c.getColumnIndexOrThrow(LocationEntry.COLUMN_LNG));
+
                 Location newLocation = new Location(String.valueOf(id));
                 newLocation.setLatitude(Double.parseDouble(latitude));
                 newLocation.setLongitude(Double.parseDouble(longitude));
-                Destination newDestination = new Destination(newLocation, name);
+                Destination newDestination = new Destination(name, address, newLocation);
                 newDestination.setDid(id);
                 mDestinationList.addDestination(newDestination);
             }
@@ -131,40 +89,28 @@ public class DbFactory {
 
     }
 
+
     /**
-     * update the destination info with pass in Destination object
-     * @param destination   new destination object to be updated according the id of destination
-     * @param mDbHelper database helper
+     * save a new contact into database with pass in contact
+     * @param contact   contact to be saved in database
+     * @param mDbHelper Database helper
      */
-    public static void updateDestination(Destination destination, HomeSafeDbHelper mDbHelper) {
-        try {
-            SQLiteDatabase db = mDbHelper.getReadableDatabase();
+    public static void addContactToDb(Contact contact, HomeSafeDbHelper mDbHelper){
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        // Create a new map of values, where column names are the keys
+        ContentValues values = new ContentValues();
+        values.put(ContactEntry.COLUMN_NAME, contact.getName());
+        values.put(ContactEntry.COLUMN_EMAIL, contact.getEmail());
+        values.put(ContactEntry.COLUMN_PHONE, contact.getPhoneNumber());
+        values.put(ContactEntry.COLUMN_TIER, contact.getTier().name());
 
-            // New value for one column
-            ContentValues values = new ContentValues();
-            values.put(LocationEntry.COLUMN_NAME, destination.getName());
-            values.put(LocationEntry.COLUMN_LNG, String.valueOf(destination.getLocation().getLongitude()));
-            values.put(LocationEntry.COLUMN_LAT, String.valueOf(destination.getLocation().getLatitude()));
-
-            // Which row to update, based on the ID
-            String selection = LocationEntry._ID + " LIKE ?";
-            String[] selectionArgs = {String.valueOf(destination.getDid())};
-
-            int count = db.update(
-                    LocationEntry.TABLE_NAME,
-                    values,
-                    selection,
-                    selectionArgs);
-            if (count == 1) {
-                Log.d(TAG, "Update destination info successfully");
-            } else {
-                Log.e(TAG, "Update destination info failed");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.e(TAG, "Retrieve From Database failed");
-        }
-
+        // Insert the new row, returning the primary key value of the new row
+        long newRowId;
+        newRowId = db.insert(
+                ContactEntry.TABLE_NAME,
+                null,
+                values);
+        contact.setCid(newRowId);
     }
 
     /**
@@ -204,6 +150,85 @@ public class DbFactory {
     }
 
     /**
+     * Delete contact info backend by pass in contact id
+     * @param cid   the id of contact which needs to be deleted
+     * @param mDbHelper database helper
+     */
+    public static void deleteContactFromDb(long cid, HomeSafeDbHelper mDbHelper) {
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        // Define 'where' part of query.
+        String selection = ContactEntry._ID + " LIKE ?";
+        // Specify arguments in placeholder order.
+        String[] selectionArgs = { String.valueOf(cid) };
+        // Issue SQL statement.
+        db.delete(ContactEntry.TABLE_NAME, selection, selectionArgs);
+    }
+
+
+    /**
+     * save a new destination into database with pass in destination
+     * @param destination   destination to be saved in database
+     * @param mDbHelper Database helper
+     */
+    public static void addDestinationToDb(Destination destination, HomeSafeDbHelper mDbHelper) {
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        // Create a new map of values, where column names are the keys
+        ContentValues values = new ContentValues();
+        values.put(LocationEntry.COLUMN_NAME, destination.getName());
+        values.put(LocationEntry.COLUMN_ADDRESS, destination.getAddress());
+        values.put(LocationEntry.COLUMN_LNG, String.valueOf(destination.getLocation().getLongitude()));
+        values.put(LocationEntry.COLUMN_LAT, String.valueOf(destination.getLocation().getLatitude()));
+
+        // Insert the new row, returning the primary key value of the new row
+        long newRowId;
+        newRowId = db.insert(
+                LocationEntry.TABLE_NAME,
+                null,
+                values);
+        destination.setDid(newRowId);
+    }
+
+    /**
+     * update the destination info with pass in Destination object
+     * @param destination   new destination object to be updated according the id of destination
+     * @param mDbHelper database helper
+     */
+    public static void updateDestination(Destination destination, HomeSafeDbHelper mDbHelper) {
+        try {
+            SQLiteDatabase db = mDbHelper.getReadableDatabase();
+
+            // New value for one column
+            ContentValues values = new ContentValues();
+            values.put(LocationEntry.COLUMN_NAME, destination.getName());
+            values.put(LocationEntry.COLUMN_ADDRESS, destination.getAddress());
+            values.put(LocationEntry.COLUMN_LNG, String.valueOf(destination.getLocation().getLongitude()));
+            values.put(LocationEntry.COLUMN_LAT, String.valueOf(destination.getLocation().getLatitude()));
+
+            // Which row to update, based on the ID
+            String selection = LocationEntry._ID + " LIKE ?";
+            String[] selectionArgs = {String.valueOf(destination.getDid())};
+
+            int count = db.update(
+                    LocationEntry.TABLE_NAME,
+                    values,
+                    selection,
+                    selectionArgs);
+            if (count == 1) {
+                Log.d(TAG, "Update destination info successfully");
+            } else {
+                Log.e(TAG, "Update destination info failed");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, "Retrieve From Database failed");
+        }
+
+    }
+
+
+
+
+    /**
      * Delete destination info backend by pass in destination id
      * @param did   the id of destination which needs to be deleted
      * @param mDbHelper database helper
@@ -218,18 +243,4 @@ public class DbFactory {
         db.delete(LocationEntry.TABLE_NAME, selection, selectionArgs);
     }
 
-    /**
-     * Delete contact info backend by pass in contact id
-     * @param cid   the id of contact which needs to be deleted
-     * @param mDbHelper database helper
-     */
-    public static void deleteContactFromDb(long cid, HomeSafeDbHelper mDbHelper) {
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
-        // Define 'where' part of query.
-        String selection = ContactEntry._ID + " LIKE ?";
-        // Specify arguments in placeholder order.
-        String[] selectionArgs = { String.valueOf(cid) };
-        // Issue SQL statement.
-        db.delete(ContactEntry.TABLE_NAME, selection, selectionArgs);
-    }
 }

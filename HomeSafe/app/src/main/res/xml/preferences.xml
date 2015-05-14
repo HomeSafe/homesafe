@@ -8,7 +8,6 @@
             android:title="@string/preferences_title_first_name"
             android:dialogTitle="Enter your first name"
             android:defaultValue=""
-            android:textColor="#000000"
             android:inputType="textCapWords"
             android:selectAllOnFocus="true" />
         <EditTextPreference
@@ -16,7 +15,6 @@
             android:title="@string/preferences_title_last_name"
             android:dialogTitle="Enter your last name"
             android:defaultValue=""
-            android:textColor="#000000"
             android:inputType="textCapWords"
             android:selectAllOnFocus="true" />
     </PreferenceCategory>
@@ -25,7 +23,6 @@
         android:key="pref_security_settings">
         <EditTextPreference
             android:key="pin"
-            android:textColor="#000000"
             android:title="@string/preferences_title_password"
             android:dialogTitle="Enter a 4-digit passcode"
             android:defaultValue=""
@@ -35,7 +32,6 @@
             android:inputType="numberPassword" />
         <EditTextPreference
             android:key="customMessage"
-            android:textColor="#000000"
             android:title="@string/preferences_title_custom_message"
             android:dialogTitle="Message sent to contacts"
             android:defaultValue="" />

@@ -37,7 +37,6 @@ public class HSTimerActivity extends ActionBarActivity {
 
         // creates the views for the on-screen components
         initProgressBar();
-//        initMenuOptions();
         addItemsToTimeOptions();
 
         txtTimer = (TextView) findViewById(R.id.textTimer);
