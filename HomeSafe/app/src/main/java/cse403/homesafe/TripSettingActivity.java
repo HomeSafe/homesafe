@@ -173,6 +173,13 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
                 destination = new Location("New Destination");
                 destination.setLatitude(place.getLatLng().latitude);
                 destination.setLongitude(place.getLatLng().longitude);
+                if (checkPlayServices()) {
+                    Log.e(TAG, "Google Play Services is installed");
+                    buildGoogleApiClient();
+                    onStart();
+                } else {
+                    Log.e(TAG, "Google Play Services is not installed");
+                }
             }
         }
     }

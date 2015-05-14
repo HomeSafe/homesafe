@@ -41,7 +41,7 @@ public class ArrivalScreenActivity extends ActionBarActivity implements GoogleAp
 
     private final String[] contactsList = {"Becky"};
     private Button homescreenBtn;
-    private ArrayList<String> contacts;
+    private ArrayList<Contact> contacts = new ArrayList<Contact>(Contacts.getInstance().getContactsInTier(Contacts.Tier.ONE));
 
     private Email mailer;  // TODO (ALEX): Remove once Messenger is fully functional. See below
 
@@ -84,7 +84,7 @@ public class ArrivalScreenActivity extends ActionBarActivity implements GoogleAp
         // TODO send out all the emails or SMSs?? (ALEX): This is taken care of in the LocationServices callback onConnected() below
 
         // specify an adapter
-        rvAdapter = new ArrivalScreenAdapter(contactsList);
+        rvAdapter = new ArrivalScreenAdapter(contacts);
         contactsView.setAdapter(rvAdapter);
     }
 
@@ -168,5 +168,10 @@ public class ArrivalScreenActivity extends ActionBarActivity implements GoogleAp
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        return;
     }
 }

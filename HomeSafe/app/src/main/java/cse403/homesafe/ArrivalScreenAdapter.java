@@ -6,9 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import cse403.homesafe.Data.Contact;
+
 public class ArrivalScreenAdapter extends RecyclerView.Adapter<ArrivalScreenAdapter.ViewHolder> {
-    private String[] dataset;
-    // TODO private List<ContactInfo> contacts;
+     private List<Contact> contacts;
 
     // Provide a reference to the views for each data item
     // complex data items may need more than one view per item, and
@@ -24,8 +29,11 @@ public class ArrivalScreenAdapter extends RecyclerView.Adapter<ArrivalScreenAdap
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public ArrivalScreenAdapter(String[] dataset) {
-        this.dataset = dataset;
+//    public ArrivalScreenAdapter(String[] dataset) {
+//        this.dataset = dataset;
+//    }
+    public ArrivalScreenAdapter(ArrayList<Contact> contacts) {
+        this.contacts = Collections.unmodifiableList(contacts);
     }
 
     // Create new views (invoked by the layout manager)
@@ -43,11 +51,12 @@ public class ArrivalScreenAdapter extends RecyclerView.Adapter<ArrivalScreenAdap
     public void onBindViewHolder(ArrivalScreenAdapter.ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.name.setText(dataset[position] + " has been notified");
+//        holder.name.setText(dataset[position] + " has been notified");
+        holder.name.setText(contacts.get(position).getName() + " has been notified");
     }
 
     @Override
     public int getItemCount() {
-        return dataset.length;
+        return contacts.size();
     }
 }
