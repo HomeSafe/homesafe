@@ -76,7 +76,7 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
                 Location washington = new Location("UW");
                 washington.setLongitude(-122.3080);
                 washington.setLatitude(47.6550);
-                Destination university = new Destination(washington, "UW");
+                Destination university = new Destination("UW", "185 W Stevens Way NE,Seattle,WA", washington);
                 Destinations.getInstance().addDestination(university);
                 List<Destination> destinationList = Destinations.getInstance().getDestinations();
                 final Map<String, Location> nameToLocation = new HashMap<String, Location>();
