@@ -21,8 +21,10 @@ import cse403.homesafe.Messaging.Email;
 import cse403.homesafe.Messaging.Messenger;
 
 /**
- * Created by Alex on 5/14/15.
- *
+ * This activity displays a password prompt to the user.
+ * If the user fails to correctly enter the password within
+ * some amount of time then the phone will contact the emergency
+ * contacts.
  */
 public class DangerActivity extends ActionBarActivity {
 
