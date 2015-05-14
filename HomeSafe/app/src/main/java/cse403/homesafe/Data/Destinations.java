@@ -8,9 +8,13 @@ import java.util.List;
 
 /**
  * A Destinations object represents the collection
- * of all Location of the User.
+ * of all Destinations of the User.
  *
- * This class provides functionality for adding and removing Location.
+ * This class provides functionality for adding and removing Destinations.
+ *
+ * This is a Singleton class -- access by calling Destinations.getInstance()
+ *
+ * TODO: Switch to android ContentProvider
  */
 public class Destinations {
     private List<Destination> destinations;
@@ -27,6 +31,10 @@ public class Destinations {
         destinations = new ArrayList<Destination>();
     }
 
+    /**
+     *  Returns the instance of this object.
+     * @return
+     */
     public static Destinations getInstance() {
         if (instance == null) {
             instance = new Destinations();
@@ -52,6 +60,11 @@ public class Destinations {
         return destinations.remove(destination);
     }
 
+    /**
+     * Returns a List<Destination> of all Destinations in this object.
+     * Do not modify the returned list
+     * @return List of all Destinations in this Destinations object.
+     */
     public List<Destination> getDestinations() {
         return destinations;
     }
