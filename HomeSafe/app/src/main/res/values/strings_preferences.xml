@@ -6,4 +6,5 @@
     <string name="preferences_category_title_security">Security</string>
     <string name="preferences_title_password">Passcode</string>
     <string name="preferences_title_custom_message">Custom Message</string>
+    <string name="preferences_title_home_safe_alert">Alert Contacts on Safe Arrival</string>
 </resources>
