@@ -15,6 +15,7 @@ public class LocationViewHolder extends RecyclerView.ViewHolder {
 
     protected TextView name;
     protected TextView address;
+    protected long did;
 
     public LocationViewHolder(View itemView) {
         super(itemView);
@@ -25,6 +26,7 @@ public class LocationViewHolder extends RecyclerView.ViewHolder {
                 Intent i = new Intent(v.getContext(), EditLocationActivity.class);
                 i.putExtra("NAME", name.getText().toString());
                 i.putExtra("ADDRESS", address.getText().toString());
+                i.putExtra("DID", did);
                 v.getContext().startActivity(i);
             }
         });
