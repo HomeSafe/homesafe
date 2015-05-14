@@ -122,5 +122,7 @@ public class Contacts{
         return result;
     }
 
-
+    public void clearContacts(){
+        contacts.clear();
+    }
 }
