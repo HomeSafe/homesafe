@@ -11,6 +11,10 @@ import cse403.homesafe.Util.GoogleMapsUtilsCallback;
  * This class provides functionality to create and edit a destination's
  * name and location.
  *
+ * When passing in an address, computes the actual geographic location of
+ * the address. If an address is unable to be converted to a location
+ * either due to a bad address or lack of network connection,
+ * goes into a state where getLocation returns null.
  */
 
 public class Destination implements GoogleMapsUtilsCallback{
@@ -19,13 +23,26 @@ public class Destination implements GoogleMapsUtilsCallback{
     private String name;
     private String address;
     private long did;
+    STATE state;
+
+    private enum STATE {
+        NO_LOCATION,
+        READY,
+        ERROR
+    }
 
     // ****** Representation Invariant
     // name must not be null
+    // Location must not be null after callback
 
     public Destination (String name, String address) {
         this.name = name;
         this.address = address;
+
+        state = STATE.NO_LOCATION;
+
+        // addressToLocation converts the address to a Location
+        // asynchronously.
         GoogleMapsUtils.addressToLocation(address, this);
     }
 
@@ -43,6 +60,8 @@ public class Destination implements GoogleMapsUtilsCallback{
      */
     public void setAddress(String address) {
         this.address = address;
+        state = STATE.NO_LOCATION;
+        GoogleMapsUtils.addressToLocation(address, this);
     }
 
     /**
@@ -66,7 +85,10 @@ public class Destination implements GoogleMapsUtilsCallback{
      * @return  Location of this Destination
      */
     public Location getLocation() {
-        return location;
+        if(state == STATE.READY) {
+            return location;
+        }
+        return null;
     }
 
     /**
@@ -74,6 +96,8 @@ public class Destination implements GoogleMapsUtilsCallback{
      * @param location new Location
      */
     public void setLocation(Location location) {
+        // We have location, so we are ready.
+        state = STATE.READY;
         this.location = location;
     }
 
@@ -99,11 +123,16 @@ public class Destination implements GoogleMapsUtilsCallback{
 
     }
 
+    // If the passed-in object is a Location,
+    // switches state to READY and notifies all
+    // listeners.
     @Override
     public void onAddressToLocation(Object obj) {
         if (obj instanceof Location) {
-            this.location = (Location) obj;
+           setLocation((Location) obj);
+           this.notifyAll();
         } else {
+            state = STATE.ERROR;
             Log.e(TAG, "Calculate location error");
         }
 
