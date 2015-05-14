@@ -1,3 +1,5 @@
+package MessagingTest;
+
 import junit.framework.TestCase;
 
 import static org.mockito.Mockito.*;
