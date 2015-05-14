@@ -94,6 +94,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ContactsActivity" />
         </activity>
+        <activity
+            android:name=".DangerActivity"
+            android:label=".DangerActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".HSTimerActivity" />
+        </activity>
         <activity android:name=".Trip" >
         </activity>
         <activity android:name=".TripSettingActivity" >
