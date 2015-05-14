@@ -47,9 +47,10 @@ public class GoogleMapsUtils {
                     JsonReader reader = Json.createReader(inputStream);
                     JsonObject jsonObj = reader.readObject();
 
-                    if (!isValid(jsonObj))  // Check if the query had results
+                    if (!isValid(jsonObj)) { // Check if the query had results
                         listener.onGetDistanceAndTime(null);
-
+                        return;
+                    }
                     double distance = getDistance(jsonObj);
                     double time = getTime(jsonObj);
 
@@ -85,8 +86,10 @@ public class GoogleMapsUtils {
                     JsonReader reader = Json.createReader(inputStream);
                     JsonObject jsonObj = reader.readObject();
 
-                    if (!isValid(jsonObj))  // Check if the query had results
+                    if (!isValid(jsonObj)) { // Check if the query had results
                         listener.onAddressToLocation(null);
+                        return;
+                    }
 
                     result = getLatLong(jsonObj);
 

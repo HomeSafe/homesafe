@@ -23,6 +23,10 @@ import java.util.Properties;
 
 /**
  * Abstraction that serves as the interface for sending emails through HomeSafe's
+ * email address.
+ *
+ * Provides functionality for sending an email to a specified Contact given the user's
+ * current location, message, and message type.
  */
 public class Email extends javax.mail.Authenticator implements cse403.homesafe.Messaging.Message {
 
