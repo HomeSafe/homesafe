@@ -32,14 +32,9 @@ public class FavLocationsActivity extends ActionBarActivity {
         linearLM.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLM);
 
-//        recyclerView.setAdapter(new LocationRecyclerAdapter(Destinations.getInstance().getDestinations()));
+        recyclerView.setAdapter(new LocationRecyclerAdapter(Destinations.getInstance().getDestinations()));
         fab = (FloatingActionButton) findViewById(R.id.location_fab);
         setUpFab();
-    }
-
-    @Override
-    public void onResume(){
-
     }
 
     private void setUpFab(){

@@ -35,6 +35,7 @@
             android:layout_alignLeft="@+id/textView"
             android:layout_alignStart="@+id/textView"
             android:textSize="30dp"
+            android:textColor="@android:color/white"
             android:layout_alignRight="@+id/textView"
             android:layout_alignEnd="@+id/textView" />
 

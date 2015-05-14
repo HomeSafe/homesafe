@@ -73,10 +73,12 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
 
                 // Set an EditText view to get user input
                 final Spinner input = new Spinner(that);
+                /* may be not useful since we can figure location from address
                 Location washington = new Location("UW");
                 washington.setLongitude(-122.3080);
                 washington.setLatitude(47.6550);
-                Destination university = new Destination(washington, "UW");
+                */
+                Destination university = new Destination("UW", "185 W Stevens Way NE,Seattle,WA");
                 Destinations.getInstance().addDestination(university);
                 List<Destination> destinationList = Destinations.getInstance().getDestinations();
                 final Map<String, Location> nameToLocation = new HashMap<String, Location>();

@@ -1,6 +1,7 @@
 package cse403.homesafe;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -50,6 +51,7 @@ public class EditLocationActivity extends ActionBarActivity {
         View mCustomView = mInflater.inflate(R.layout.actionbar_custom, null);
         TextView mTitleTextView = (TextView) mCustomView.findViewById(R.id.title);
         mTitleTextView.setText("Edit location");
+        mTitleTextView.setTextColor(Color.WHITE);
         mActionBar.setCustomView(mCustomView);
         mActionBar.setDisplayShowCustomEnabled(true);
         discardChange = (Button)findViewById(R.id.discard);

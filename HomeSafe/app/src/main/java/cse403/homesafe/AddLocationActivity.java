@@ -1,6 +1,7 @@
 package cse403.homesafe;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.Image;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -15,7 +16,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
+/**
+ * AddLocationActivity manages the adding of a single location,
+ * which consists of a name, address, city, and state.
+ *
+ * In order to add a location, all four must not be entered. If not,
+ * toasts that these must be filled.
+ */
 public class AddLocationActivity extends ActionBarActivity {
     public static final String EMPTY_STR = "";
     Button discardChange;
@@ -33,6 +40,7 @@ public class AddLocationActivity extends ActionBarActivity {
         View mCustomView = mInflater.inflate(R.layout.actionbar_custom, null);
         TextView mTitleTextView = (TextView) mCustomView.findViewById(R.id.title);
         mTitleTextView.setText("Add new location");
+        mTitleTextView.setTextColor(Color.WHITE);
         mActionBar.setCustomView(mCustomView);
         mActionBar.setDisplayShowCustomEnabled(true);
         discardChange = (Button)findViewById(R.id.discard);
@@ -62,6 +70,7 @@ public class AddLocationActivity extends ActionBarActivity {
                 EditText mEditState = (EditText) findViewById(R.id.state_text);
                 String stateText = mEditState.getText().toString();
 
+                // Check that all fields are non-empty
                 if(!nameText.equals(EMPTY_STR) && !stAddrText.equals(EMPTY_STR) && !cityText.equals(EMPTY_STR) && !stateText.equals(EMPTY_STR)){
                     String finalAddr = stAddrText + "," + cityText + "," + stateText;
                     //TODO update db

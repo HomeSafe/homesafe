@@ -8,6 +8,10 @@ import java.util.List;
  * of all contacts of the User in a particular tier.
  *
  * This class provides functionality for adding and removing contacts.
+ *
+ * This is a Singleton class and should be accessed with Contacts.getInstance()
+ *
+ * TODO: use Android ContentProvider?
  */
 public class Contacts{
     private List<Contact> contacts;

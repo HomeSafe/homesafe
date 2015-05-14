@@ -30,6 +30,6 @@ public final class HomeSafeContract {
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_LAT = "latitude";
         public static final String COLUMN_LNG = "longitude";
-
+        public static final String COLUMN_ADDRESS = "address";
     }
 }
