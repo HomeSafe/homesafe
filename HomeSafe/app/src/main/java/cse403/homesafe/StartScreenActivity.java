@@ -1,9 +1,11 @@
 package cse403.homesafe;
 //This class is for Start Screen Activity, where it handles the side bar and start trip events
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.location.Location;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -16,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import cse403.homesafe.Data.Contact;
 import cse403.homesafe.Data.Contacts;
@@ -43,6 +46,14 @@ public class StartScreenActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_screen);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        if (!isAccountSetUp()) {
+            Toast.makeText(getApplicationContext(),
+                    "Set a first/last name and passcode.", Toast.LENGTH_LONG)
+                    .show();
+            Intent i = new Intent(StartScreenActivity.this, SettingsActivity.class);
+            startActivity(i);
+        }
 
         // Retrieve data from database
         Contacts.getInstance().clearContacts();
@@ -88,6 +99,15 @@ public class StartScreenActivity extends ActionBarActivity {
                 startActivity(i);
             }
         });
+    }
+
+    private boolean isAccountSetUp() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String password = preferences.getString("pin", null);
+        String userFirstName = preferences.getString("firstName", null);
+        String userLastName = preferences.getString("lastName", null);
+
+        return password == null || userFirstName == null || userLastName == null;
     }
 
     private void setupButton() {
