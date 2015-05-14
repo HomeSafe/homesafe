@@ -1,5 +1,6 @@
 package cse403.homesafe;
 
+import android.content.Intent;
 import android.location.Location;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -82,7 +83,10 @@ public class ArrivalScreenActivity extends ActionBarActivity implements GoogleAp
 
             @Override
             public void onClick(View v) {
-                finish();
+                // When this button is clicked, clear the activity stack and start fresh from
+                // the start screen.
+                startActivity(new Intent(getApplicationContext(),
+                        StartScreenActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
             }
         });
     }
