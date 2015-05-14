@@ -35,6 +35,7 @@ android:orientation="vertical" >
     android:textSize="20sp"
     android:paddingTop="10dp"
     android:padding="20dp"
+    android:textColor="@android:color/white"
     android:layout_width="match_parent"
     android:layout_height="wrap_content" />
 </LinearLayout>

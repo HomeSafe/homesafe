@@ -1,9 +1,12 @@
 package cse403.homesafe;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -18,7 +21,7 @@ import cse403.homesafe.Data.DbFactory;
 import cse403.homesafe.Data.HomeSafeDbHelper;
 
 
-public class AddContactActivity extends ActionBarActivity {
+public class AddContactActivity extends ActionBarActivity implements TextWatcher {
     public static final String EMPTY_STR = "";
     Button discardChange;
     ImageView saveContact;
@@ -40,10 +43,18 @@ public class AddContactActivity extends ActionBarActivity {
         View mCustomView = mInflater.inflate(R.layout.actionbar_custom, null);
         TextView mTitleTextView = (TextView) mCustomView.findViewById(R.id.title);
         mTitleTextView.setText("Add new contact");
+        mTitleTextView.setTextColor(Color.WHITE);
         mActionBar.setCustomView(mCustomView);
         mActionBar.setDisplayShowCustomEnabled(true);
         discardChange = (Button)findViewById(R.id.discard);
         saveContact = (ImageView) findViewById(R.id.save_menu_item);
+//        Spinner spinner = (Spinner) findViewById(R.id.tier_spinner);
+//        // Create an ArrayAdapter using the string array and a default spinner layout
+//        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.tier_array, android.R.layout.simple_spinner_item);
+//        // Specify the layout to use when the list of choices appears
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        // Apply the adapter to the spinner
+//        spinner.setAdapter(adapter);
         setUpButton();
     }
 
@@ -90,5 +101,20 @@ public class AddContactActivity extends ActionBarActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+
     }
 }

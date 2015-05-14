@@ -84,8 +84,11 @@ public class Email extends javax.mail.Authenticator implements cse403.homesafe.M
                 String userFirstName = preferences.getString("firstName", null);
                 String userLastName = preferences.getString("lastName", null);
 
-                if (userFirstName == null || userLastName == null)
-                    throw new RuntimeException("User's first or last name is missing.");
+                if (userFirstName == null || userLastName == null) {
+                    // TODO (Alex): Remove this hacky fix at a later time
+                    userFirstName = "";
+                    userLastName = "";
+                }
 
                 String subject, body;
                 if (type == Messenger.MessageType.DANGER) {
