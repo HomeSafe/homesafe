@@ -9,7 +9,11 @@ import android.util.Log;
 import static cse403.homesafe.Data.HomeSafeContract.*;
 
 /**
- * Created by yellowleaf on 5/10/15.
+ * DbFactory manages all interactions with the database.
+ *
+ * It provides functionality for retrieving data from the database using
+ * a HomeSafeDbHelper, adding/removing/editing a contact from the database,
+ * and adding/removing/updating a destination.
  */
 public class DbFactory {
     private static final String TAG = "DataBaseFactory";
@@ -76,7 +80,7 @@ public class DbFactory {
                 Location newLocation = new Location(String.valueOf(id));
                 newLocation.setLatitude(Double.parseDouble(latitude));
                 newLocation.setLongitude(Double.parseDouble(longitude));
-                Destination newDestination = new Destination(name, address, newLocation);
+                Destination newDestination = new Destination(name, address);
                 newDestination.setDid(id);
                 mDestinationList.addDestination(newDestination);
             }

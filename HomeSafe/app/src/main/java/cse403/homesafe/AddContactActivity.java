@@ -20,7 +20,13 @@ import cse403.homesafe.Data.Contacts;
 import cse403.homesafe.Data.DbFactory;
 import cse403.homesafe.Data.HomeSafeDbHelper;
 
-
+/**
+ * AddContactActivity manages the adding of a single contact,
+ * which consists of a name, phone number, email, and tier.
+ *
+ * In order to add a contact, all four must not be entered. If not,
+ * toasts that these must be filled.
+ */
 public class AddContactActivity extends ActionBarActivity implements TextWatcher {
     public static final String EMPTY_STR = "";
     Button discardChange;
@@ -79,6 +85,7 @@ public class AddContactActivity extends ActionBarActivity implements TextWatcher
                 EditText mEditTier = (EditText)findViewById(R.id.tier_text);
                 String tierStr = mEditTier.getText().toString();
 
+                // Check if all four elements are non-empty
                 if(!nameStr.equals(EMPTY_STR) && !phoneStr.equals(EMPTY_STR) && !emailStr.equals(EMPTY_STR) && !tierStr.equals(EMPTY_STR)) {
                     int tierNum = Integer.parseInt(mEditTier.getText().toString());
                     Contacts.Tier tier;

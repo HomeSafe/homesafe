@@ -26,7 +26,14 @@ import cse403.homesafe.Data.Contacts;
 import cse403.homesafe.Messaging.Email;
 import cse403.homesafe.Messaging.Messenger;
 
-
+/**
+ * Manages interaction with user on the Arrival Screen -- when the trip has ended.
+ * Offers functionality to return to homescreen.
+ *
+ * If the user specified in settings that they
+ * would like to have contacts notified on safe arrival, these messages are sent out
+ * after contacting google play services.
+ */
 public class ArrivalScreenActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     // TODO Need to populate the contact list from the first tier contacts (ALEX): Messenger takes care of that
     private final String TAG = "ArrivalScreenActivity";
@@ -51,9 +58,14 @@ public class ArrivalScreenActivity extends ActionBarActivity implements GoogleAp
         RecyclerView contactsView = (RecyclerView) findViewById(R.id.contactsView);
         homescreenBtn = (Button) findViewById(R.id.homescreenBtn);
 
-        backToStartScreen();
+        // set listener for back to start screen
+        setBackToStartScreenListener();
+
+        // TODO: We only want to do email-related things if
+        // the user has specified that they would like emails sent out on safe arrival
 
         mailer = Email.getInstance();  // TODO: Remove this once Messenger can retrieve contacts from Contacts.java. Use Messenger then
+
         // use this setting to improve performance if you know that changes
         // in content to do change the layout size of the RecyclerView
         contactsView.setHasFixedSize(true);
@@ -71,14 +83,14 @@ public class ArrivalScreenActivity extends ActionBarActivity implements GoogleAp
 
         // TODO send out all the emails or SMSs?? (ALEX): This is taken care of in the LocationServices callback onConnected() below
 
-        // specify an adaoter
+        // specify an adapter
         rvAdapter = new ArrivalScreenAdapter(contactsList);
         contactsView.setAdapter(rvAdapter);
     }
 
     /* Ends the timer for the trip, taking the user automatically to the arrival screen.
 * */
-    private void backToStartScreen() {
+    private void setBackToStartScreenListener() {
         homescreenBtn.setOnClickListener(new View.OnClickListener() {
 
             @Override
