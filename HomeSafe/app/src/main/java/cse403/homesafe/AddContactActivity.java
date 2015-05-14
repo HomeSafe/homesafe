@@ -19,6 +19,7 @@ import cse403.homesafe.Data.HomeSafeDbHelper;
 
 
 public class AddContactActivity extends ActionBarActivity {
+    public static final String EMPTY_STR = "";
     Button discardChange;
     ImageView saveContact;
     HomeSafeDbHelper mDbHelper;
@@ -59,25 +60,34 @@ public class AddContactActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 EditText mEditName = (EditText)findViewById(R.id.name_text);
+                String nameStr = mEditName.getText().toString();
                 EditText mEditPhone = (EditText)findViewById(R.id.phone_text);
+                String phoneStr = mEditPhone.getText().toString();
                 EditText mEditEmail = (EditText)findViewById(R.id.email_text);
+                String emailStr = mEditEmail.getText().toString();
                 EditText mEditTier = (EditText)findViewById(R.id.tier_text);
-                int tierNum = Integer.parseInt(mEditTier.getText().toString());
-                Contacts.Tier tier;
-                if(tierNum == 1){
-                    tier = Contacts.Tier.ONE;
-                } else if(tierNum == 2){
-                    tier = Contacts.Tier.TWO;
+                String tierStr = mEditTier.getText().toString();
+
+                if(!nameStr.equals(EMPTY_STR) && !phoneStr.equals(EMPTY_STR) && !emailStr.equals(EMPTY_STR) && !tierStr.equals(EMPTY_STR)) {
+                    int tierNum = Integer.parseInt(mEditTier.getText().toString());
+                    Contacts.Tier tier;
+                    if(tierNum == 1){
+                        tier = Contacts.Tier.ONE;
+                    } else if(tierNum == 2){
+                        tier = Contacts.Tier.TWO;
+                    } else {
+                        tier = Contacts.Tier.THREE;
+                    }
+                    Contact contact = new Contact(nameStr, emailStr, phoneStr, tier);
+                    mContactList.addContact(contact, tier);
+                    DbFactory.addContactToDb(contact, mDbHelper);
+                    Intent i = new Intent(AddContactActivity.this, ContactsActivity.class);
+                    Toast.makeText(AddContactActivity.this, "Added Contact " + mEditName.getText(), Toast.LENGTH_SHORT).show();
+                    startActivity(i);
+                    finish();
                 } else {
-                    tier = Contacts.Tier.THREE;
+                    Toast.makeText(AddContactActivity.this, "Missing Information", Toast.LENGTH_SHORT).show();
                 }
-                Contact contact = new Contact(mEditName.getText().toString(), mEditEmail.getText().toString(), mEditPhone.getText().toString(), tier);
-                mContactList.addContact(contact, tier);
-                DbFactory.addContactToDb(contact, mDbHelper);
-                Intent i = new Intent(AddContactActivity.this, ContactsActivity.class);
-                Toast.makeText(AddContactActivity.this, "Added Contact " + mEditName.getText(), Toast.LENGTH_SHORT).show();
-                startActivity(i);
-                finish();
             }
         });
     }
