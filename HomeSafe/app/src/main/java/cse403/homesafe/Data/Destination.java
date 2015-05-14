@@ -77,6 +77,15 @@ public class Destination implements GoogleMapsUtilsCallback {
     }
 
     /**
+     * Returns true if this Destination is in a ready state.
+     * Returns false otherwise.
+     * @return true if Destination is ready.
+     */
+    public boolean isReady() {
+        return this.state == STATE.READY;
+    }
+
+    /**
      * Returns address of this Destination
      * @return  the address of this destination
      */
