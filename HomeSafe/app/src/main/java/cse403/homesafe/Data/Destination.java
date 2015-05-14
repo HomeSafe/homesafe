@@ -1,6 +1,10 @@
 package cse403.homesafe.Data;
 
 import android.location.Location;
+import android.util.Log;
+
+import cse403.homesafe.Util.GoogleMapsUtils;
+import cse403.homesafe.Util.GoogleMapsUtilsCallback;
 
 /**
  * A Destination object represents a single destination created by user.
@@ -9,7 +13,8 @@ import android.location.Location;
  *
  */
 
-public class Destination {
+public class Destination implements GoogleMapsUtilsCallback{
+    private static final String TAG = "Destination";
     private Location location;
     private String name;
     private String address;
@@ -18,10 +23,10 @@ public class Destination {
     // ****** Representation Invariant
     // name must not be null
 
-    public Destination (String name, String address, Location location) {
+    public Destination (String name, String address) {
         this.name = name;
         this.address = address;
-        this.location = location;
+        GoogleMapsUtils.addressToLocation(address, this);
     }
 
     /**
@@ -86,5 +91,21 @@ public class Destination {
      */
     public long getDid() {
         return this.did;
+    }
+
+    @Override
+    public void onGetDistanceAndTime(Object obj) {
+        // Empty
+
+    }
+
+    @Override
+    public void onAddressToLocation(Object obj) {
+        if (obj instanceof Location) {
+            this.location = (Location) obj;
+        } else {
+            Log.e(TAG, "Calculate location error");
+        }
+
     }
 }
