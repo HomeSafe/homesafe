@@ -60,8 +60,43 @@ public class Contacts{
      * existed in this ContactsActivity object, and was removed.
      * false otherwise.
      */
-    public boolean removeContact(String cid) {
-        return false;
+    public boolean removeContact(long cid) {
+        int index = 0;
+        for (Contact c : contacts) {
+            if (c.getCid() == cid) {
+                break;
+            }
+            index++;
+        }
+        contacts.remove(index);
+        return true;
+    }
+
+    /**
+     * Edits the contact with the passed-in cid
+     * from this object.
+     *
+     * @param cid the cid of the contact to be edited.
+     * @param name updated name
+     * @param phoneNumber updated phone number
+     * @param emailAddress updated email address
+     * @param tier updated tier
+     * @return true if a contact with the passed-in cid
+     * existed in this ContactsActivity object, and was edited.
+     * false otherwise.
+     */
+    public boolean editContact(long cid, String name, String phoneNumber, String emailAddress, Contacts.Tier tier) {
+        boolean found = false;
+        for (Contact c : contacts) {
+            if (c.getCid() == cid) {
+                found = true;
+                c.setName(name);
+                c.setEmail(emailAddress);
+                c.setPhoneNumber(phoneNumber);
+                c.setTier(tier);
+            }
+        }
+        return found;
     }
 
     /**

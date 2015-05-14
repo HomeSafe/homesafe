@@ -27,6 +27,7 @@ public class EditContactActivity extends ActionBarActivity {
     Contacts mContactList;
     Button deleteContact;
     long cid;
+    int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +35,9 @@ public class EditContactActivity extends ActionBarActivity {
         String name = intent.getStringExtra("NAME");
         String phone = intent.getStringExtra("PHONE");
         String email = intent.getStringExtra("EMAIL");
+        String tier = intent.getStringExtra("TIER");
         cid = intent.getLongExtra("CID", 0);
+        int position = intent.getIntExtra("POSITION", 0);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_contact);
@@ -44,10 +47,13 @@ public class EditContactActivity extends ActionBarActivity {
         mEditPhone.setText(phone);
         EditText mEditEmail = (EditText)findViewById(R.id.email_text);
         mEditEmail.setText(email);
+        EditText mEditTier = (EditText)findViewById(R.id.tier_text);
+        mEditTier.setText(tier);
         mDbHelper = new HomeSafeDbHelper(this);
         mContactList = Contacts.getInstance();
         ActionBar mActionBar = getSupportActionBar();
         mActionBar.setDisplayShowHomeEnabled(false);
+        mActionBar.setDisplayHomeAsUpEnabled(false);
         mActionBar.setDisplayShowTitleEnabled(false);
         LayoutInflater mInflater = LayoutInflater.from(this);
 
@@ -89,6 +95,7 @@ public class EditContactActivity extends ActionBarActivity {
                 }
                 Contact contact = new Contact(mEditName.getText().toString(), mEditEmail.getText().toString(), mEditPhone.getText().toString(), tier);
                 contact.setCid(cid);
+                Contacts.getInstance().editContact(cid, mEditName.getText().toString(), mEditPhone.getText().toString(), mEditEmail.getText().toString(), tier);
                 DbFactory.updateContact(contact, mDbHelper);
                 Intent i = new Intent(EditContactActivity.this, ContactsActivity.class);
                 Toast.makeText(EditContactActivity.this, "Edited Contact " + mEditName.getText(), Toast.LENGTH_SHORT).show();
@@ -96,6 +103,16 @@ public class EditContactActivity extends ActionBarActivity {
                 finish();
             }
         });
-//        deleteContact.setOnClickListener();
+        deleteContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Contacts.getInstance().removeContact(cid);
+                DbFactory.deleteContactFromDb(cid, mDbHelper);
+                Toast.makeText(EditContactActivity.this, "Contact Deleted", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(EditContactActivity.this, ContactsActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
     }
 }

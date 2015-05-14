@@ -32,6 +32,7 @@ public class AddContactActivity extends ActionBarActivity {
         mContactList = Contacts.getInstance();
         ActionBar mActionBar = getSupportActionBar();
         mActionBar.setDisplayShowHomeEnabled(false);
+        mActionBar.setDisplayHomeAsUpEnabled(false);
         mActionBar.setDisplayShowTitleEnabled(false);
         LayoutInflater mInflater = LayoutInflater.from(this);
 

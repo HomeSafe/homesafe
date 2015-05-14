@@ -49,7 +49,6 @@ public class ContactsActivity extends ActionBarActivity {
         // Assigning ViewPager View and setting the adapter
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(adapter);
-
         // Assiging the Sliding Tab Layout View
         tabs = (SlidingTabLayout) findViewById(R.id.tabs);
         tabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
@@ -77,12 +76,14 @@ public class ContactsActivity extends ActionBarActivity {
         return true;
     }
 
+
     private void setUpFab(){
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(ContactsActivity.this, AddContactActivity.class);
                 startActivity(i);
+                finish();
             }
         });
     }

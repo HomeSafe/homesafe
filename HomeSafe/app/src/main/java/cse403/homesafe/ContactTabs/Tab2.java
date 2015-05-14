@@ -19,16 +19,25 @@ import cse403.homesafe.R;
  */
 public class Tab2 extends Fragment {
     Contacts mContactsList;
+    RecyclerView mRecyclerView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.activity_card, container, false);
         final FragmentActivity c = getActivity();
-        final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerList);
+        this.mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerList);
         mContactsList = mContactsList.getInstance();
         LinearLayoutManager layoutManager = new LinearLayoutManager(c);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(new ContactRecyclerAdapter(mContactsList.getContactsInTier(Contacts.Tier.TWO)));
+        this.mRecyclerView.setLayoutManager(layoutManager);
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        this.mRecyclerView.setAdapter(
+                new ContactRecyclerAdapter(mContactsList.getContactsInTier(Contacts.Tier.TWO))
+        );
     }
 }
