@@ -23,6 +23,7 @@ import android.widget.Toast;
 import cse403.homesafe.Data.Contact;
 import cse403.homesafe.Data.Contacts;
 import cse403.homesafe.Data.DbFactory;
+import cse403.homesafe.Data.Destinations;
 import cse403.homesafe.Data.HomeSafeDbHelper;
 import cse403.homesafe.Messaging.SMS;
 import cse403.homesafe.Settings.SettingsActivity;
@@ -57,6 +58,7 @@ public class StartScreenActivity extends ActionBarActivity {
 
         // Retrieve data from database
         Contacts.getInstance().clearContacts();
+        Destinations.getInstance().clearDestinations();
         mDbHelper = new HomeSafeDbHelper(this);
         DbFactory.retrieveFromDb(mDbHelper);
 
