@@ -150,11 +150,17 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
                 new Button.OnClickListener() {
                     public void onClick(View w) {
                         long time = 1000 * (ETA.getCurrentHour() * 3600 + ETA.getCurrentMinute() * 60);
-                        Intent i = new Intent(getApplicationContext(), HSTimerActivity.class);
-                        i.putExtra("timefromuser", time);
-                        startActivity(i);
-                    }
 
+                        if (time == 0) {
+                            Toast.makeText(TripSettingActivity.this,
+                                    "You cannot start a trip with no time set",
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            Intent i = new Intent(getApplicationContext(), HSTimerActivity.class);
+                            i.putExtra("timefromuser", time);
+                            startActivity(i);
+                        }
+                    }
                 }
         );
     }
@@ -259,6 +265,9 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
 
                     if (distAndTime != null && mLastLocation != null) {
                         startTrip.setEnabled(true);
+                        String estimationMsg = "Your estimated time of arrival is " + hours +
+                                " hours and " + minutes + " minutes.";
+                        Toast.makeText(TripSettingActivity.this, estimationMsg, Toast.LENGTH_SHORT).show();
                     }
                 }
 

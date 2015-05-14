@@ -56,6 +56,7 @@ public class StartScreenActivity extends ActionBarActivity {
         }
 
         // Retrieve data from database
+        Contacts.getInstance().clearContacts();
         mDbHelper = new HomeSafeDbHelper(this);
         DbFactory.retrieveFromDb(mDbHelper);
 

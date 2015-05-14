@@ -11,22 +11,69 @@ import cse403.homesafe.Util.GoogleMapsUtilsCallback;
  * This class provides functionality to create and edit a destination's
  * name and location.
  *
+ * When passing in an address, computes the actual geographic location of
+ * the address. If an address is unable to be converted to a location
+ * either due to a bad address or lack of network connection,
+ * goes into a state where getLocation returns null.
  */
 
-public class Destination implements GoogleMapsUtilsCallback{
+public class Destination implements GoogleMapsUtilsCallback {
     private static final String TAG = "Destination";
     private Location location;
     private String name;
     private String address;
     private long did;
+    STATE state;
+
+    private enum STATE {
+        NO_LOCATION,
+        READY,
+        ERROR
+    }
 
     // ****** Representation Invariant
     // name must not be null
+    // If state is NO_LOCATION: location should be null;
+    // if state is READY: location must be a valid location
 
+    /**
+     * Constructs a new Destination object with a name and address.
+     * Dynamically converts the address to geographical coordinates.
+     * While this conversion is in progress, this Destination's state is
+     * NO_LOCATION
+     *
+     * @param name name of the location
+     * @param address address of the location
+     */
     public Destination (String name, String address) {
         this.name = name;
         this.address = address;
-        GoogleMapsUtils.addressToLocation(address, this);
+
+        state = STATE.NO_LOCATION;
+
+        // addressToLocation converts the address to a Location
+        // asynchronously.
+        synchronized(this) {
+            GoogleMapsUtils.addressToLocation(address, this);
+            try {
+                this.wait(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Constructs a new Destination object with a name, address, and location
+     * @param name name of the location
+     * @param address address of the location
+     * @param location Location object of the address
+     */
+    public Destination (String name, String address, Location location) {
+        this.name = name;
+        this.address = address;
+        this.location = location;
+        state = STATE.READY;
     }
 
     /**
@@ -43,6 +90,8 @@ public class Destination implements GoogleMapsUtilsCallback{
      */
     public void setAddress(String address) {
         this.address = address;
+        state = STATE.NO_LOCATION;
+        GoogleMapsUtils.addressToLocation(address, this);
     }
 
     /**
@@ -66,7 +115,10 @@ public class Destination implements GoogleMapsUtilsCallback{
      * @return  Location of this Destination
      */
     public Location getLocation() {
-        return location;
+        if(state == STATE.READY) {
+            return location;
+        }
+        return null;
     }
 
     /**
@@ -74,6 +126,8 @@ public class Destination implements GoogleMapsUtilsCallback{
      * @param location new Location
      */
     public void setLocation(Location location) {
+        // We have location, so we are ready.
+        state = STATE.READY;
         this.location = location;
     }
 
@@ -99,13 +153,19 @@ public class Destination implements GoogleMapsUtilsCallback{
 
     }
 
+    // If the passed-in object is a Location,
+    // switches state to READY and notifies all
+    // listeners.
     @Override
     public void onAddressToLocation(Object obj) {
-        if (obj instanceof Location) {
-            this.location = (Location) obj;
-        } else {
-            Log.e(TAG, "Calculate location error");
+        synchronized (this) {
+            if (obj instanceof Location) {
+                setLocation((Location) obj);
+                this.notifyAll();
+            } else {
+                state = STATE.ERROR;
+                Log.e(TAG, "Calculate location error");
+            }
         }
-
     }
 }
