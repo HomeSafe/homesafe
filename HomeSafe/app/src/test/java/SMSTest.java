@@ -7,6 +7,7 @@ import org.robolectric.shadows.ShadowSmsManager;
 
 import cse403.homesafe.Data.Contact;
 import cse403.homesafe.Data.Contacts;
+import cse403.homesafe.Messaging.Messenger;
 import cse403.homesafe.Messaging.SMS;
 
 import android.content.Context;
@@ -39,7 +40,7 @@ public class SMSTest extends TestCase {
     @Test
     public void testSendTextMessage() {
 
-        sms.sendMessage(recipient, location, customMessage, context);
+        sms.sendMessage(recipient, location, customMessage, context, Messenger.MessageType.DANGER);
 
         ShadowSmsManager shadowSmsManager = Robolectric.shadowOf(SmsManager.getDefault());
         ShadowSmsManager.TextSmsParams lastSentTextMessageParams = shadowSmsManager.getLastSentTextMessageParams();

@@ -38,7 +38,7 @@ public class SMS implements Message {
      * @param customMessage Customized message to be sent
      */
     @Override
-    public void sendMessage(Contact recipient, android.location.Location location, String customMessage, Context context) {
+    public void sendMessage(Contact recipient, android.location.Location location, String customMessage, Context context, Messenger.MessageType type) {
         String message = "";
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);

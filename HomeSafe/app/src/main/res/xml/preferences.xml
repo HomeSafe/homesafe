@@ -37,7 +37,7 @@
             android:key="customMessage"
             android:textColor="#000"
             android:title="@string/preferences_title_custom_message"
-            android:dialogTitle="Custom message to be sent to your contacts"
+            android:dialogTitle="Message sent to contacts"
             android:defaultValue="" />
     </PreferenceCategory>
 </PreferenceScreen>

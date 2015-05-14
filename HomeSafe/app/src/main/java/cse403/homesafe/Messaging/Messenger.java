@@ -17,6 +17,16 @@ import android.preference.PreferenceManager;
  */
 public class Messenger {
 
+    /**
+     * Public enum for specifying the type of message to be sent out.
+     * DANGER specifies that the user did not check in with the app.
+     * HOMESAFE specifies that the user arrived safely.
+     */
+    public enum MessageType {
+        DANGER,
+        HOMESAFE
+    }
+
     private static SMS sms = SMS.getInstance();  // For sending text messages
     private static Email email = Email.getInstance();  // For sending email
 
@@ -26,7 +36,7 @@ public class Messenger {
      * @param tier Tier of contacts to be notified
      * @param location  Last known user location
      */
-    public static void sendNotifications (Contacts.Tier tier, Location location, Context context) {
+    public static void sendNotifications (Contacts.Tier tier, Location location, Context context, MessageType type) {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         String customMessage = preferences.getString("customMessage", null);
@@ -40,10 +50,10 @@ public class Messenger {
         Contacts contacts = Contacts.getInstance();
         List<Contact> contactsNotified = contacts.getContactsInTier(tier);
         for (Contact c : contactsNotified) {
-            if (!c.getEmail().equals(""))  // TODO (Alex): Change to '!= null' if Contact changes behavior
-                email.sendMessage(c, location, customMessage, context);  // Change customMessage parameter to appropriate in SharedPreferences
-            if (!c.getPhoneNumber().equals(""))  // TODO (Alex): Change to '!= null' if Contact changes behavior
-                sms.sendMessage(c, location, customMessage, context);
+            if (c.getEmail() != null)
+                email.sendMessage(c, location, customMessage, context, type);  // Change customMessage parameter to appropriate in SharedPreferences
+            if (c.getPhoneNumber() != null)
+                sms.sendMessage(c, location, customMessage, context, type);
         }
     }
 }

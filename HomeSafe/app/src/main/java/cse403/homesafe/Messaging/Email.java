@@ -74,7 +74,8 @@ public class Email extends javax.mail.Authenticator implements cse403.homesafe.M
      * @param location      Last location of user
      * @param customMessage Customized message to be sent
      */
-    public void sendMessage(final Contact recipient, final Location location, final String customMessage, final Context context) {
+    public void sendMessage(final Contact recipient, final Location location, final String customMessage,
+                            final Context context, final Messenger.MessageType type) {
         new Thread(new Runnable() {
             public void run() {
                 String recipientEmail = recipient.getEmail();
@@ -86,14 +87,22 @@ public class Email extends javax.mail.Authenticator implements cse403.homesafe.M
                 if (userFirstName == null || userLastName == null)
                     throw new RuntimeException("User's first or last name is missing.");
 
-
-                String subject = userFirstName + " " + userLastName + " May Need Your Help";
-                String body = userFirstName + " was using HomeSafe, a walking safety app.\n\nThey were"
-                        + " using the app to get to a destination, but did not check in with the app."
-                        + " As a result, this automated email is being sent to all of " + userFirstName
-                        + "'s contacts. Their last known coordinates are (" + location.getLatitude() + ", "
-                        + location.getLongitude() + "). You may need to check in with " + userFirstName + "."
-                        + "\n\n" + userFirstName + " says: " + customMessage;
+                String subject, body;
+                if (type == Messenger.MessageType.DANGER) {
+                    subject = userFirstName + " " + userLastName + " May Need Your Help";
+                    body = userFirstName + " was using HomeSafe, a walking safety app.\n\nThey were"
+                            + " using the app to get to a destination, but did not check in with the app."
+                            + " As a result, this automated email is being sent to all of " + userFirstName
+                            + "'s contacts. Their last known coordinates are (" + location.getLatitude() + ", "
+                            + location.getLongitude() + "). You may need to check in with " + userFirstName + "."
+                            + "\n\n" + userFirstName + " says: " + customMessage;
+                } else {
+                    subject = userFirstName + " " + userLastName + " Arrived Safely";
+                    body = userFirstName + " was using HomeSafe, a walking safety app.\n\nThey were"
+                            + " using the app to get to a destination and they arrived safely. This is"
+                            + " an automated message sent by " + userFirstName + "'s phone to"
+                            + " notify you of their safe arrival";
+                }
                 try {
                     sendMail(subject, body, "homesafealerts@gmail.com", recipientEmail);
                 } catch (Exception e) {

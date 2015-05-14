@@ -23,6 +23,7 @@ import java.util.List;
 import cse403.homesafe.Data.Contact;
 import cse403.homesafe.Data.Contacts;
 import cse403.homesafe.Messaging.Email;
+import cse403.homesafe.Messaging.Messenger;
 
 
 public class ArrivalScreenActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -119,7 +120,7 @@ public class ArrivalScreenActivity extends ActionBarActivity implements GoogleAp
         if (lastKnownLocation != null) {
             // TODO: Remove the below method of sending notifications once Contacts are properly populated. Use Messenger then
             Contact testContact = new Contact("Alex", "jahrndez@uw.edu", "4259884882", Contacts.Tier.ONE);
-            mailer.sendMessage(testContact, lastKnownLocation, "Test custom message", getApplicationContext());
+            mailer.sendMessage(testContact, lastKnownLocation, "Test custom message", getApplicationContext(), Messenger.MessageType.HOMESAFE);
         } else {  // FusedLocationApi returned null, meaning current location is not currently available
             Log.e(TAG, "Current location is not available!");
         }

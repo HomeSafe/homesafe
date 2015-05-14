@@ -19,6 +19,6 @@ public interface Message {
      * @param location Last location of user
      * @param customMessage Message to be send
      */
-    public void sendMessage(Contact recipient, Location location, String customMessage, Context context);
+    public void sendMessage(Contact recipient, Location location, String customMessage, Context context, Messenger.MessageType type);
 
 }

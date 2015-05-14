@@ -31,12 +31,12 @@ public class MessengerTest extends TestCase {
         ContextHolder.setContext(context);
 
         testContact1 = new Contact("Alex", "jahrndez@uw.edu", "4259884882", Contacts.Tier.ONE);
-        testContact1 = new Contact("John Doe", "jahs.herndez@gmail.com", "4259884882", Contacts.Tier.TWO);
+        testContact2 = new Contact("John Doe", "jahs.herndez@gmail.com", "4259884882", Contacts.Tier.TWO);
     }
 
     @Test
     public void testSendNotifications() {
-        Messenger.sendNotifications(Contacts.Tier.ONE, new Location("provider"), context);
+        Messenger.sendNotifications(Contacts.Tier.ONE, new Location("provider"), context, Messenger.MessageType.DANGER);
     }
 }
 
