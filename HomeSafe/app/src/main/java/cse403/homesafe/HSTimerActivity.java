@@ -3,10 +3,13 @@ package cse403.homesafe;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -29,7 +32,6 @@ import java.util.List;
 import cse403.homesafe.Data.Contacts;
 import cse403.homesafe.Data.SecurityData;
 import cse403.homesafe.Messaging.Messenger;
-import cse403.homesafe.Util.GoogleMapsUtils;
 
 public class HSTimerActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
@@ -45,7 +47,7 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
     private Spinner timeOptions;    // the different amounts of time that can be added to timer
     private TextView txtTimer;      // textual representation of the time left in timer
 
-    private int number_of_tries;    // current number of incorrect password entries
+    private int numAttempts;    // current number of incorrect password entries
 
 
     private GoogleApiClient mGoogleApiClient;
@@ -60,7 +62,7 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hstimer);
 
-        number_of_tries = 0;
+        numAttempts = 0;
 
         // creates the views for the on-screen components
         initProgressBar();
@@ -239,24 +241,33 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
         // Set an EditText view to get user input
         final EditText input = new EditText(that);
         input.setBackgroundColor(0xFFAAAAAA);
+        input.setTransformationMethod(PasswordTransformationMethod.getInstance());
         alert.setView(input);
 
         alert.setPositiveButton("Enter", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 String enteredPassword = input.getText().toString();
-                if (SecurityData.getInstance().checkPwdRegular(enteredPassword)) {
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                String pin = prefs.getString("pin", null);
+
+                if (pin == null)
+                    Log.e(TAG, "Password wasn't stored or accessed correctly");
+
+                int pincode = Integer.parseInt(pin);
+
+                if (pincode == Integer.parseInt(enteredPassword)) {
                     if (timer != null) {
                         timer.cancel();
                         countDownPeriod = 0;
                         txtTimer.setText("00:00:00");
                         pb.setProgress(0);
-                        number_of_tries = 0;
+                        numAttempts = 0;
                     }
                     Toast.makeText(HSTimerActivity.this, "Ended Trip", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(HSTimerActivity.this, ArrivalScreenActivity.class));
                 } else {
-                    number_of_tries++;
-                    if (number_of_tries == INCORRECT_TRIES) {
+                    numAttempts++;
+                    if (numAttempts == INCORRECT_TRIES) {
                         buildGoogleApiClient();
                         onStart();
                         Messenger.sendNotifications(Contacts.Tier.ONE, mLastLocation, getApplicationContext(), Messenger.MessageType.DANGER);
