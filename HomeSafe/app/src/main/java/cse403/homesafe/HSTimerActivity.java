@@ -245,7 +245,6 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
         input.setBackgroundColor(0xFFAAAAAA);
         input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
         input.setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
-        input.setTransformationMethod(PasswordTransformationMethod.getInstance());
         alert.setView(input);
 
         alert.setPositiveButton("Enter", new DialogInterface.OnClickListener() {
@@ -281,6 +280,11 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
                         promptForPassword();
                     }
                 }
+            }
+        });
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dialog.cancel();
             }
         });
         alert.show();
