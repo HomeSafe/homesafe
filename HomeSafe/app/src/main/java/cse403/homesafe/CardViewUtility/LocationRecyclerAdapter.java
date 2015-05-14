@@ -36,9 +36,9 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationViewHo
     @Override
     public void onBindViewHolder(LocationViewHolder locationViewHolder, int i) {
         Destination destination = destinations.get(i);
-        //TODO I need the location name
         locationViewHolder.name.setText(destination.getName());
-//        locationViewHolder.address.setText(destination);
+        locationViewHolder.address.setText(destination.getAddress());
+        locationViewHolder.did = destination.getDid();
     }
 
     @Override

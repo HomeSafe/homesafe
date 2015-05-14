@@ -156,6 +156,8 @@ public class Destination implements GoogleMapsUtilsCallback {
         return this.did;
     }
 
+
+
     @Override
     public void onGetDistanceAndTime(Object obj) {
         // Empty

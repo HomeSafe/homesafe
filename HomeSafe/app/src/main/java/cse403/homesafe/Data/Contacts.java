@@ -122,6 +122,9 @@ public class Contacts{
         return result;
     }
 
+    /**
+     * clear all the contacts in the list
+     */
     public void clearContacts(){
         contacts.clear();
     }

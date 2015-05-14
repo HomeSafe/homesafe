@@ -101,7 +101,7 @@ public class EditContactActivity extends ActionBarActivity {
                     }
                     Contact contact = new Contact(mEditName.getText().toString(), mEditEmail.getText().toString(), mEditPhone.getText().toString(), tier);
                     contact.setCid(cid);
-                    Contacts.getInstance().editContact(cid, mEditName.getText().toString(), mEditPhone.getText().toString(), mEditEmail.getText().toString(), tier);
+                    mContactList.editContact(cid, mEditName.getText().toString(), mEditPhone.getText().toString(), mEditEmail.getText().toString(), tier);
                     DbFactory.updateContact(contact, mDbHelper);
                     Intent i = new Intent(EditContactActivity.this, ContactsActivity.class);
                     Toast.makeText(EditContactActivity.this, "Edited Contact " + mEditName.getText(), Toast.LENGTH_SHORT).show();
@@ -115,8 +115,8 @@ public class EditContactActivity extends ActionBarActivity {
         deleteContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Contacts.getInstance().removeContact(cid);
-                    DbFactory.deleteContactFromDb(cid, mDbHelper);
+                mContactList.removeContact(cid);
+                DbFactory.deleteContactFromDb(cid, mDbHelper);
                 Toast.makeText(EditContactActivity.this, "Contact Deleted", Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(EditContactActivity.this, ContactsActivity.class);
                 startActivity(i);
