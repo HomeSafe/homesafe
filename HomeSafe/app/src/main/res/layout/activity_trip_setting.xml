@@ -23,7 +23,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/spinnerETA"
         android:timePickerMode="spinner"
-        android:background="#AAAAAA"
         android:layout_above="@+id/startTripButton"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="32dp" />
