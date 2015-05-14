@@ -44,8 +44,8 @@ public class StartScreenActivity extends ActionBarActivity {
         setContentView(R.layout.activity_start_screen);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-
         // Retrieve data from database
+        Contacts.getInstance().clearContacts();
         mDbHelper = new HomeSafeDbHelper(this);
         DbFactory.retrieveFromDb(mDbHelper);
 

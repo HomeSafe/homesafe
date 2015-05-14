@@ -76,16 +76,10 @@
         <activity
             android:name=".AddLocationActivity"
             android:label="@string/title_activity_add_location" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".FavLocationsActivity" />
         </activity>
         <activity
             android:name=".EditLocationActivity"
             android:label=".EditLocationActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".FavLocationsActivity" />
         </activity>
         <activity
             android:name=".EditContactActivity"
