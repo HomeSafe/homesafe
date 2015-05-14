@@ -3,9 +3,11 @@ package cse403.homesafe;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
@@ -17,12 +19,20 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import cse403.homesafe.Data.Contacts;
 import cse403.homesafe.Data.SecurityData;
+import cse403.homesafe.Messaging.Messenger;
+import cse403.homesafe.Util.GoogleMapsUtils;
 
-public class HSTimerActivity extends ActionBarActivity {
+public class HSTimerActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+
     // TODO round the corners of the spinner and add a shadow OR do something to make it stand
     // out from the background and obvious that it's a drop down menu.
     private CountDownTimer timer;   // representation for a timer clock
@@ -35,9 +45,15 @@ public class HSTimerActivity extends ActionBarActivity {
     private Spinner timeOptions;    // the different amounts of time that can be added to timer
     private TextView txtTimer;      // textual representation of the time left in timer
 
-    private int number_of_tries;
+    private int number_of_tries;    // current number of incorrect password entries
 
-    public static final int INCORRECT_TRIES = 3;
+
+    private GoogleApiClient mGoogleApiClient;
+    private Location mLastLocation;
+
+    private static final int INCORRECT_TRIES = 3;           // max number of incorrect password attempts
+    private static final String TAG = "HSTimerActivity";    // for logcat purposes
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -203,6 +219,11 @@ public class HSTimerActivity extends ActionBarActivity {
         timeOptions.setAdapter(dataAdapter);
     }
 
+    /**
+     * A dialog that prompts the user for password. If user enters password
+     * correctly, then user will be directed to Arrival Screen, otherwise if the
+     * user inputs the password incorrectly 3 times then
+     */
     private void promptForPassword() {
         final HSTimerActivity that = this;
         final AlertDialog.Builder alert = new AlertDialog.Builder(that);
@@ -230,15 +251,77 @@ public class HSTimerActivity extends ActionBarActivity {
                     startActivity(new Intent(HSTimerActivity.this, ArrivalScreenActivity.class));
                 } else {
                     number_of_tries++;
-                    Toast.makeText(HSTimerActivity.this, "Incorrect Password", Toast.LENGTH_SHORT).show();
                     if (number_of_tries == INCORRECT_TRIES) {
-                        startActivity(new Intent(getApplicationContext(), ArrivalScreenActivity.class));
+                        buildGoogleApiClient();
+                        onStart();
+                        Messenger.sendNotifications(Contacts.Tier.ONE, mLastLocation, getApplicationContext(), Messenger.MessageType.DANGER);
+                        Toast.makeText(HSTimerActivity.this, "Contacts have been notified", Toast.LENGTH_SHORT).show();
                     } else {
+                        Toast.makeText(HSTimerActivity.this, "Incorrect Password", Toast.LENGTH_SHORT).show();
                         promptForPassword();
                     }
                 }
             }
         });
         alert.show();
+    }
+
+    /**
+     * Callback method of Google API Client if connected
+     */
+    @Override
+    public void onConnected(Bundle bundle) {
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+        if (mLastLocation != null) {
+            Log.e(TAG, "Connected!");
+        } else {
+            Log.e(TAG, "Failed on getting last location");
+        }
+
+    }
+
+    /**
+     * Callback method for Google API Client if connection is suspended
+     */
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.e(TAG, "Connection Suspended");
+    }
+
+    /**
+     * Callback method for Google API Client if connection fails
+     */
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.e(TAG, "Connection Failed");
+    }
+
+    /**
+     * Starts the Google API Client
+     */
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (mGoogleApiClient != null) {
+            Log.e(TAG, "Connection Started");
+            mGoogleApiClient.connect();
+        }
+    }
+
+    /**
+     * Builds the Google API Client
+     */
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+        if (mGoogleApiClient != null) {
+            Log.e(TAG, "Build Complete");
+        } else {
+            Log.e(TAG, "Build Incomplete");
+        }
     }
 }
