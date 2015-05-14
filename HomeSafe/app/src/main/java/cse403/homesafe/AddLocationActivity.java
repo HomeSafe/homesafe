@@ -16,7 +16,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
+/**
+ * AddLocationActivity manages the adding of a single location,
+ * which consists of a name, address, city, and state.
+ *
+ * In order to add a location, all four must not be entered. If not,
+ * toasts that these must be filled.
+ */
 public class AddLocationActivity extends ActionBarActivity {
     public static final String EMPTY_STR = "";
     Button discardChange;
@@ -64,6 +70,7 @@ public class AddLocationActivity extends ActionBarActivity {
                 EditText mEditState = (EditText) findViewById(R.id.state_text);
                 String stateText = mEditState.getText().toString();
 
+                // Check that all fields are non-empty
                 if(!nameText.equals(EMPTY_STR) && !stAddrText.equals(EMPTY_STR) && !cityText.equals(EMPTY_STR) && !stateText.equals(EMPTY_STR)){
                     String finalAddr = stAddrText + "," + cityText + "," + stateText;
                     //TODO update db
