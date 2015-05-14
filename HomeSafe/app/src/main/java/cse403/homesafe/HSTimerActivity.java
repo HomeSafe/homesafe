@@ -1,5 +1,7 @@
 package cse403.homesafe;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -9,6 +11,7 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -16,6 +19,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cse403.homesafe.Data.SecurityData;
 
 public class HSTimerActivity extends ActionBarActivity {
     // TODO round the corners of the spinner and add a shadow OR do something to make it stand
@@ -30,10 +35,16 @@ public class HSTimerActivity extends ActionBarActivity {
     private Spinner timeOptions;    // the different amounts of time that can be added to timer
     private TextView txtTimer;      // textual representation of the time left in timer
 
+    private int number_of_tries;
+
+    public static final int INCORRECT_TRIES = 3;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hstimer);
+
+        number_of_tries = 0;
 
         // creates the views for the on-screen components
         initProgressBar();
@@ -135,14 +146,7 @@ public class HSTimerActivity extends ActionBarActivity {
 
             @Override
             public void onClick(View v) {
-                if (timer != null) {
-                    timer.cancel();
-                    countDownPeriod = 0;
-                    txtTimer.setText("00:00:00");
-                    pb.setProgress(0);
-                }
-                Toast.makeText(HSTimerActivity.this, "Ended Trip", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(HSTimerActivity.this, ArrivalScreenActivity.class));
+                promptForPassword();
             }
         });
     }
@@ -197,5 +201,44 @@ public class HSTimerActivity extends ActionBarActivity {
                 android.R.layout.simple_spinner_item, list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         timeOptions.setAdapter(dataAdapter);
+    }
+
+    private void promptForPassword() {
+        final HSTimerActivity that = this;
+        final AlertDialog.Builder alert = new AlertDialog.Builder(that);
+
+        alert.setTitle("Unlock");
+        alert.setMessage("Please Enter Password");
+
+        // Set an EditText view to get user input
+        final EditText input = new EditText(that);
+        input.setBackgroundColor(0xFFAAAAAA);
+        alert.setView(input);
+
+        alert.setPositiveButton("Enter", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                String enteredPassword = input.getText().toString();
+                if (SecurityData.getInstance().checkPwdRegular(enteredPassword)) {
+                    if (timer != null) {
+                        timer.cancel();
+                        countDownPeriod = 0;
+                        txtTimer.setText("00:00:00");
+                        pb.setProgress(0);
+                        number_of_tries = 0;
+                    }
+                    Toast.makeText(HSTimerActivity.this, "Ended Trip", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(HSTimerActivity.this, ArrivalScreenActivity.class));
+                } else {
+                    number_of_tries++;
+                    Toast.makeText(HSTimerActivity.this, "Incorrect Password", Toast.LENGTH_SHORT).show();
+                    if (number_of_tries == INCORRECT_TRIES) {
+                        startActivity(new Intent(getApplicationContext(), ArrivalScreenActivity.class));
+                    } else {
+                        promptForPassword();
+                    }
+                }
+            }
+        });
+        alert.show();
     }
 }
