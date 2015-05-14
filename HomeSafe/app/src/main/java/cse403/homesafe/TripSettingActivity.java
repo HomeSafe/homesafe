@@ -58,7 +58,8 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trip_setting);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        this.setTitle("Trip Settings");
 
         final TripSettingActivity that = this;
         destinations = (Button) findViewById(R.id.favoriteLocationButton);
@@ -254,8 +255,6 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
 
             }
         });
-
-
     }
 
     @Override
