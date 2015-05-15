@@ -71,7 +71,7 @@ public class AddLocationActivity extends ActionBarActivity {
         saveLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(AddLocationActivity.this, ContactsActivity.class);
+                Intent i = new Intent(AddLocationActivity.this, FavLocationsActivity.class);
                 EditText mEditName = (EditText)findViewById(R.id.name_text);
                 String nameText = mEditName.getText().toString();
                 EditText mEditAddress = (EditText) findViewById(R.id.st_address_text);

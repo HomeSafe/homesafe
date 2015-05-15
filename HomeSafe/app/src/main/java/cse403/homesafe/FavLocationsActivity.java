@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +20,7 @@ import cse403.homesafe.Data.Destinations;
 
 
 public class FavLocationsActivity extends ActionBarActivity {
+    private static final String TAG = "FavLocationsActivity";
     FloatingActionButton fab;
     RecyclerView recyclerView;
     @Override
@@ -39,6 +41,8 @@ public class FavLocationsActivity extends ActionBarActivity {
 
     @Override
     public void onResume(){
+        super.onResume();
+        Log.d(TAG, Destinations.getInstance().getDestinations().toString());
         recyclerView.setAdapter(new LocationRecyclerAdapter(Destinations.getInstance().getDestinations()));
     }
 
