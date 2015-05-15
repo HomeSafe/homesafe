@@ -66,6 +66,7 @@ public class EditLocationActivity extends ActionBarActivity {
         mActionBar.setCustomView(mCustomView);
         mActionBar.setDisplayShowCustomEnabled(true);
         discardChange = (Button)findViewById(R.id.discard);
+        deleteLocation = (Button)findViewById(R.id.delete);
         saveLocation = (ImageView) findViewById(R.id.save_menu_item);
         setUpButton();
     }
