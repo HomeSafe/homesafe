@@ -52,9 +52,8 @@ public class SMS implements Message {
                 + "'s contacts. Their last know location is (" + location.getLatitude() + ", "
                 + location.getLongitude() + "). You may need to check in with " + userFirstName + ".";
 
-        if (!customMessage.isEmpty()) {
+        if (!customMessage.isEmpty())
             message += "\n\n" + userFirstName + " says: " + customMessage;
-        }
 
         SmsManager.getDefault().sendTextMessage("+1" + recipient.getPhoneNumber(), null, message, null, null);
     }
