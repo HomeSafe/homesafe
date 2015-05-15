@@ -31,7 +31,7 @@ import cse403.homesafe.Data.HomeSafeDbHelper;
  * In order to add a contact, all four must not be entered. If not,
  * toasts that these must be filled.
  */
-public class AddContactActivity extends ActionBarActivity implements TextWatcher {
+public class AddContactActivity extends ActionBarActivity {
     public static final String EMPTY_STR = "";
     Button discardChange;
     ImageView saveContact;
@@ -63,17 +63,12 @@ public class AddContactActivity extends ActionBarActivity implements TextWatcher
         tierNum = getIntent().getStringExtra("TAB");
         mEditTier.setText(tierNum);
 
-//        Spinner spinner = (Spinner) findViewById(R.id.tier_spinner);
-//        // Create an ArrayAdapter using the string array and a default spinner layout
-//        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.tier_array, android.R.layout.simple_spinner_item);
-//        // Specify the layout to use when the list of choices appears
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        // Apply the adapter to the spinner
-//        spinner.setAdapter(adapter);
         setUpButton();
     }
 
+    //setting button listeners
     private void setUpButton(){
+        //discard current change, navigate to last screen
         discardChange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,6 +78,7 @@ public class AddContactActivity extends ActionBarActivity implements TextWatcher
                 finish();
             }
         });
+        //save contact information based on the text input
         saveContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,34 +106,21 @@ public class AddContactActivity extends ActionBarActivity implements TextWatcher
                         return;
                     }
                     Contact contact = new Contact(nameStr, emailStr, phoneStr, tier);
+                    //add contact to in memory cache
                     mContactList.addContact(contact, tier);
+                    //add contact to db
                     DbFactory.addContactToDb(contact, mDbHelper);
+                    //navigate back to contact screen
                     Intent i = new Intent(AddContactActivity.this, ContactsActivity.class);
                     i.putExtra("TAB", "TAB" + tierNum);
                     Toast.makeText(AddContactActivity.this, "Added Contact " + mEditName.getText(), Toast.LENGTH_SHORT).show();
                     startActivity(i);
                     finish();
                 } else {
+                    //if information is incomplete, make a toast to notify user
                     Toast.makeText(AddContactActivity.this, "Missing Information", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
-
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-    }
-
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-    }
-
-    @Override
-    public void afterTextChanged(Editable s) {
-
-    }
-
-
 }

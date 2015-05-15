@@ -1,24 +1,20 @@
 package cse403.homesafe.CardViewUtility;
 
-import android.location.Location;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import cse403.homesafe.Data.Destination;
 import cse403.homesafe.R;
 
 
-/**
- * Created by luluyi on 5/8/15.
+/*
+ * This is the Adapter class that holds the LocationViewHolder
  */
 public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationViewHolder> {
-
-    private List<Destination> destinations;
+    private List<Destination> destinations; //the destinations to fill
 
     public LocationRecyclerAdapter(List<Destination> locations) {
         this.destinations = new ArrayList<Destination>();

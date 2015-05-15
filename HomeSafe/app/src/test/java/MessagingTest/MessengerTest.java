@@ -2,7 +2,6 @@ package MessagingTest;
 
 import android.content.Context;
 import android.location.Location;
-import android.telephony.SmsManager;
 
 import static org.mockito.Mockito.*;
 
@@ -16,7 +15,7 @@ import org.robolectric.Robolectric;
 import cse403.homesafe.Data.Contact;
 import cse403.homesafe.Data.Contacts;
 import cse403.homesafe.Messaging.Messenger;
-import cse403.homesafe.Utility.ContextHolder;
+import cse403.homesafe.Util.ContextHolder;
 
 /**
  * Test class for Messenger.java

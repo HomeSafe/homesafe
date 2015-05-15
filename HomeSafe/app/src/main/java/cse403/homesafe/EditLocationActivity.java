@@ -6,8 +6,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,7 +18,14 @@ import cse403.homesafe.Data.Destination;
 import cse403.homesafe.Data.Destinations;
 import cse403.homesafe.Data.HomeSafeDbHelper;
 
-
+/**
+ * EditLocationActivity manages the editing of a single contact,
+ * which supports changing the name, phone number, email, and tier.
+ *
+ * EditLocation Screen will auto populate the location information, user needs
+ * to modify based on the original information. Incomplete information will not
+ * be processed
+ */
 public class EditLocationActivity extends ActionBarActivity {
     public static final String EMPTY_STR = "";
     Button discardChange;
@@ -72,6 +77,7 @@ public class EditLocationActivity extends ActionBarActivity {
     }
 
     private void setUpButton(){
+        //discard current change, navigate to location list screen
         discardChange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,6 +86,7 @@ public class EditLocationActivity extends ActionBarActivity {
                 finish();
             }
         });
+        //save location information based on the text change
         saveLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,6 +115,7 @@ public class EditLocationActivity extends ActionBarActivity {
                 }
             }
         });
+        //delete the location and navigate back to location screen
         deleteLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

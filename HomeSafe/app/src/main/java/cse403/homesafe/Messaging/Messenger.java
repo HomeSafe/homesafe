@@ -4,7 +4,6 @@ import java.util.List;
 
 import cse403.homesafe.Data.Contact;
 import cse403.homesafe.Data.Contacts;
-import cse403.homesafe.Utility.ContextHolder;
 
 import android.content.Context;
 import android.content.SharedPreferences;

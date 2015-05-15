@@ -2,21 +2,26 @@ package cse403.homesafe;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -97,20 +102,21 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
     *  Makes sure the progress bar is view-able, and that it's facing the right
     *  way to make the animation make sense to the user.
     * */
-    private void initProgressBar() {
+    private boolean initProgressBar() {
         pb = (ProgressBar) findViewById(R.id.progressBar);
         // rotates pb when starting up so that the progress bar starts from the bottom of
         // the circle rather than from the side.
         Animation an = new RotateAnimation(0f, 0f, 0f, 0f);
         an.setFillAfter(true);
         pb.startAnimation(an);
+        return true;
     }
 
     /* Creates and starts a new immutableCountDownTimer object.
      * @effect creates a new CountDownTimer. The caller is responsible for canceling the
      *         old timer.
      * */
-    private void createTimer() {
+    private boolean createTimer() {
         timer = new CountDownTimer(countDownPeriod, 1) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -137,12 +143,13 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
             }
 
         }.start();
+        return true;
     }
 
     /** Adds more time to the timer depending on how much has been selected in the timeOption
      *  drop down menu.
      */
-    private void addToTimer() {
+    private boolean addToTimer() {
         btnAdd.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -163,11 +170,12 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
                         Toast.LENGTH_SHORT).show();
             }
         });
+        return true;
     }
 
     /* Ends the timer for the trip, taking the user automatically to the arrival screen.
     * */
-    private void endTimer() {
+    private boolean endTimer() {
         btnEnd.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -175,6 +183,7 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
                 promptForPassword();
             }
         });
+        return true;
     }
 
     /* Converts a string in the format "[int] [time unit]" to milliseconds to be
@@ -215,7 +224,7 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
     *  These times must be in the format [number] [time unit (sec, min, hr)] or
     *  else parseTimeString cannot read them as proper amounts of time.
     * */
-    private void addItemsToTimeOptions() {
+    private boolean addItemsToTimeOptions() {
         timeOptions = (Spinner) findViewById(R.id.timeOptions);
         List<String> list = new ArrayList<String>();
         list.add("1 min");
@@ -227,6 +236,7 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
                 android.R.layout.simple_spinner_item, list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         timeOptions.setAdapter(dataAdapter);
+        return true;
     }
 
     /**
@@ -234,7 +244,7 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
      * correctly, then user will be directed to Arrival Screen, otherwise if the
      * user inputs the password incorrectly 3 times then
      */
-    private void promptForPassword() {
+    private boolean promptForPassword() {
         final HSTimerActivity that = this;
         final AlertDialog.Builder alert = new AlertDialog.Builder(that);
 
@@ -243,9 +253,10 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
 
         // Set an EditText view to get user input
         final EditText input = new EditText(that);
-        input.setBackgroundColor(0xFFAAAAAA);
+        input.setTextColor(0xFFFFFFFF);
         input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
         input.setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
+        input.setGravity(Gravity.CENTER_HORIZONTAL);
         alert.setView(input);
 
         alert.setPositiveButton("Enter", new DialogInterface.OnClickListener() {
@@ -289,6 +300,8 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
             }
         });
         alert.show();
+
+        return true;
     }
 
     /**
@@ -303,7 +316,6 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
         } else {
             Log.e(TAG, "Failed on getting last location");
         }
-
     }
 
     /**
@@ -337,7 +349,9 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
     /**
      * Builds the Google API Client
      */
-    protected synchronized void buildGoogleApiClient() {
+    protected synchronized boolean buildGoogleApiClient() {
+        boolean result = false;
+
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -345,8 +359,11 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
                 .build();
         if (mGoogleApiClient != null) {
             Log.e(TAG, "Build Complete");
+            result = true;
         } else {
             Log.e(TAG, "Build Incomplete");
         }
+
+        return result;
     }
 }

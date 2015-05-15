@@ -1,5 +1,6 @@
 package cse403.homesafe.CardViewUtility;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -11,6 +12,7 @@ import cse403.homesafe.R;
 /**
  * Created by luluyi on 5/10/15.
  */
+//holder to contain one destination
 public class LocationViewHolder extends RecyclerView.ViewHolder {
 
     protected TextView name;
@@ -27,7 +29,11 @@ public class LocationViewHolder extends RecyclerView.ViewHolder {
                 i.putExtra("NAME", name.getText().toString());
                 i.putExtra("ADDRESS", address.getText().toString());
                 i.putExtra("DID", did);
-                v.getContext().startActivity(i);
+                //trigger EditLocationActivity
+                Activity activity = (Activity) v.getContext();
+                activity.startActivity(i);
+                //finish current activity
+                activity.finish();
             }
         });
     }

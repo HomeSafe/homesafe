@@ -1,33 +1,19 @@
 package cse403.homesafe;
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
 import com.melnykov.fab.FloatingActionButton;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cse403.homesafe.ContactTabs.SlidingTabLayout;
-import cse403.homesafe.ContactTabs.Tab2;
 import cse403.homesafe.ContactTabs.ViewPagerAdapter;
-import cse403.homesafe.Data.Contact;
-import cse403.homesafe.Data.Contacts;
-import cse403.homesafe.Data.HomeSafeContract;
 import cse403.homesafe.Data.HomeSafeDbHelper;
 
-import static cse403.homesafe.Data.HomeSafeContract.*;
-
+//ContactActivity retrieves three different tier's list of contacts
+//and displays them in different tabs
 public class ContactsActivity extends ActionBarActivity {
     FloatingActionButton fab;
 
@@ -99,6 +85,7 @@ public class ContactsActivity extends ActionBarActivity {
         }
     }
 
+    //floating add button navigates to add contact activity
     private void setUpFab(){
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,20 +98,5 @@ public class ContactsActivity extends ActionBarActivity {
                 finish();
             }
         });
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }

@@ -1,23 +1,18 @@
 package cse403.homesafe.CardViewUtility;
-
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import cse403.homesafe.AddContactActivity;
 import cse403.homesafe.Data.Contact;
-import cse403.homesafe.EditContactActivity;
 import cse403.homesafe.R;
 
+/*
+ * This is the Adapter class that holds the ContactViewHolder
+ */
 public class ContactRecyclerAdapter extends RecyclerView.Adapter<ContactViewHolder> {
-
-    private List<Contact> contacts;
+    private List<Contact> contacts; //the contacts to fill
 
     public ContactRecyclerAdapter(List<Contact> contacts) {
         this.contacts = new ArrayList<Contact>();

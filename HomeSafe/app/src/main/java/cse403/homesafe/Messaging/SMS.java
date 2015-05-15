@@ -6,7 +6,6 @@ import android.preference.PreferenceManager;
 import android.telephony.SmsManager;
 
 import cse403.homesafe.Data.Contact;
-import cse403.homesafe.Utility.ContextHolder;
 
 /**
  * Abstraction that serves as the interface for sending text messages
