@@ -40,6 +40,12 @@ public class GoogleMapsUtils {
             public void run() {
                 try {
 
+                    if (origin == null || dest == null) {
+                        Log.e(TAG, "One of origin or destination is null");
+                        listener.onGetDistanceAndTime(null);
+                        return;
+                    }
+
                     URL url = new URL(GOOGLE_DIRECTIONS_URL + origin.getLatitude() + "," + origin.getLongitude()
                             + "&destination=" + dest.getLatitude() + "," + dest.getLongitude() + "&mode=walking");
                     URLConnection urlConnection = url.openConnection();
@@ -79,6 +85,12 @@ public class GoogleMapsUtils {
             public void run() {
                 Location result;
                 try {
+                    if (address == null) {
+                        Log.e(TAG, "Address is null");
+                        listener.onAddressToLocation(null);
+                        return;
+                    }
+
                     String formattedAddress = address.replace(' ', '+');
                     URL url = new URL(GOOGLE_GEOCODER_URL + formattedAddress);
                     URLConnection urlConnection = url.openConnection();
