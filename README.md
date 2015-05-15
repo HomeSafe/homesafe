@@ -5,6 +5,8 @@ The Software Design Specification is located [here](https://drive.google.com/fil
 
 The Design Changes and Rationale Document is located in the Design Changes and Rationale Directory in this repository.
 
+NOTE: As of Beta release, only Android 5.0 Lollipop (API level 21) and above is <i>fully</i> supported. Android 4.0 Ice Cream Sandwich (API level 14) through Android 4.4 KitKat (API level 19) have limited support at the time. All other Android versions have no support.
+
 Homesafe - Developer Documentation
 ========
 ###Table of Contents
