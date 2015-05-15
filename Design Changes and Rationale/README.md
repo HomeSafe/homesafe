@@ -1,3 +1,5 @@
+Design Changes and Rationale - May 15th, 2015
+
 Design changes:
  One of the major oversights of our initial Architecture was the fact that we failed to break up the project into Android Activities.
 

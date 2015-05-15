@@ -1,3 +1,10 @@
+UPDATE May 14th 2015:
+The Software Requirements Specification is located [here](https://drive.google.com/file/d/0B7Qa-eLpQZL2b093UHI0aVk1ZHM/view?usp=sharing)
+
+The Software Design Specification is located [here](https://drive.google.com/file/d/0B4eVFDvqMnKhS191UXlJYWFfems/view?usp=sharing)
+
+The Design Changes and Rationale Document is located in the Design Changes and Rationale Directory in this repository.
+
 Homesafe - Developer Documentation
 ========
 ###Table of Contents
