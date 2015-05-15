@@ -42,7 +42,7 @@ public class ArrivalScreenActivity extends ActionBarActivity implements GoogleAp
     private RecyclerView.Adapter rvAdapter;
     private RecyclerView contactsView;
     private Button homescreenBtn;
-    private ArrayList<Contact> contacts = new ArrayList<Contact>(Contacts.getInstance().getContactsInTier(Contacts.Tier.ONE));
+    private final ArrayList<Contact> contacts = new ArrayList<Contact>(Contacts.getInstance().getContactsInTier(Contacts.Tier.ONE));
 
     private GoogleApiClient mGoogleApiClient;
     private Location lastKnownLocation;
