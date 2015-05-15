@@ -1,7 +1,11 @@
 package cse403.homesafe;
 
+
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -33,6 +37,7 @@ public class AddContactActivity extends ActionBarActivity implements TextWatcher
     ImageView saveContact;
     HomeSafeDbHelper mDbHelper;
     Contacts mContactList;
+    String tierNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +59,10 @@ public class AddContactActivity extends ActionBarActivity implements TextWatcher
         mActionBar.setDisplayShowCustomEnabled(true);
         discardChange = (Button)findViewById(R.id.discard);
         saveContact = (ImageView) findViewById(R.id.save_menu_item);
+        EditText mEditTier = (EditText)findViewById(R.id.tier_text);
+        tierNum = getIntent().getStringExtra("TAB");
+        mEditTier.setText(tierNum);
+
 //        Spinner spinner = (Spinner) findViewById(R.id.tier_spinner);
 //        // Create an ArrayAdapter using the string array and a default spinner layout
 //        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.tier_array, android.R.layout.simple_spinner_item);
@@ -69,6 +78,7 @@ public class AddContactActivity extends ActionBarActivity implements TextWatcher
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(AddContactActivity.this, ContactsActivity.class);
+                i.putExtra("TAB", "TAB" + tierNum);
                 startActivity(i);
                 finish();
             }
@@ -89,17 +99,21 @@ public class AddContactActivity extends ActionBarActivity implements TextWatcher
                 if(!nameStr.equals(EMPTY_STR) && !phoneStr.equals(EMPTY_STR) && !emailStr.equals(EMPTY_STR) && !tierStr.equals(EMPTY_STR)) {
                     int tierNum = Integer.parseInt(mEditTier.getText().toString());
                     Contacts.Tier tier;
-                    if(tierNum == 1){
+                    if (tierNum == 1){
                         tier = Contacts.Tier.ONE;
-                    } else if(tierNum == 2){
+                    } else if (tierNum == 2){
                         tier = Contacts.Tier.TWO;
-                    } else {
+                    } else if (tierNum == 3){
                         tier = Contacts.Tier.THREE;
+                    } else {
+                        Toast.makeText(AddContactActivity.this, "Please enter either 1, 2 or 3 as tier level", Toast.LENGTH_SHORT).show();
+                        return;
                     }
                     Contact contact = new Contact(nameStr, emailStr, phoneStr, tier);
                     mContactList.addContact(contact, tier);
                     DbFactory.addContactToDb(contact, mDbHelper);
                     Intent i = new Intent(AddContactActivity.this, ContactsActivity.class);
+                    i.putExtra("TAB", "TAB" + tierNum);
                     Toast.makeText(AddContactActivity.this, "Added Contact " + mEditName.getText(), Toast.LENGTH_SHORT).show();
                     startActivity(i);
                     finish();
@@ -124,4 +138,6 @@ public class AddContactActivity extends ActionBarActivity implements TextWatcher
     public void afterTextChanged(Editable s) {
 
     }
+
+
 }

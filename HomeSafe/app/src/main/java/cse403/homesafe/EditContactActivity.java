@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +24,7 @@ import cse403.homesafe.Data.HomeSafeDbHelper;
 
 public class EditContactActivity extends ActionBarActivity {
     public static final String EMPTY_STR = "";
+    private static final String TAG = "EditContactActivity";
     Button discardChange;
     ImageView saveContact;
     HomeSafeDbHelper mDbHelper;
@@ -33,6 +35,7 @@ public class EditContactActivity extends ActionBarActivity {
     EditText mEditPhone;
     EditText mEditEmail;
     EditText mEditTier;
+    String tier;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +43,7 @@ public class EditContactActivity extends ActionBarActivity {
         String name = intent.getStringExtra("NAME");
         String phone = intent.getStringExtra("PHONE");
         String email = intent.getStringExtra("EMAIL");
-        String tier = intent.getStringExtra("TIER");
+        tier = intent.getStringExtra("TIER");
         cid = intent.getLongExtra("CID", 0);
 
         super.onCreate(savedInstanceState);
@@ -78,6 +81,8 @@ public class EditContactActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(EditContactActivity.this, ContactsActivity.class);
+                i.putExtra("TAB", "TAB" + tier);
+                Log.e(TAG, "TAB" + tier);
                 startActivity(i);
                 finish();
             }
@@ -104,6 +109,7 @@ public class EditContactActivity extends ActionBarActivity {
                     mContactList.editContact(cid, mEditName.getText().toString(), mEditPhone.getText().toString(), mEditEmail.getText().toString(), tier);
                     DbFactory.updateContact(contact, mDbHelper);
                     Intent i = new Intent(EditContactActivity.this, ContactsActivity.class);
+                    i.putExtra("TAB", "TAB" + tierNum);
                     Toast.makeText(EditContactActivity.this, "Edited Contact " + mEditName.getText(), Toast.LENGTH_SHORT).show();
                     startActivity(i);
                     finish();
@@ -119,6 +125,7 @@ public class EditContactActivity extends ActionBarActivity {
                 DbFactory.deleteContactFromDb(cid, mDbHelper);
                 Toast.makeText(EditContactActivity.this, "Contact Deleted", Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(EditContactActivity.this, ContactsActivity.class);
+                i.putExtra("TAB", "TAB" + tier);
                 startActivity(i);
                 finish();
             }

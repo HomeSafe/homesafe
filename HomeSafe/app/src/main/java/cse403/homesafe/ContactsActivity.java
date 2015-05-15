@@ -3,6 +3,8 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -17,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cse403.homesafe.ContactTabs.SlidingTabLayout;
+import cse403.homesafe.ContactTabs.Tab2;
 import cse403.homesafe.ContactTabs.ViewPagerAdapter;
 import cse403.homesafe.Data.Contact;
 import cse403.homesafe.Data.Contacts;
@@ -32,8 +35,10 @@ public class ContactsActivity extends ActionBarActivity {
     ViewPagerAdapter adapter;
     SlidingTabLayout tabs;
     HomeSafeDbHelper mDbHelper;
+    ViewPager.OnPageChangeListener onPageChangeListener;
     CharSequence Titles[]={"Tier 1","Tier 2", "Tier 3"};
     int Numboftabs = 3;
+    int tabNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +54,8 @@ public class ContactsActivity extends ActionBarActivity {
         // Assigning ViewPager View and setting the adapter
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(adapter);
+
+
         // Assiging the Sliding Tab Layout View
         tabs = (SlidingTabLayout) findViewById(R.id.tabs);
         tabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
@@ -63,7 +70,9 @@ public class ContactsActivity extends ActionBarActivity {
 
         // Setting the ViewPager For the SlidingTabsLayout
         tabs.setViewPager(pager);
+
         tabs.setElevation(8); //red is fine, only for api21
+
 
         fab = (FloatingActionButton) findViewById(R.id.contacts_fab);
         setUpFab();
@@ -76,12 +85,28 @@ public class ContactsActivity extends ActionBarActivity {
         return true;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (getIntent().getStringExtra("TAB") != null) {
+            if (getIntent().getStringExtra("TAB").equals("TAB2")) {
+                pager.setCurrentItem(1, true);
+            } else if (getIntent().getStringExtra("TAB").equals("TAB3")) {
+                pager.setCurrentItem(2, true);
+            } else {
+                pager.setCurrentItem(0, true);
+            }
+        }
+    }
 
     private void setUpFab(){
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(ContactsActivity.this, AddContactActivity.class);
+                tabNum = pager.getCurrentItem();
+                tabNum++;
+                i.putExtra("TAB", String.valueOf(tabNum));
                 startActivity(i);
                 finish();
             }
