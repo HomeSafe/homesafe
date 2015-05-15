@@ -20,6 +20,7 @@ import cse403.homesafe.Data.Destinations;
 
 public class FavLocationsActivity extends ActionBarActivity {
     FloatingActionButton fab;
+    RecyclerView recyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,14 +28,18 @@ public class FavLocationsActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Favorite Locations");
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerList);
+        this.recyclerView = (RecyclerView) findViewById(R.id.recyclerList);
         LinearLayoutManager linearLM = new LinearLayoutManager(this);
         linearLM.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLM);
 
-        recyclerView.setAdapter(new LocationRecyclerAdapter(Destinations.getInstance().getDestinations()));
         fab = (FloatingActionButton) findViewById(R.id.location_fab);
         setUpFab();
+    }
+
+    @Override
+    public void onResume(){
+        recyclerView.setAdapter(new LocationRecyclerAdapter(Destinations.getInstance().getDestinations()));
     }
 
     private void setUpFab(){

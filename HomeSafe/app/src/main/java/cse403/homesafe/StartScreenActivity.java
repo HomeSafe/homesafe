@@ -23,6 +23,7 @@ import android.widget.Toast;
 import cse403.homesafe.Data.Contact;
 import cse403.homesafe.Data.Contacts;
 import cse403.homesafe.Data.DbFactory;
+import cse403.homesafe.Data.Destinations;
 import cse403.homesafe.Data.HomeSafeDbHelper;
 import cse403.homesafe.Messaging.SMS;
 import cse403.homesafe.Settings.SettingsActivity;
@@ -57,6 +58,7 @@ public class StartScreenActivity extends ActionBarActivity {
 
         // Retrieve data from database
         Contacts.getInstance().clearContacts();
+        Destinations.getInstance().clearDestinations();
         mDbHelper = new HomeSafeDbHelper(this);
         DbFactory.retrieveFromDb(mDbHelper);
 
@@ -107,7 +109,10 @@ public class StartScreenActivity extends ActionBarActivity {
         String userFirstName = preferences.getString("firstName", null);
         String userLastName = preferences.getString("lastName", null);
 
-        return password == null || userFirstName == null || userLastName == null;
+        if (password == null || userFirstName == null || userLastName == null)
+            return false;
+
+        return userFirstName.length() * userLastName.length() * password.length() != 0;
     }
 
     private void setupButton() {

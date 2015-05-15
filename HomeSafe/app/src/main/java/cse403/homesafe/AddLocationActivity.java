@@ -16,6 +16,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
+
+import cse403.homesafe.Data.DbFactory;
+import cse403.homesafe.Data.Destination;
+import cse403.homesafe.Data.Destinations;
+import cse403.homesafe.Data.HomeSafeDbHelper;
+
 /**
  * AddLocationActivity manages the adding of a single location,
  * which consists of a name, address, city, and state.
@@ -27,11 +34,15 @@ public class AddLocationActivity extends ActionBarActivity {
     public static final String EMPTY_STR = "";
     Button discardChange;
     ImageView saveLocation;
+    Destinations mDesList;
+    HomeSafeDbHelper mDbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_location);
+        mDbHelper = new HomeSafeDbHelper(this);
+        mDesList = Destinations.getInstance();
         ActionBar mActionBar = getSupportActionBar();
         mActionBar.setDisplayShowHomeEnabled(false);
         mActionBar.setDisplayShowTitleEnabled(false);
@@ -73,11 +84,17 @@ public class AddLocationActivity extends ActionBarActivity {
                 // Check that all fields are non-empty
                 if(!nameText.equals(EMPTY_STR) && !stAddrText.equals(EMPTY_STR) && !cityText.equals(EMPTY_STR) && !stateText.equals(EMPTY_STR)){
                     String finalAddr = stAddrText + "," + cityText + "," + stateText;
-                    //TODO update db
-                    //TODO update cache
-                    Toast.makeText(AddLocationActivity.this, "Added Location", Toast.LENGTH_SHORT).show();
-                    startActivity(i);
-                    finish();
+                    Destination newDes = new Destination(nameText, finalAddr);
+                    if (!newDes.isReady()) {
+                        Toast.makeText(AddLocationActivity.this, "Please enter a valid address", Toast.LENGTH_SHORT).show();
+                    } else {
+                        mDesList.addDestination(newDes);
+                        DbFactory.addDestinationToDb(newDes, mDbHelper);
+                        Toast.makeText(AddLocationActivity.this, "Added Location", Toast.LENGTH_SHORT).show();
+                        startActivity(i);
+                        finish();
+                    }
+
                 } else {
                     Toast.makeText(AddLocationActivity.this, "Missing Information", Toast.LENGTH_SHORT).show();
                 }

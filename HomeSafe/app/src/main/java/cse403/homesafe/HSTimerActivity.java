@@ -256,9 +256,9 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
                 if (pin == null)
                     Log.e(TAG, "Password wasn't stored or accessed correctly");
 
-                int pincode = Integer.parseInt(pin);
+                //int pincode = Integer.parseInt(pin);
 
-                if (pincode == Integer.parseInt(enteredPassword)) {
+                if (pin.equals(enteredPassword)) {
                     if (timer != null) {
                         timer.cancel();
                         countDownPeriod = 0;
