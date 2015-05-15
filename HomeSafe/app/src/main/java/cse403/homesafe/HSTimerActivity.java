@@ -64,7 +64,7 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hstimer);
-
+        getSupportActionBar().setTitle("Trip in progress");
         numAttempts = 0;
 
         // creates the views for the on-screen components
