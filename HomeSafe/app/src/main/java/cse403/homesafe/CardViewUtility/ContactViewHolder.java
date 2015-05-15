@@ -10,8 +10,8 @@ import cse403.homesafe.Data.Contacts;
 import cse403.homesafe.EditContactActivity;
 import cse403.homesafe.R;
 
+//holder to contain one contact
 public class ContactViewHolder extends RecyclerView.ViewHolder {
-
     protected TextView name;
     protected TextView phone;
     protected TextView email;
@@ -24,10 +24,11 @@ public class ContactViewHolder extends RecyclerView.ViewHolder {
         name = (TextView) itemView.findViewById(R.id.name);
         phone = (TextView) itemView.findViewById(R.id.phone);
         email = (TextView) itemView.findViewById(R.id.email);
+
+        //click listener on this item, cardview listener
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // item clicked
                 Intent i = new Intent(v.getContext(), EditContactActivity.class);
                 i.putExtra("CID", cid);
                 i.putExtra("NAME", name.getText().toString());
@@ -43,8 +44,10 @@ public class ContactViewHolder extends RecyclerView.ViewHolder {
                     tierNum = "3";
                 }
                 i.putExtra("TIER", tierNum);
+                //trigger EditContactActivity
                 Activity activity = (Activity) v.getContext();
                 activity.startActivity(i);
+                //finish current activity
                 activity.finish();
             }
         });

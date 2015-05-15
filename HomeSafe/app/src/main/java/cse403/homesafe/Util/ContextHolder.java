@@ -1,4 +1,4 @@
-package cse403.homesafe.Utility;
+package cse403.homesafe.Util;
 
 import android.content.Context;
 

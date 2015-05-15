@@ -2,21 +2,16 @@ package cse403.homesafe;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.media.Image;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.List;
 
 import cse403.homesafe.Data.DbFactory;
 import cse403.homesafe.Data.Destination;
@@ -27,7 +22,8 @@ import cse403.homesafe.Data.HomeSafeDbHelper;
  * AddLocationActivity manages the adding of a single location,
  * which consists of a name, address, city, and state.
  *
- * In order to add a location, all four must not be entered. If not,
+ * In order to add a location, all four must not be entered and the address should be verified
+ * via google. If not,
  * toasts that these must be filled.
  */
 public class AddLocationActivity extends ActionBarActivity {
@@ -59,7 +55,9 @@ public class AddLocationActivity extends ActionBarActivity {
         setUpButton();
     }
 
+    //setting button listeners
     private void setUpButton(){
+        //discard current change, navigate to last screen
         discardChange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,6 +66,7 @@ public class AddLocationActivity extends ActionBarActivity {
                 finish();
             }
         });
+        //save contact information based on the text input
         saveLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,16 +84,18 @@ public class AddLocationActivity extends ActionBarActivity {
                 if(!nameText.equals(EMPTY_STR) && !stAddrText.equals(EMPTY_STR) && !cityText.equals(EMPTY_STR) && !stateText.equals(EMPTY_STR)){
                     String finalAddr = stAddrText + "," + cityText + "," + stateText;
                     Destination newDes = new Destination(nameText, finalAddr);
+                    //address is not valid
                     if (!newDes.isReady()) {
                         Toast.makeText(AddLocationActivity.this, "Please enter a valid address", Toast.LENGTH_SHORT).show();
                     } else {
+                        //add destination to cache list
                         mDesList.addDestination(newDes);
+                        //add to database
                         DbFactory.addDestinationToDb(newDes, mDbHelper);
                         Toast.makeText(AddLocationActivity.this, "Added Location", Toast.LENGTH_SHORT).show();
                         startActivity(i);
                         finish();
                     }
-
                 } else {
                     Toast.makeText(AddLocationActivity.this, "Missing Information", Toast.LENGTH_SHORT).show();
                 }

@@ -6,8 +6,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,7 +18,14 @@ import cse403.homesafe.Data.Contacts;
 import cse403.homesafe.Data.DbFactory;
 import cse403.homesafe.Data.HomeSafeDbHelper;
 
-
+/**
+ * EditContactActivity manages the editing of a single contact,
+ * which supports changing the name, phone number, email, and tier.
+ *
+ * EditContact Screen will auto populate the contact information, user needs
+ * to modify based on the original information. Incomplete information will not
+ * be processed
+ */
 public class EditContactActivity extends ActionBarActivity {
     public static final String EMPTY_STR = "";
     Button discardChange;
@@ -37,6 +42,7 @@ public class EditContactActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Intent intent = getIntent();
+        //these information always come from the recyclerview
         String name = intent.getStringExtra("NAME");
         String phone = intent.getStringExtra("PHONE");
         String email = intent.getStringExtra("EMAIL");
@@ -73,7 +79,9 @@ public class EditContactActivity extends ActionBarActivity {
         setUpButton();
     }
 
+    //set up the button listener
     private void setUpButton(){
+        //discard current change, navigate to contact list screen
         discardChange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,6 +90,7 @@ public class EditContactActivity extends ActionBarActivity {
                 finish();
             }
         });
+        //save contact information based on the text change
         saveContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,10 +117,12 @@ public class EditContactActivity extends ActionBarActivity {
                     startActivity(i);
                     finish();
                 } else {
+                    //information incomplete
                     Toast.makeText(EditContactActivity.this, "Missing Information", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+        //delete the contact and navigate back to contact screen
         deleteContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
