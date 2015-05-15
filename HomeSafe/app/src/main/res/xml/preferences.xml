@@ -8,6 +8,7 @@
             android:title="@string/preferences_title_first_name"
             android:dialogTitle="Enter your first name"
             android:defaultValue=""
+            android:textColor="#FFFFFF"
             android:inputType="textCapWords"
             android:selectAllOnFocus="true" />
         <EditTextPreference
@@ -15,6 +16,7 @@
             android:title="@string/preferences_title_last_name"
             android:dialogTitle="Enter your last name"
             android:defaultValue=""
+            android:textColor="#FFFFFF"
             android:inputType="textCapWords"
             android:selectAllOnFocus="true" />
     </PreferenceCategory>
@@ -26,6 +28,7 @@
             android:title="@string/preferences_title_password"
             android:dialogTitle="Enter a 4-digit passcode"
             android:defaultValue=""
+            android:textColor="#FFFFFF"
             android:maxLength="4"
             android:password="true"
             android:selectAllOnFocus="true"
@@ -34,6 +37,7 @@
             android:key="customMessage"
             android:title="@string/preferences_title_custom_message"
             android:dialogTitle="Message sent to contacts"
+            android:textColor="#FFFFFF"
             android:defaultValue="" />
         <CheckBoxPreference
             android:key="homeSafeAlert"

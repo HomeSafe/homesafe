@@ -82,7 +82,7 @@ public class AddLocationActivity extends ActionBarActivity {
 
                 // Check that all fields are non-empty
                 if(!nameText.equals(EMPTY_STR) && !stAddrText.equals(EMPTY_STR) && !cityText.equals(EMPTY_STR) && !stateText.equals(EMPTY_STR)){
-                    String finalAddr = stAddrText + "," + cityText + "," + stateText;
+                    String finalAddr = capitalize(stAddrText) + ", " + capitalize(cityText) + ", " + capitalize(stateText);
                     Destination newDes = new Destination(nameText, finalAddr);
                     //address is not valid
                     if (!newDes.isReady()) {
@@ -101,5 +101,17 @@ public class AddLocationActivity extends ActionBarActivity {
                 }
             }
         });
+    }
+
+    // Quick helper method for capitalizing the first letter of each word in user input.
+    private String capitalize(final String word) {
+        String[] arr = word.split(" ");
+        StringBuffer sb = new StringBuffer();
+
+        for (int i = 0; i < arr.length; i++) {
+            sb.append(Character.toUpperCase(arr[i].charAt(0)))
+                    .append(arr[i].substring(1)).append(" ");
+        }
+        return sb.toString().trim();
     }
 }

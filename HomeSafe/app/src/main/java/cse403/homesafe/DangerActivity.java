@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Gravity;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -85,10 +86,10 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
 
         // Set an EditText view to get user input
         final EditText input = new EditText(this);
-        input.setBackgroundColor(0xFFAAAAAA);
         input.setTextColor(0xFFFFFFFF);
         input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
         input.setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
+        input.setGravity(Gravity.CENTER_HORIZONTAL);
         alert.setView(input);
 
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {

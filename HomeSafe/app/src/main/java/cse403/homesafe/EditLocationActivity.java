@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +18,7 @@ import cse403.homesafe.Data.DbFactory;
 import cse403.homesafe.Data.Destination;
 import cse403.homesafe.Data.Destinations;
 import cse403.homesafe.Data.HomeSafeDbHelper;
+
 
 /**
  * EditLocationActivity manages the editing of a single contact,
@@ -97,7 +99,8 @@ public class EditLocationActivity extends ActionBarActivity {
                 if(!nameStr.equals(EMPTY_STR) && !stAddrStr.equals(EMPTY_STR) && !cityStr.equals(EMPTY_STR)
                         && !stateStr.equals(EMPTY_STR)) {
                     Intent i = new Intent(EditLocationActivity.this, FavLocationsActivity.class);
-                    String finalAddr = stAddrStr + "," + cityStr + "," + stateStr;
+                    String finalAddr = capitalize(stAddrStr) + ", " + capitalize(cityStr) + ", " + capitalize(stateStr);
+                    Log.e("EditLocation: ", finalAddr);
                     Destination newDes = new Destination(nameStr, finalAddr);
                     newDes.setDid(did);
                     if (!newDes.isReady()) {
@@ -127,5 +130,17 @@ public class EditLocationActivity extends ActionBarActivity {
                 finish();
             }
         });
+    }
+
+    // Quick helper method for capitalizing the first letter of each word in user input.
+    private String capitalize(final String word) {
+        String[] arr = word.split(" ");
+        StringBuffer sb = new StringBuffer();
+
+        for (int i = 0; i < arr.length; i++) {
+            sb.append(Character.toUpperCase(arr[i].charAt(0)))
+                    .append(arr[i].substring(1)).append(" ");
+        }
+        return sb.toString().trim();
     }
 }
