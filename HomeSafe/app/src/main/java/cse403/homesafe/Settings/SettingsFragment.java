@@ -1,6 +1,7 @@
 package cse403.homesafe.Settings;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
@@ -8,6 +9,10 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.preference.PreferenceGroup;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 
 import cse403.homesafe.R;
 
@@ -54,7 +59,9 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         if (preference instanceof EditTextPreference) {
             if (!preference.getTitle().toString().equals("Passcode")) {  // Don't show if it's the passcode preference
                 EditTextPreference editTextPref = (EditTextPreference) preference;
-                preference.setSummary(editTextPref.getText());
+                Spannable summary = new SpannableString(editTextPref.getText());
+                summary.setSpan(new ForegroundColorSpan(0xFF000000), 0, summary.length(), 0);
+                preference.setSummary( summary );
             }
         }
     }
