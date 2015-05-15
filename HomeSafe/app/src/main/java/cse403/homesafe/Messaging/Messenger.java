@@ -38,11 +38,7 @@ public class Messenger {
     public static void sendNotifications (Contacts.Tier tier, Location location, Context context, MessageType type) {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String customMessage = preferences.getString("customMessage", null);
-
-        if (customMessage == null) {
-            throw new RuntimeException("No custom message found");
-        }
+        String customMessage = preferences.getString("customMessage", "");
 
         customMessage = customMessage.trim();
 
