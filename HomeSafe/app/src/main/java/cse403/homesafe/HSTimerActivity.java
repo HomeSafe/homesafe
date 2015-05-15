@@ -1,5 +1,6 @@
 package cse403.homesafe;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -132,7 +133,7 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
                 timer.cancel();
                 pb.setProgress(0);
                 Toast.makeText(HSTimerActivity.this, "Your Trip Has Ended", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(HSTimerActivity.this, ArrivalScreenActivity.class));
+                startActivity(new Intent(HSTimerActivity.this, DangerActivity.class));
             }
 
         }.start();
