@@ -15,12 +15,9 @@ public class SMS implements Message {
 
     // Instance of SMS
     private static final SMS _instance = new SMS();
-    private SmsManager smsManager;
 
     // Private singleton constructor
-    private SMS() {
-        smsManager = SmsManager.getDefault();
-    }
+    private SMS() { }
 
     /**
      * Get singleton instance of SMS
@@ -45,8 +42,6 @@ public class SMS implements Message {
         String userFirstName = preferences.getString("firstName", null);
         String userLastName = preferences.getString("lastName", null);
 
-        // TODO: At a later time, we may force user to set first and last name before starting any trips.
-        // TODO (cont'd): As such, this check may be unnecessary.
         userFirstName = (userFirstName == null) ? "" : userFirstName;
         userLastName = (userLastName == null) ? "" : userLastName;
 
@@ -61,6 +56,6 @@ public class SMS implements Message {
             message += "\n\n" + userFirstName + " says: " + customMessage;
         }
 
-        smsManager.sendTextMessage("+1" + recipient.getPhoneNumber(), null, message, null, null);
+        SmsManager.getDefault().sendTextMessage("+1" + recipient.getPhoneNumber(), null, message, null, null);
     }
 }
