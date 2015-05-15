@@ -45,15 +45,15 @@ public class SMS implements Message {
         userFirstName = (userFirstName == null) ? "" : userFirstName;
         userLastName = (userLastName == null) ? "" : userLastName;
 
-        message = userFirstName + userLastName + " may need your help!\n";
-        message += userFirstName + " was using HomeSafe, a walking safety app.\n\n They were"
-                + " using the app to get to a destination, but did not check in with the app."
-                + " As a result, this is an automated email being sent to all of " + userFirstName
-                + "'s contacts. Their last know location is (" + location.getLatitude() + ", "
-                + location.getLongitude() + "). You may need to check in with " + userFirstName + ".";
-
-        if (!customMessage.isEmpty())
-            message += "\n\n" + userFirstName + " says: " + customMessage;
+        message = userFirstName + " " + userLastName + " may need your help!";
+//        message += userFirstName + " was using HomeSafe, a walking safety app.\n\n They were"
+//                + " using the app to get to a destination, but did not check in with the app."
+//                + " As a result, this is an automated email being sent to all of " + userFirstName
+//                + "'s contacts. Their last know location is (" + location.getLatitude() + ", "
+//                + location.getLongitude() + "). You may need to check in with " + userFirstName + ".";
+//
+//        if (!customMessage.isEmpty())
+//            message += "\n\n" + userFirstName + " says: " + customMessage;
 
         SmsManager.getDefault().sendTextMessage("+1" + recipient.getPhoneNumber(), null, message, null, null);
     }
