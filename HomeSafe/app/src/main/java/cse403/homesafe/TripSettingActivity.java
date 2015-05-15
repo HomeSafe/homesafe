@@ -146,7 +146,6 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
         ETA.setCurrentMinute(0);
 
         startTrip = (Button) findViewById(R.id.startTripButton);
-        startTrip.setEnabled(false);
         startTrip.setOnClickListener(
                 new Button.OnClickListener() {
                     public void onClick(View w) {
@@ -155,6 +154,10 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
                         if (time == 0) {
                             Toast.makeText(TripSettingActivity.this,
                                     "You cannot start a trip with no time set",
+                                    Toast.LENGTH_SHORT).show();
+                        } else if (destination == null) {
+                            Toast.makeText(TripSettingActivity.this,
+                                    "You cannot start a trip with no destination set",
                                     Toast.LENGTH_SHORT).show();
                         } else {
                             Intent i = new Intent(getApplicationContext(), HSTimerActivity.class);
