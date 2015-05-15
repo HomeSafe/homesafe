@@ -11,4 +11,5 @@
     <color name="buttonHighlightColor">#F5F5F5</color>
     <color name="card_background">#F1F8E9</color>
     <color name="colorControlNormal">#FFFFFF</color>
+    <color name="fabColor">#FFC107</color>
 </resources>
