@@ -31,9 +31,7 @@ public class StartScreenActivityTest extends ActivityInstrumentationTestCase2<St
         activity = getActivity();
     }
 
-    public void testStartSecondActivity() throws Exception {
-
-
+    public void testStartTripSettingActivity() throws Exception {
 
         // add monitor to check for the second activity
         ActivityMonitor monitor =
