@@ -33,7 +33,14 @@ public class HSTimerActivityTest {
     @Test
     public void testInitProgressBar() throws Exception {
         timerActivity = PowerMockito.spy(new HSTimerActivity());
-
+        PowerMockito.doNothing().when(timerActivity); //.initProgressBar(); // "initProgressBar", new Object[0]);
         PowerMockito.verifyPrivate(timerActivity).invoke("initProgressBar", new Object[0]);
+    }
+
+    @Test
+    public void testCreateTimer() throws Exception {
+        timerActivity = PowerMockito.spy(new HSTimerActivity());
+        PowerMockito.doNothing().when(timerActivity, "createTimer", new Object[0]);
+        PowerMockito.verifyPrivate(timerActivity).invoke("createTimer", new Object[0]);
     }
 }
