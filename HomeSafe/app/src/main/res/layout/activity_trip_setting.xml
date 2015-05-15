@@ -55,6 +55,7 @@
         android:layout_height="wrap_content"
         android:text="Add New "
         android:layout_marginLeft="70px"
+        android:gravity="center"
         android:id="@+id/button4"
         android:textColor="#FFFFFF"
         android:layout_alignTop="@+id/favoriteLocationButton"
