@@ -142,4 +142,9 @@ public class EditContactActivity extends ActionBarActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        discardChange.callOnClick();    // red is fine since we have min at 21
+    }
 }
