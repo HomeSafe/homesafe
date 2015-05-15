@@ -29,7 +29,7 @@ The HomeSafe Security app is an open-source safety app for Android devices. In o
 ###Cloning the Repository
 Open a terminal window (or a Git terminal window for non-Linux users) and enter
 ```
-git clone https://github.com/Vivekparam/homesafe
+git clone https://github.com/HomeSafe/homesafe
 ```
 this will create a local copy of the HomeSafe repository on your machine so you will now have access to the most recent copy of the source code.
 
