@@ -16,7 +16,7 @@ import static org.junit.Assert.assertEquals;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(HSTimerActivity.class)
-public class HSTimerActivityTest {
+public class HSTimerActivityUnitTest {
 
     HSTimerActivity timerActivity;
 
@@ -57,6 +57,25 @@ public class HSTimerActivityTest {
     }
 
     @Test
+    public void testAddItemsToTimeOptions() throws Exception {
+        timerActivity = PowerMockito.spy(new HSTimerActivity());
+        PowerMockito.when(timerActivity, "addItemsToTimeOptions", new Object[0]).thenReturn(true);
+    }
+
+    @Test
+    public void testPromptForPassword() throws Exception {
+        timerActivity = PowerMockito.spy(new HSTimerActivity());
+        PowerMockito.when(timerActivity, "promptForPassword", new Object[0]).thenReturn(true);
+    }
+
+    @Test
+    public void testBuildGoogleApiClient() throws Exception {
+        timerActivity = PowerMockito.spy(new HSTimerActivity());
+        PowerMockito.when(timerActivity, "buildGoogleApiClient", new Object[0]).thenReturn(true);
+    }
+
+    // Static method parseTimeString tests
+    @Test
     public void testParseTimeStringSec() throws Exception {
         assertEquals(new Long(HSTimerActivity.parseTimeString("1000 sec")), new Long(1000000));
     }
@@ -74,23 +93,5 @@ public class HSTimerActivityTest {
     @Test
     public void testParseTimeStringError() throws Exception {
         assertEquals(new Long(HSTimerActivity.parseTimeString("error")), new Long(-1));
-    }
-
-    @Test
-    public void testAddItemsToTimeOptions() throws Exception {
-        timerActivity = PowerMockito.spy(new HSTimerActivity());
-        PowerMockito.when(timerActivity, "addItemsToTimeOptions", new Object[0]).thenReturn(true);
-    }
-
-    @Test
-    public void testPromptForPassword() throws Exception {
-        timerActivity = PowerMockito.spy(new HSTimerActivity());
-        PowerMockito.when(timerActivity, "promptForPassword", new Object[0]).thenReturn(true);
-    }
-
-    @Test
-    public void testBuildGoogleApiClient() throws Exception {
-        timerActivity = PowerMockito.spy(new HSTimerActivity());
-        PowerMockito.when(timerActivity, "buildGoogleApiClient", new Object[0]).thenReturn(true);
     }
 }
