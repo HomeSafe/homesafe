@@ -1,15 +1,13 @@
 package cse403.homesafe;
-//This class is for Start Screen Activity, where it handles the side bar and start trip events
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,24 +18,19 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import cse403.homesafe.Data.Contact;
 import cse403.homesafe.Data.Contacts;
 import cse403.homesafe.Data.DbFactory;
 import cse403.homesafe.Data.Destinations;
 import cse403.homesafe.Data.HomeSafeDbHelper;
-import cse403.homesafe.Messaging.SMS;
 import cse403.homesafe.Settings.SettingsActivity;
-import cse403.homesafe.Utility.ContextHolder;
+import cse403.homesafe.Util.ContextHolder;
 
+//This class is for Start Screen Activity, where it handles the side bar menu and start trip events
 public class StartScreenActivity extends ActionBarActivity {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
     private ArrayAdapter<String> mAdapter;
-    Toolbar toolbar;
-    private CharSequence mDrawerTitle;
-    private CharSequence mTitle;
-    private String[] navList;
     private Button buttonStart;
     private HomeSafeDbHelper mDbHelper;
 
@@ -62,9 +55,7 @@ public class StartScreenActivity extends ActionBarActivity {
         mDbHelper = new HomeSafeDbHelper(this);
         DbFactory.retrieveFromDb(mDbHelper);
 
-        mTitle = mDrawerTitle = getTitle();
         buttonStart = (Button)findViewById(R.id.button);
-        navList = getResources().getStringArray(R.array.menu_array);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.navList);
 
@@ -78,11 +69,14 @@ public class StartScreenActivity extends ActionBarActivity {
 
         ContextHolder.setContext(getApplicationContext());
     }
+
+    //add the menu items to the drawer side bar
     private void addDrawerItems() {
         final String[] menuListItems = getResources().getStringArray(R.array.menu_array);
         mAdapter = new ArrayAdapter<String>(this, R.layout.drawer_list_item, menuListItems);
         mDrawerList.setAdapter(mAdapter);
 
+        //set each up each menu item where it goes
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             //A good example of how to make a toast
 //            Toast.makeText(StartScreenActivity.this, menuListItems[position], Toast.LENGTH_SHORT).show();
@@ -97,12 +91,12 @@ public class StartScreenActivity extends ActionBarActivity {
                 } else {
                     i = new Intent(StartScreenActivity.this, SettingsActivity.class);
                 }
-//                i.putExtra("string", Yourlist.get(pos).sms);
                 startActivity(i);
             }
         });
     }
 
+    //check if personal information of homesafe user is set up
     private boolean isAccountSetUp() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String password = preferences.getString("pin", null);
@@ -115,6 +109,7 @@ public class StartScreenActivity extends ActionBarActivity {
         return userFirstName.length() * userLastName.length() * password.length() != 0;
     }
 
+    //set up start trip button
     private void setupButton() {
         buttonStart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,6 +120,7 @@ public class StartScreenActivity extends ActionBarActivity {
         });
     }
 
+    //set up the drawer open and close
     private void setupDrawer() {
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
 

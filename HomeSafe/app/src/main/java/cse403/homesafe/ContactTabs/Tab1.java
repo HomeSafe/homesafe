@@ -14,6 +14,7 @@ import cse403.homesafe.CardViewUtility.ContactRecyclerAdapter;
 import cse403.homesafe.Data.Contacts;
 import cse403.homesafe.R;
 
+//Tab as Fragment view to list Tier1 Contacts
 public class Tab1 extends Fragment {
     Contacts mContactsList;
     RecyclerView mRecyclerView;
@@ -30,6 +31,7 @@ public class Tab1 extends Fragment {
         return view;
     }
 
+    //refresh the adapter
     @Override
     public void onResume() {
         super.onResume();

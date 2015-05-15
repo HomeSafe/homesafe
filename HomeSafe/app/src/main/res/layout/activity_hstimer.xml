@@ -54,6 +54,7 @@ android:orientation="vertical" >
         android:layout_gravity="center"
         android:padding="10dp"
         android:textSize="20sp"
+        android:textColor="#FFFFFFFF"
         android:text="Add More Time" />
 
     <Button
@@ -63,6 +64,7 @@ android:orientation="vertical" >
         android:layout_gravity="center"
         android:padding="10dp"
         android:textSize="20sp"
+        android:textColor="#FFFFFFFF"
         android:paddingTop="20dp"
         android:text="End Trip" />
 

@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
@@ -20,6 +22,9 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
+import java.util.ArrayList;
+
+import cse403.homesafe.Data.Contact;
 import cse403.homesafe.Data.Contacts;
 import cse403.homesafe.Messaging.Messenger;
 
@@ -38,16 +43,35 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
     private GoogleApiClient mGoogleApiClient;
     private int numAttempts;
 
+    private RecyclerView contactsView;
+
+    private RecyclerView.Adapter rvAdapter;
+
+    private int currentTier;
+
+    private final ArrayList<Contact> contacts1 = new ArrayList<Contact>(Contacts.getInstance().getContactsInTier(Contacts.Tier.ONE));
+    private final ArrayList<Contact> contacts2 = new ArrayList<Contact>(Contacts.getInstance().getContactsInTier(Contacts.Tier.TWO));
+    private final ArrayList<Contact> contacts3 = new ArrayList<Contact>(Contacts.getInstance().getContactsInTier(Contacts.Tier.THREE));
+
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_danger);
 
+        getSupportActionBar().setTitle("DANGER ZONE");
+
+        contactsView = (RecyclerView) findViewById(R.id.contactsView);
+
+
+        RecyclerView.LayoutManager rvLayoutManager = new LinearLayoutManager(this);
+        contactsView.setLayoutManager(rvLayoutManager);
+        contactsView.setHasFixedSize(true);
+
+        createTimer();
         numAttempts = 0;
         promptForPassword();
-
-
     }
 
     /**
@@ -62,6 +86,7 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
         // Set an EditText view to get user input
         final EditText input = new EditText(this);
         input.setBackgroundColor(0xFFAAAAAA);
+        input.setTextColor(0xFFFFFFFF);
         input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
         input.setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
         alert.setView(input);
@@ -75,17 +100,23 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
                 if (pin == null)
                     Log.e(TAG, "Password wasn't stored or accessed correctly");
 
-                int pincode = Integer.parseInt(pin);
-
-                if (pincode == Integer.parseInt(enteredPassword)) {
+                if (pin.equals(enteredPassword)) {
                     dialog.cancel();
                     timer.cancel();
-                    Toast.makeText(getApplicationContext(), "Correct Pincode", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(getApplicationContext(), ArrivalScreenActivity.class));
+                    Toast.makeText(DangerActivity.this, "Correct Pincode", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(DangerActivity.this, ArrivalScreenActivity.class));
                 } else {
                     numAttempts++;
                     if (numAttempts == 3) {
-
+                        numAttempts = 0;
+                        timer.cancel();
+                        if (checkPlayServices()) {
+                            Log.e(TAG, "Google Play Services is installed");
+                            buildGoogleApiClient();
+                            onStart();
+                        } else {
+                            Log.e(TAG, "Google Play Services is not installed");
+                        }
                     } else {
                         promptForPassword();
                     }
@@ -101,30 +132,15 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
      *         old timer.
      * */
     private void createTimer() {
-        timer = new CountDownTimer(600, 1) {
+        timer = new CountDownTimer(60000, 1) {
             @Override
             public void onTick(long millisUntilFinished) {
-//                countDownPeriod = millisUntilFinished;  // update how much time is left in the timer
-                long seconds = millisUntilFinished / 1000;
-//                int barVal = (int) (millisUntilFinished/ 1000);  // update progress bar animation
-//                pb.setProgress(barVal);
 
-                // re-calculate the text display for the timer
-//                String hrs = String.format("%02d", seconds / 3600);
-//                seconds %= 3600;       // strip off seconds that got converted to hours
-//                String mins = String.format("%02d", seconds / 60);
-//                seconds %= 60;         // strip off seconds that got converted to minutes
-//                String secs = String.format("%02d", seconds % 60);
-//                txtTimer.setText(hrs + ":" + mins + ":" + secs);
             }
 
             @Override
             public void onFinish() {
                 timer.cancel();
-//                pb.setProgress(0);
-//                Toast.makeText(HSTimerActivity.this, "Your Trip Has Ended", Toast.LENGTH_SHORT).show();
-//                startActivity(new Intent(HSTimerActivity.this, ArrivalScreenActivity.class));
-                // TODO: Remove once Contacts is properly populated and Messenger becomes functional
                 if (checkPlayServices()) {
                     Log.e(TAG, "Google Play Services is installed");
                     buildGoogleApiClient();
@@ -143,7 +159,29 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
                 mGoogleApiClient);
         if (mLastLocation != null) {
             Log.e(TAG, "Connected!");
-            Messenger.sendNotifications(Contacts.Tier.ONE, mLastLocation, getApplicationContext(), Messenger.MessageType.DANGER);
+            Contacts.Tier tier;
+            ArrayList<Contact> contacts;
+            switch (currentTier){
+                case 1 :    tier = Contacts.Tier.ONE;
+                            contacts = contacts1;
+                            break;
+                case 2 :    tier = Contacts.Tier.TWO;
+                            contacts = contacts2;
+                            break;
+                case 3 :    tier = Contacts.Tier.THREE;
+                            contacts = contacts3;
+                            break;
+                default :   tier = Contacts.Tier.ONE;
+                            contacts = contacts1;
+            }
+
+            Messenger.sendNotifications(tier, mLastLocation, getApplicationContext(), Messenger.MessageType.DANGER);
+            rvAdapter = new ArrivalScreenAdapter(contacts);
+            contactsView.setAdapter(rvAdapter);
+            currentTier++;
+
+            // TODO: Implement more levels of notification by creating additional timers and password prompts
+//            createTimer();
         }
     }
 
@@ -158,15 +196,17 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
     }
 
     protected synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
         if (mGoogleApiClient != null) {
-            Log.e(TAG, "Build Complete");
+            Log.i(TAG, "Build Complete");
         } else {
-            Log.e(TAG, "Build Incomplete");
+            Log.i(TAG, "Build Incomplete");
         }
     }
 

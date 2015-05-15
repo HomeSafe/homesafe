@@ -8,7 +8,6 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import cse403.homesafe.Data.Contact;
-import cse403.homesafe.Utility.ContextHolder;
 
 import javax.activation.DataHandler;
 import javax.mail.MessagingException;
