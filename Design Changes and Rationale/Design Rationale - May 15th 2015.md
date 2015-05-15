@@ -20,6 +20,7 @@ Design changes:
 		6. Initially, we had planned to write a Location class which stored a name, address, and coordinates. It turned out that something similar was already implemented in android -- a class also called Location.
 		The Android.Location class, however, did not contain a name or address, but  Thus, we created the Destination class, which wraps a name, address, and an Android.Location. The constructor for this class, in order to make things simple for clients, automatically consults the Google API to convert passed-in addresses to Locations. In order to do this, we had to perform some clever wait() and notify() calls to make sure the client doesn't have to deal with the fact that the constructor is an asychronous operation.  
 
+	Initially we had planned to perform three rounds of UI Testing, but the amount of work it took to develop the UI was much greater than anticipated. We missed our initial deadline for UI testing last week, and now have planned to do hallways tests this following tuesday, preceeding the Full-featured release. All other deadlines have been reached as expected. We have not been far enough ahead to add any extra features.
 
 Two design patterns or principals
 	Singleton:
