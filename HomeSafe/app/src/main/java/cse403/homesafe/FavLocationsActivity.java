@@ -21,6 +21,7 @@ import cse403.homesafe.Data.Destinations;
 public class FavLocationsActivity extends ActionBarActivity {
     FloatingActionButton fab;
     RecyclerView recyclerView;
+    Destinations mDesList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,15 +33,21 @@ public class FavLocationsActivity extends ActionBarActivity {
         LinearLayoutManager linearLM = new LinearLayoutManager(this);
         linearLM.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLM);
-
+        mDesList = Destinations.getInstance();
+        for(int i = 0; i < mDesList.getDestinations().size(); i++){
+            System.out.println(mDesList.getDestinations().get(i).getAddress());
+        }
+        recyclerView.setAdapter(new LocationRecyclerAdapter(Destinations.getInstance().getDestinations()));
         fab = (FloatingActionButton) findViewById(R.id.location_fab);
         setUpFab();
     }
 
-    @Override
-    public void onResume(){
-        recyclerView.setAdapter(new LocationRecyclerAdapter(Destinations.getInstance().getDestinations()));
-    }
+//    @Override
+//    public void onResume(){
+//        super.onResume();
+//        System.out.println(Destinations.getInstance().getDestinations());
+//
+//    }
 
     private void setUpFab(){
         fab.setOnClickListener(new View.OnClickListener() {

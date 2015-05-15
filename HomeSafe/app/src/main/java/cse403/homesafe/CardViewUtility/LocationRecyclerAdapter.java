@@ -22,7 +22,7 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationViewHo
 
     public LocationRecyclerAdapter(List<Destination> locations) {
         this.destinations = new ArrayList<Destination>();
-        this.destinations.addAll(destinations);
+        this.destinations.addAll(locations);
     }
 
     @Override

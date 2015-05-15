@@ -66,6 +66,7 @@ public class EditLocationActivity extends ActionBarActivity {
         mActionBar.setCustomView(mCustomView);
         mActionBar.setDisplayShowCustomEnabled(true);
         discardChange = (Button)findViewById(R.id.discard);
+        deleteLocation = (Button)findViewById(R.id.delete);
         saveLocation = (ImageView) findViewById(R.id.save_menu_item);
         setUpButton();
     }
@@ -88,7 +89,7 @@ public class EditLocationActivity extends ActionBarActivity {
                 String stateStr = mEditState.getText().toString();
                 if(!nameStr.equals(EMPTY_STR) && !stAddrStr.equals(EMPTY_STR) && !cityStr.equals(EMPTY_STR)
                         && !stateStr.equals(EMPTY_STR)) {
-                    Intent i = new Intent(EditLocationActivity.this, ContactsActivity.class);
+                    Intent i = new Intent(EditLocationActivity.this, FavLocationsActivity.class);
                     String finalAddr = stAddrStr + "," + cityStr + "," + stateStr;
                     Destination newDes = new Destination(nameStr, finalAddr);
                     newDes.setDid(did);

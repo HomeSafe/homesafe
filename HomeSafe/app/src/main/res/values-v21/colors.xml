@@ -9,4 +9,6 @@
     <color name="accent">#388E3C</color>
     <color name="buttonColor">#BDBDBD</color>
     <color name="buttonHighlightColor">#F5F5F5</color>
+    <color name="card_background">#F1F8E9</color>
+    <color name="colorControlNormal">#FFFFFF</color>
 </resources>

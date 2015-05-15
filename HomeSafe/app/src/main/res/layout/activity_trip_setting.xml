@@ -31,50 +31,55 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_marginTop="50px"
         android:text="Set Destination"
         android:textSize="20dp"
+        android:gravity="center"
         android:id="@+id/textView2"
         android:textColor="#000000"
-        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Favorites"
+        android:layout_marginRight="70px"
         android:id="@+id/favoriteLocationButton"
+        android:textColor="#FFFFFF"
         android:layout_below="@+id/textView2"
-        android:layout_alignRight="@+id/spinnerETA"
-        android:layout_alignEnd="@+id/spinnerETA"
-        android:textColor="#FFFFFF" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add New "
+        android:layout_marginLeft="70px"
         android:id="@+id/button4"
+        android:textColor="#FFFFFF"
         android:layout_alignTop="@+id/favoriteLocationButton"
-        android:layout_alignLeft="@+id/spinnerETA"
-        android:layout_alignStart="@+id/spinnerETA"
-        android:textColor="#FFFFFF" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Current Destination Not Set"
+        android:gravity="center"
         android:textColor="#000000"
         android:textSize="20dp"
         android:id="@+id/currentDestinationText"
-        android:layout_marginTop="66dp"
-        android:layout_alignLeft="@+id/button4"
-        android:layout_alignStart="@+id/button4" />
+        android:layout_below="@+id/favoriteLocationButton"
+        android:layout_alignLeft="@+id/spinnerETA"
+        android:layout_alignStart="@+id/spinnerETA" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Hours : Minutes"
+        android:gravity="center"
         android:textColor="#000000"
         android:textSize="20dp"
         android:layout_above="@+id/spinnerETA"

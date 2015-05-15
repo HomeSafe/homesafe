@@ -9,7 +9,8 @@
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
     card_view:cardCornerRadius="5dp"
-    card_view:cardElevation="5dp">
+    card_view:cardElevation="5dp"
+    card_view:cardBackgroundColor="@color/card_background">
 
     <LinearLayout
         android:orientation="vertical"
