@@ -60,6 +60,8 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
         setContentView(R.layout.activity_trip_setting);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         this.setTitle("Trip Settings");
+        Destination university = new Destination("UW", "185 W Stevens Way NE,Seattle,WA");
+        Destinations.getInstance().addDestination(university);
 
         final TripSettingActivity that = this;
         destinations = (Button) findViewById(R.id.favoriteLocationButton);
@@ -78,8 +80,7 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
                 washington.setLongitude(-122.3080);
                 washington.setLatitude(47.6550);
                 */
-                Destination university = new Destination("UW", "185 W Stevens Way NE,Seattle,WA");
-                Destinations.getInstance().addDestination(university);
+
                 List<Destination> destinationList = Destinations.getInstance().getDestinations();
                 final Map<String, Location> nameToLocation = new HashMap<String, Location>();
 
@@ -173,6 +174,8 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
                 destination = new Location("New Destination");
                 destination.setLatitude(place.getLatLng().latitude);
                 destination.setLongitude(place.getLatLng().longitude);
+                TextView currentDestinationText = (TextView) findViewById(R.id.currentDestinationText);
+                currentDestinationText.setText(place.getName());
                 if (checkPlayServices()) {
                     Log.e(TAG, "Google Play Services is installed");
                     buildGoogleApiClient();

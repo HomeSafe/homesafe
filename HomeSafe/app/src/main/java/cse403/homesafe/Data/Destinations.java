@@ -53,12 +53,28 @@ public class Destinations {
 
     /**
      * Removes a Destination from Destinations
-     * @param destination   Destination to remove
+     * @param did   the id of destination to remove
      * @return      True if removing Location is successful, false otherwise
      */
-    public boolean removeDestination(Destination destination) {
-        return destinations.remove(destination);
+    public boolean removeDestination(long did) {
+        int index = 0;
+        for (Destination e : destinations) {
+            if (e.getDid() == did) {
+                break;
+            }
+            index++;
+        }
+        destinations.remove(index);
+        return true;
     }
+
+    /*
+     * clear all the destinations in the list
+     */
+    public void clearDestinations() {
+        destinations.clear();
+    }
+
 
     /**
      * Returns a List<Destination> of all Destinations in this object.

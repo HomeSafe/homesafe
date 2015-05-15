@@ -156,6 +156,8 @@ public class Destination implements GoogleMapsUtilsCallback {
         return this.did;
     }
 
+
+
     @Override
     public void onGetDistanceAndTime(Object obj) {
         // Empty
@@ -170,11 +172,11 @@ public class Destination implements GoogleMapsUtilsCallback {
         synchronized (this) {
             if (obj instanceof Location) {
                 setLocation((Location) obj);
-                this.notifyAll();
             } else {
                 state = STATE.ERROR;
                 Log.e(TAG, "Calculate location error");
             }
+            notifyAll();
         }
     }
 }

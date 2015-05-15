@@ -1,5 +1,6 @@
 package cse403.homesafe;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -131,7 +133,7 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
                 timer.cancel();
                 pb.setProgress(0);
                 Toast.makeText(HSTimerActivity.this, "Your Trip Has Ended", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(HSTimerActivity.this, ArrivalScreenActivity.class));
+                startActivity(new Intent(HSTimerActivity.this, DangerActivity.class));
             }
 
         }.start();
@@ -243,7 +245,7 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
         final EditText input = new EditText(that);
         input.setBackgroundColor(0xFFAAAAAA);
         input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
-        input.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        input.setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
         alert.setView(input);
 
         alert.setPositiveButton("Enter", new DialogInterface.OnClickListener() {
@@ -255,9 +257,9 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
                 if (pin == null)
                     Log.e(TAG, "Password wasn't stored or accessed correctly");
 
-                int pincode = Integer.parseInt(pin);
+                //int pincode = Integer.parseInt(pin);
 
-                if (pincode == Integer.parseInt(enteredPassword)) {
+                if (pin.equals(enteredPassword)) {
                     if (timer != null) {
                         timer.cancel();
                         countDownPeriod = 0;
@@ -279,6 +281,11 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
                         promptForPassword();
                     }
                 }
+            }
+        });
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dialog.cancel();
             }
         });
         alert.show();
