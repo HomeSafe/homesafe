@@ -1,6 +1,7 @@
 package cse403.homesafe.test;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Instrumentation;
 import android.app.Instrumentation.ActivityMonitor;
 import android.test.ActivityInstrumentationTestCase2;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import cse403.homesafe.HSTimerActivity;
 import cse403.homesafe.R;
 import cse403.homesafe.StartScreenActivity;
 import cse403.homesafe.TripSettingActivity;
@@ -19,7 +21,6 @@ import cse403.homesafe.TripSettingActivity;
  * Created by dliuxy94 on 5/14/15.
  */
 public class StartScreenActivitySystemTest extends ActivityInstrumentationTestCase2<StartScreenActivity> {
-
     private StartScreenActivity activity;
 
     public StartScreenActivitySystemTest() {
@@ -35,7 +36,7 @@ public class StartScreenActivitySystemTest extends ActivityInstrumentationTestCa
 
     
     public void testStartTripSettingActivity() throws Exception {
-
+        Instrumentation mInstrumentation = getInstrumentation();
         // add monitor to check for the second activity
         ActivityMonitor monitor =
                 getInstrumentation().
@@ -54,28 +55,17 @@ public class StartScreenActivitySystemTest extends ActivityInstrumentationTestCa
         TripSettingActivity startedActivity = (TripSettingActivity) monitor
                 .waitForActivityWithTimeout(2000);
         assertNotNull(startedActivity);
-//
-        // search for the textView
-//        Button favButton = (Button) startedActivity.findViewById(R.id.favoriteLocationButton);
-//        TouchUtils.clickView(this, favButton);
 
+        Button startTripButton = (Button) startedActivity.findViewById(R.id.startTripButton);
+        TouchUtils.clickView(this, startTripButton);
 
-//        assertTrue(false);
+        getInstrumentation().removeMonitor(monitor);
+        monitor = getInstrumentation().addMonitor(HSTimerActivity.class.getName(), null, false);
 
-//        // wait 2 seconds for the start of the activity
-//        TripSettingActivity startedActivity = (TripSettingActivity) monitor
-//                .waitForActivityWithTimeout(2000);
-//        assertNotNull(startedActivity);
-//
-//        // check that the TextView is on the screen
-//        ViewAsserts.assertOnScreen(startedActivity.getWindow().getDecorView(),
-//                textView);
-//        // validate the text on the TextView
-//        assertEquals("Text incorrect", "Started", textView.getText().toString());
-//
-//        // press back and click again
-//        this.sendKeys(KeyEvent.KEYCODE_BACK);
-//
-//        TouchUtils.clickView(this, view);
+        HSTimerActivity currentActivity = (HSTimerActivity) monitor.waitForActivityWithTimeout(2000);
+
+        Button endTripButton = (Button) currentActivity.findViewById(R.id.btnEnd);
+        TouchUtils.clickView(this, endTripButton);
+
     }
 }
