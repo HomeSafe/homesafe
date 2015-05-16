@@ -4,8 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cse403.homesafe.TripSettingActivity"
-    android:backgroundTint="@color/abc_background_cache_hint_selector_material_dark">
+    tools:context="cse403.homesafe.TripSettingActivity">
 
     <TextView
         android:layout_width="wrap_content"
@@ -18,24 +17,27 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
-    <Button
-        android:layout_width="fill_parent"
+    <Spinner
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Favorites"
-        android:textSize="20dp"
-        android:id="@+id/favoriteLocationButton"
+        android:id="@+id/favoriteLocationSpinner"
         android:textColor="#FFFFFF"
+        android:background="@color/primary"
+        android:textSize="20dp"
         android:layout_weight="1"
         android:layout_below="@+id/textView1"
         android:layout_centerHorizontal="true"
-        android:layout_marginLeft="20dp"/>
+        android:layout_marginLeft="20dp"
+        android:popupBackground="@android:color/white">
+
+    </Spinner>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="OR"
         android:textSize="8pt"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/favoriteLocationButton"
+        android:layout_below="@id/favoriteLocationSpinner"
         android:textColor="#000000"
         android:id="@+id/textView3" />
     <Button

@@ -56,8 +56,9 @@ public class StartScreenActivitySystemTest extends ActivityInstrumentationTestCa
         assertNotNull(startedActivity);
 //
         // search for the textView
-        Button favButton = (Button) startedActivity.findViewById(R.id.favoriteLocationButton);
-        TouchUtils.clickView(this, favButton);
+//        Button favButton = (Button) startedActivity.findViewById(R.id.favoriteLocationButton);
+//        TouchUtils.clickView(this, favButton);
+
 
 //        assertTrue(false);
 

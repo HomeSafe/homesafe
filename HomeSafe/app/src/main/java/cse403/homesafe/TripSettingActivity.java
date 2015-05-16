@@ -1,8 +1,6 @@
 package cse403.homesafe;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.support.v7.app.ActionBarActivity;
@@ -11,6 +9,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -63,64 +62,18 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
         Destination university = new Destination("UW", "185 W Stevens Way NE,Seattle,WA");
         Destinations.getInstance().addDestination(university);
 
-        final TripSettingActivity that = this;
-        destinations = (Button) findViewById(R.id.favoriteLocationButton);
-        destinations.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final AlertDialog.Builder alert = new AlertDialog.Builder(that);
-
-                alert.setTitle("Set Destination");
-                alert.setMessage("Choose a destination from favorites:");
-
-                // Set an EditText view to get user input
-                final Spinner input = new Spinner(that);
-                /* may be not useful since we can figure location from address
-                Location washington = new Location("UW");
-                washington.setLongitude(-122.3080);
-                washington.setLatitude(47.6550);
-                */
-
-                List<Destination> destinationList = Destinations.getInstance().getDestinations();
-                final Map<String, Location> nameToLocation = new HashMap<String, Location>();
-
-                ArrayList<String> stringList = new ArrayList<String>();
-                for (Destination dest : destinationList) {
-                    stringList.add(dest.getName());
-                    nameToLocation.put(dest.getName(), dest.getLocation());
-                }
-                ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(that,
-                        android.R.layout.simple_spinner_item, stringList);
-                input.setAdapter(dataAdapter);
-                input.setBackgroundColor(0xFFAAAAAA);
-                alert.setView(input);
-
-                alert.setPositiveButton("Set Destination", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        String nameOfDest = input.getSelectedItem() + "";
-                        destination = nameToLocation.get(nameOfDest);
-                        if (checkPlayServices()) {
-                            Log.e(TAG, "Google Play Services is installed");
-                            buildGoogleApiClient();
-                            onStart();
-                        } else {
-                            Log.e(TAG, "Google Play Services is not installed");
-                        }
-
-                        TextView currentDestinationText = (TextView) findViewById(R.id.currentDestinationText);
-                        currentDestinationText.setText("Destination: " + nameOfDest);
-
-                    }
-                });
-                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        dialog.cancel();
-                    }
-                });
-
-                alert.show();
-            }
-        });
+        Spinner input = (Spinner) findViewById(R.id.favoriteLocationSpinner);
+        List<Destination> destinationList = Destinations.getInstance().getDestinations();
+        final Map<String, Location> nameToLocation = new HashMap<String, Location>();
+        ArrayList<String> stringList = new ArrayList<String>();
+        for (Destination dest : destinationList) {
+            stringList.add(dest.getName());
+            nameToLocation.put(dest.getName(), dest.getLocation());
+        }
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, stringList);
+        input.setAdapter(dataAdapter);
+        input.setOnItemSelectedListener(new CustomOnItemSelectedListener(nameToLocation));
 
         newLocation = (Button) findViewById(R.id.button4);
         newLocation.setOnClickListener(new View.OnClickListener() {
@@ -301,5 +254,33 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
             return false;
         }
         return true;
+    }
+
+    public class CustomOnItemSelectedListener implements AdapterView.OnItemSelectedListener{
+        Map<String, Location> nameToLocation;
+        public CustomOnItemSelectedListener(Map<String, Location> nameToLocation){
+            this.nameToLocation = nameToLocation;
+        }
+
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            String nameOfDest = parent.getItemAtPosition(position).toString() + "";
+            destination = nameToLocation.get(nameOfDest);
+            if (checkPlayServices()) {
+                Log.e(TAG, "Google Play Services is installed");
+                buildGoogleApiClient();
+                onStart();
+            } else {
+                Log.e(TAG, "Google Play Services is not installed");
+            }
+
+            TextView currentDestinationText = (TextView) findViewById(R.id.currentDestinationText);
+            currentDestinationText.setText("Destination: " + nameOfDest);
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+
+        }
     }
 }
