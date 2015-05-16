@@ -79,7 +79,9 @@ This will build and run all tests. Once the tests have completed, you may find a
 ```
 app/build/outputs/reports/androidTests/connected/index.html.
 ```
-If you'd like to run individual tests, you'll find core class JUnit tests in app/src/main/java/UnitTests/ and Activity unit tests in app/src/androidTest/java/cse403/homesafe/test/. 
+If you'd like to run individual tests, you'll find core class JUnit tests in app/src/main/java/UnitTests/ and Activity unit tests in app/src/androidTest/java/cse403/homesafe/test/.
+
+To run individual tests from Android Studio, you'll need to switch back and forth between modes. Makes sure unit testing is enabled first in Preferences > Build Tools > Gradle > Experimental. To test unit testing, go to View > Tool Windows > Build Variants and switch to Unit Tests. To run the instrumentation tests, switch it to Instrumentation Tests.
 
 ###Setting Up Automated Builds and Tests
 Building and testing can be a pain; if you're interesting in setting up automated daily builds the following sites can help you on your way to setting some up: [Jenkins](http://jenkins-ci.org/ "Jenkins"), [CruiseControl](http://cruisecontrol.sourceforge.net/ "CruiseControl"), [Cron](http://en.wikipedia.org/wiki/Cron "Cron").
