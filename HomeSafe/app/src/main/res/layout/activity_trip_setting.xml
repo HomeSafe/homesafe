@@ -1,107 +1,94 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     tools:context="cse403.homesafe.TripSettingActivity"
     android:backgroundTint="@color/abc_background_cache_hint_selector_material_dark">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Set Destination From"
+        android:textColor="@android:color/black"
+        android:id="@+id/textView1"
+        android:textSize="13pt"
+        android:layout_marginTop="26dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Set Destination:"
-            android:textSize="40dp"
-            android:id="@+id/textView2"
-            android:textColor="#000000"
-            android:shadowColor="@color/accent_material_dark"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:gravity="center"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
-        <TextView
-            android:layout_width="157dp"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Current Destination Not Set"
-            android:gravity="center"
-            android:textColor="#000000"
-            android:textSize="20dp"
-            android:id="@+id/currentDestinationText"
-            android:layout_below="@+id/textView2"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true">
-        </TextView>
+        android:layout_centerHorizontal="true" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Favorites"
-            android:textSize="50px"
-            android:id="@+id/favoriteLocationButton"
-            android:textColor="#FFFFFF"
-            android:layout_below="@+id/currentDestinationText"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginLeft="38dp"
-            android:layout_marginStart="38dp" />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Map"
-            android:id="@+id/button4"
-            android:textSize="50px"
-            android:textColor="#FFFFFF"
-            android:layout_below="@+id/currentDestinationText"
-            android:layout_toRightOf="@+id/favoriteLocationButton"
-            android:layout_toEndOf="@+id/favoriteLocationButton" />
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Favorites"
+        android:textSize="20dp"
+        android:id="@+id/favoriteLocationButton"
+        android:textColor="#FFFFFF"
+        android:layout_weight="1"
+        android:layout_below="@+id/textView1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="20dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OR"
+        android:textSize="8pt"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/favoriteLocationButton"
+        android:textColor="#000000"
+        android:id="@+id/textView3" />
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Map"
+        android:id="@+id/button4"
+        android:textSize="20dp"
+        android:layout_marginLeft="20dp"
+        android:textColor="#FFFFFF"
+        android:layout_below="@+id/textView3"
+        android:layout_centerHorizontal="true" />
 
-        <TimePicker
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/spinnerETA"
-            android:timePickerMode="spinner"
-            android:layout_below="@+id/favoriteLocationButton"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="82dp"
-            android:foregroundGravity="center_horizontal" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Current Destination: Not Set"
+        android:textColor="#000000"
+        android:textSize="20dp"
+        android:id="@+id/currentDestinationText"
+        android:layout_below="@+id/button4"
+        android:layout_centerHorizontal="true" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Start Trip"
-            android:id="@+id/startTripButton"
-            android:textSize="30dp"
-            android:textColor="@android:color/white"
-            android:layout_below="@+id/spinnerETA"
-            android:layout_alignRight="@+id/button4"
-            android:layout_alignEnd="@+id/button4" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Set Timer"
+        android:textColor="@android:color/black"
+        android:id="@+id/textView2"
+        android:textSize="13pt"
+        android:layout_marginTop="10pt"
+        android:layout_below="@+id/currentDestinationText"
+        android:layout_centerHorizontal="true" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Set Timer:"
-            android:textSize="40dp"
-            android:id="@+id/textView4"
-            android:textColor="#000000"
-            android:shadowColor="@color/accent_material_dark"
-            android:layout_marginTop="36dp"
-            android:layout_below="@+id/favoriteLocationButton"
-            android:layout_alignRight="@+id/startTripButton"
-            android:layout_alignEnd="@+id/startTripButton" />
-    </RelativeLayout>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Trip"
+        android:layout_marginBottom="10pt"
+        android:id="@+id/startTripButton"
+        android:textSize="25dp"
+        android:textColor="@android:color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
-
-</LinearLayout>
+    <TimePicker
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinnerETA"
+        android:timePickerMode="spinner"
+        android:layout_below="@+id/textView2"
+        android:layout_centerHorizontal="true">
+    </TimePicker>
+</RelativeLayout>

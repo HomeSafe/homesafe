@@ -108,7 +108,7 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
                         }
 
                         TextView currentDestinationText = (TextView) findViewById(R.id.currentDestinationText);
-                        currentDestinationText.setText(nameOfDest);
+                        currentDestinationText.setText("Destination: " + nameOfDest);
 
                     }
                 });
@@ -178,7 +178,7 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
                 destination.setLatitude(place.getLatLng().latitude);
                 destination.setLongitude(place.getLatLng().longitude);
                 TextView currentDestinationText = (TextView) findViewById(R.id.currentDestinationText);
-                currentDestinationText.setText(place.getName());
+                currentDestinationText.setText("Destination: " + place.getName());
                 if (checkPlayServices()) {
                     Log.e(TAG, "Google Play Services is installed");
                     buildGoogleApiClient();
