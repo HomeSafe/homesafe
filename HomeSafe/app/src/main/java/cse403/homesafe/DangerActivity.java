@@ -1,5 +1,6 @@
 package cse403.homesafe;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -49,6 +50,7 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
     private RecyclerView.Adapter rvAdapter;
 
     private int currentTier;
+    private AlertDialog.Builder alert;
 
     private final ArrayList<Contact> contacts1 = new ArrayList<Contact>(Contacts.getInstance().getContactsInTier(Contacts.Tier.ONE));
     private final ArrayList<Contact> contacts2 = new ArrayList<Contact>(Contacts.getInstance().getContactsInTier(Contacts.Tier.TWO));
@@ -62,9 +64,10 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
         setContentView(R.layout.activity_danger);
 
         getSupportActionBar().setTitle("DANGER ZONE");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setHomeButtonEnabled(false);
 
         contactsView = (RecyclerView) findViewById(R.id.contactsView);
-
 
         RecyclerView.LayoutManager rvLayoutManager = new LinearLayoutManager(this);
         contactsView.setLayoutManager(rvLayoutManager);
@@ -79,7 +82,7 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
      * Prompt user for password. Send entered password to appropriate callback.
      */
     private void promptForPassword() {
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert = new AlertDialog.Builder(this);
 
         alert.setTitle("Enter Passcode");
         alert.setMessage("To Stop Alerts, Enter Correct Passcode");
@@ -236,5 +239,11 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
             return false;
         }
         return true;
+    }
+
+    // Do nothing when the back button is pressed
+    @Override
+    public void onBackPressed() {
+        return;
     }
 }
