@@ -12,6 +12,7 @@ Homesafe - Developer Documentation
 ###Table of Contents
 1. New to HomeSafe
 2. Getting Started
+ * Downloading APK
  * Cloning the repository
  * Building HomeSafe
 3. Developing HomeSafe
@@ -27,6 +28,9 @@ New to the HomeSafe security app? Read the [short product description](https://d
 The HomeSafe Security app is an open-source safety app for Android devices. In order to use the app or contribute to the project, you will first need to download the repository from the Github webpage:
 * Never used Github before? No problem, start [here](https://github.com/ "Github")!
 * For everyone else here's a handy [Github cheatsheet](https://training.github.com/kit/downloads/github-git-cheat-sheet.pdf "Github cheatsheet")!
+
+###Downloading APK
+You may download the built APK under HomeSafe/app.
 
 ###Cloning the Repository
 Open a terminal window (or a Git terminal window for non-Linux users) and enter
