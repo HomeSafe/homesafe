@@ -105,7 +105,6 @@ public class EditLocationActivity extends ActionBarActivity {
                     newDes.setDid(did);
                     if (!newDes.isReady()) {
                         Toast.makeText(EditLocationActivity.this, "Please enter a valid address", Toast.LENGTH_SHORT).show();
-                        return;
                     } else {
                         mDesList.removeDestination(did);
                         mDesList.addDestination(newDes);

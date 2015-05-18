@@ -56,7 +56,7 @@ public class Destination implements GoogleMapsUtilsCallback {
         synchronized(this) {
             GoogleMapsUtils.addressToLocation(address, this);
             try {
-                this.wait(200);
+                wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -180,7 +180,6 @@ public class Destination implements GoogleMapsUtilsCallback {
         synchronized (this) {
             if (obj instanceof Location) {
                 setLocation((Location) obj);
-                state = STATE.READY;
             } else {
                 state = STATE.ERROR;
                 Log.e(TAG, "Calculate location error");

@@ -87,7 +87,6 @@ public class AddLocationActivity extends ActionBarActivity {
                     //address is not valid
                     if (!newDes.isReady()) {
                         Toast.makeText(AddLocationActivity.this, "Please enter a valid address", Toast.LENGTH_SHORT).show();
-                        return;
                     } else {
                         //add destination to cache list
                         mDesList.addDestination(newDes);
