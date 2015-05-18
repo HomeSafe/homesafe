@@ -18,18 +18,18 @@
         android:layout_centerHorizontal="true" />
 
     <Spinner
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/favoriteLocationSpinner"
-        android:textColor="#FFFFFF"
-        android:background="@color/primary"
-        android:textSize="20dp"
-        android:layout_weight="1"
+        android:textColor="#ffffff"
+        android:background="@color/primary_dark"
+        android:textSize="30dp"
         android:layout_below="@+id/textView1"
         android:layout_centerHorizontal="true"
-        android:layout_marginLeft="20dp"
-        android:popupBackground="@android:color/white">
-
+        android:layout_marginLeft="30dp"
+        android:popupBackground="@android:color/white"
+        android:elevation="3dp"
+        >
     </Spinner>
     <TextView
         android:layout_width="wrap_content"

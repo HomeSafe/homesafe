@@ -59,11 +59,13 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
         setContentView(R.layout.activity_trip_setting);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         this.setTitle("Trip Settings");
-        Destination university = new Destination("UW", "185 W Stevens Way NE,Seattle,WA");
-        Destinations.getInstance().addDestination(university);
+        Destination defaultDest = new Destination("No Available Destinations");
 
         Spinner input = (Spinner) findViewById(R.id.favoriteLocationSpinner);
         List<Destination> destinationList = Destinations.getInstance().getDestinations();
+        if(destinationList.isEmpty()){
+            destinationList.add(defaultDest);
+        }
         final Map<String, Location> nameToLocation = new HashMap<String, Location>();
         ArrayList<String> stringList = new ArrayList<String>();
         for (Destination dest : destinationList) {
@@ -71,7 +73,8 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
             nameToLocation.put(dest.getName(), dest.getLocation());
         }
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, stringList);
+                R.layout.spinner_item, stringList);
+        dataAdapter.setDropDownViewResource(R.layout.spinner_drop_down);
         input.setAdapter(dataAdapter);
         input.setOnItemSelectedListener(new CustomOnItemSelectedListener(nameToLocation));
 
