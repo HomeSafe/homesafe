@@ -180,6 +180,7 @@ public class Destination implements GoogleMapsUtilsCallback {
         synchronized (this) {
             if (obj instanceof Location) {
                 setLocation((Location) obj);
+                state = STATE.READY;
             } else {
                 state = STATE.ERROR;
                 Log.e(TAG, "Calculate location error");

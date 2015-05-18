@@ -82,11 +82,12 @@ public class AddLocationActivity extends ActionBarActivity {
 
                 // Check that all fields are non-empty
                 if(!nameText.equals(EMPTY_STR) && !stAddrText.equals(EMPTY_STR) && !cityText.equals(EMPTY_STR) && !stateText.equals(EMPTY_STR)){
-                    String finalAddr = capitalize(stAddrText) + ", " + capitalize(cityText) + ", " + capitalize(stateText);
+                    String finalAddr = capitalize(stAddrText) + ", " + capitalize(cityText) + ", " + stateText.toUpperCase();
                     Destination newDes = new Destination(nameText, finalAddr);
                     //address is not valid
                     if (!newDes.isReady()) {
                         Toast.makeText(AddLocationActivity.this, "Please enter a valid address", Toast.LENGTH_SHORT).show();
+                        return;
                     } else {
                         //add destination to cache list
                         mDesList.addDestination(newDes);

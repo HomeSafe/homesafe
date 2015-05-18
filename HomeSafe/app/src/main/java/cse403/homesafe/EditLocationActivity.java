@@ -99,12 +99,13 @@ public class EditLocationActivity extends ActionBarActivity {
                 if(!nameStr.equals(EMPTY_STR) && !stAddrStr.equals(EMPTY_STR) && !cityStr.equals(EMPTY_STR)
                         && !stateStr.equals(EMPTY_STR)) {
                     Intent i = new Intent(EditLocationActivity.this, FavLocationsActivity.class);
-                    String finalAddr = capitalize(stAddrStr) + ", " + capitalize(cityStr) + ", " + capitalize(stateStr);
+                    String finalAddr = capitalize(stAddrStr) + ", " + capitalize(cityStr) + ", " + stateStr.toUpperCase();
                     Log.e("EditLocation: ", finalAddr);
                     Destination newDes = new Destination(nameStr, finalAddr);
                     newDes.setDid(did);
                     if (!newDes.isReady()) {
                         Toast.makeText(EditLocationActivity.this, "Please enter a valid address", Toast.LENGTH_SHORT).show();
+                        return;
                     } else {
                         mDesList.removeDestination(did);
                         mDesList.addDestination(newDes);
