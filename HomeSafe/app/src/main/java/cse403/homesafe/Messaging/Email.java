@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.location.Location;
 
 import android.preference.PreferenceManager;
+import android.text.Html;
+import android.text.TextUtils;
 import android.util.Log;
 
 import cse403.homesafe.Data.Contact;
@@ -18,6 +20,10 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.util.ByteArrayDataSource;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 /**
@@ -94,20 +100,24 @@ public class Email extends javax.mail.Authenticator implements cse403.homesafe.M
                 }
 
                 String subject, body;
+                body = buildBody(type, context, userFirstName, userLastName, customMessage, location);
+
                 if (type == Messenger.MessageType.DANGER) {
                     subject = userFirstName + " " + userLastName + " May Need Your Help";
-                    body = userFirstName + " was using HomeSafe, a walking safety app.\n\nThey were"
-                            + " using the app to get to a destination, but did not check in with the app."
-                            + " As a result, this automated email is being sent to all of " + userFirstName
-                            + "'s contacts. Their last known coordinates are (" + location.getLatitude() + ", "
-                            + location.getLongitude() + "). You may need to check in with " + userFirstName + "."
-                            + "\n\n" + userFirstName + " says: " + customMessage;
+//                    body = userFirstName + " was using HomeSafe, a walking safety app.\n\nThey were"
+//                            + " using the app to get to a destination, but did not check in with the app."
+//                            + " As a result, this automated email is being sent to all of " + userFirstName
+//                            + "'s contacts. Their last known coordinates are (" + location.getLatitude() + ", "
+//                            + location.getLongitude() + "). You may need to check in with " + userFirstName + "."
+//                            + "\n\n" + userFirstName + " says: " + customMessage;
                 } else {
+
                     subject = userFirstName + " " + userLastName + " Arrived Safely";
-                    body = userFirstName + " was using HomeSafe, a walking safety app.\n\nThey were"
-                            + " using the app to get to a destination and they arrived safely. This is"
-                            + " an automated message sent by " + userFirstName + "'s phone to"
-                            + " notify you of their safe arrival";
+//                    body = userFirstName + " was using HomeSafe, a walking safety app.\n\nThey were"
+//                            + " using the app to get to a destination and they arrived safely. This is"
+//                            + " an automated message sent by " + userFirstName + "'s phone to"
+//                            + " notify you of their safe arrival.";
+
                 }
                 try {
                     sendMail(subject, body, "homesafealerts@gmail.com", recipientEmail);
@@ -118,6 +128,46 @@ public class Email extends javax.mail.Authenticator implements cse403.homesafe.M
         }).start();
     }
 
+    private String buildBody(Messenger.MessageType type, Context context, String first, String last, String message, Location location) {
+        try {
+            InputStream is = context.getAssets().open("Prefix.html");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            String prefix = new String(buffer);
+
+            if (type == Messenger.MessageType.HOMESAFE)
+                is = context.getAssets().open("ArrivalFormat.html");
+            else
+                is = context.getAssets().open("DangerFormat.html");
+
+            size = is.available();
+            buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            String format;
+            if (type == Messenger.MessageType.HOMESAFE)
+                format = String.format(new String(buffer), first, last, first, first);
+            else
+                format = String.format(new String(buffer), first, last, first, first, location.getLatitude(), location.getLongitude(),
+                        location.getLatitude(), location.getLongitude(), first, first, message);
+
+            is = context.getAssets().open("Suffix.html");
+            size = is.available();
+            buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            String suffix = new String(buffer);
+
+            return prefix + format + suffix;
+
+        } catch (IOException e) {
+            Log.e(TAG, "Unable to open file");
+        }
+        return null;
+    }
+
     // Authentication for email
     protected PasswordAuthentication getPasswordAuthentication() {
         return new PasswordAuthentication(user, password);
@@ -126,7 +176,7 @@ public class Email extends javax.mail.Authenticator implements cse403.homesafe.M
     private synchronized void sendMail(String subject, String body, String sender, String recipients) throws Exception {
         try {
             MimeMessage message = new MimeMessage(session);
-            DataHandler handler = new DataHandler(new ByteArrayDataSource(body.getBytes(), "text/plain"));
+            DataHandler handler = new DataHandler(new ByteArrayDataSource(body.getBytes(), "text/html"));
             message.setSender(new InternetAddress(sender));
             message.setSubject(subject);
             message.setDataHandler(handler);

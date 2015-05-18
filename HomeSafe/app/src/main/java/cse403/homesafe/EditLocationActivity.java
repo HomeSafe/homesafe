@@ -50,7 +50,7 @@ public class EditLocationActivity extends ActionBarActivity {
         Intent intent = getIntent();
         String name = intent.getStringExtra("NAME");
         String address = intent.getStringExtra("ADDRESS");
-        String[] splitAddr = address.split(",");
+        String[] splitAddr = address.split(", ");
         did = intent.getLongExtra("DID", 0);
         this.mEditName = (EditText) findViewById(R.id.name_text);
         this.mEditStAddr = (EditText) findViewById(R.id.st_address_text);
@@ -138,8 +138,10 @@ public class EditLocationActivity extends ActionBarActivity {
         StringBuffer sb = new StringBuffer();
 
         for (int i = 0; i < arr.length; i++) {
-            sb.append(Character.toUpperCase(arr[i].charAt(0)))
-                    .append(arr[i].substring(1)).append(" ");
+            if (arr[i].length() > 1) {
+                sb.append(Character.toUpperCase(arr[i].charAt(0)))
+                        .append(arr[i].substring(1)).append(" ");
+            }
         }
         return sb.toString().trim();
     }
