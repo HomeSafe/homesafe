@@ -37,19 +37,22 @@ import cse403.homesafe.Util.DistanceAndTime;
 import cse403.homesafe.Util.GoogleMapsUtils;
 import cse403.homesafe.Util.GoogleMapsUtilsCallback;
 
-
+/**
+ * TripSettingActivity manages setting the destination, displaying the estimated
+ * time arrival from the current location to the destination, and starting the trip
+ * after destination has been selected.
+ */
 public class TripSettingActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleMapsUtilsCallback {
 
-    Button destinations;
-    TimePicker ETA;
-    Button startTrip;
-    Location destination;
-    Button newLocation;
-    DistanceAndTime distAndTime;
+    TimePicker ETA;     // time picker for user to set ETA
+    Button startTrip;     // button for starting trip
+    Button selectFromMap; // button for selecting location from map
+    Location mLastLocation; // the user's last known location (current location)
+    Location destination;   // the user's intended destination
+    DistanceAndTime distAndTime; // stores the distance and time it takes to arrive at destination
+    GoogleApiClient mGoogleApiClient; // access the google api to retrieve last known location
+    String TAG = "TripSettingActivity"; // for logcat debugging purposes
     int PLACE_PICKER_REQUEST = 1;
-    GoogleApiClient mGoogleApiClient;
-    Location mLastLocation;
-    String TAG = "TripSettingActivity";
 
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1000;
 
@@ -78,8 +81,8 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
         input.setAdapter(dataAdapter);
         input.setOnItemSelectedListener(new CustomOnItemSelectedListener(nameToLocation));
 
-        newLocation = (Button) findViewById(R.id.button4);
-        newLocation.setOnClickListener(new View.OnClickListener() {
+        selectFromMap = (Button) findViewById(R.id.chooseFromMap);
+        selectFromMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int PLACE_PICKER_REQUEST = 1;
@@ -125,6 +128,11 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
         );
     }
 
+    /**
+     * Listener method for when user's selects a destination from the map. This method
+     * displays the estimated time arrival from the current location to the destination
+     * that was selected from the map.
+     */
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == RESULT_OK) {
@@ -168,6 +176,10 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Builds the Google Api Client for the purpose of retrieving the
+     * user's current location.
+     */
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -181,6 +193,9 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
         }
     }
 
+    /**
+     * Callback method of Google API Client if connected.
+     */
     @Override
     public void onConnected(Bundle connectionHint) {
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
@@ -191,6 +206,9 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
         }
     }
 
+    /**
+     * Starts the Google API Client.
+     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -200,20 +218,30 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
         }
     }
 
+    /**
+     * Callback method for Google API Client if connection is suspended.
+     */
     @Override
     public void onConnectionSuspended(int i) {
         Log.e(TAG, "Connection Suspended");
 
     }
 
+    /**
+     * Callback method for Google API Client if connection fails.
+     */
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         Log.e(TAG, "Connection Failed");
     }
 
+    /**
+     * Callback for when GoogleMapUtils finishes, retrieves the distance and
+     * time it takes to arrive to the destination from current location, and sets the
+     * time picker to display the retrieved ETA.
+     */
     @Override
     public void onGetDistanceAndTime(final Object obj) {
-
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -240,7 +268,10 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
     @Override
     public void onAddressToLocation(Object obj) { }
 
-
+    /**
+     * Returns true if GooglePlayServices is installed on the device otherwise
+     * false.
+     */
     private boolean checkPlayServices() {
         int resultCode = GooglePlayServicesUtil
                 .isGooglePlayServicesAvailable(this);
@@ -259,6 +290,11 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
         return true;
     }
 
+    /**
+     * Listener class for when user's selects a destination from the drop down favorite list.
+     * This method displays the estimated time arrival from the current location to the
+     * destination that was selected from the map.
+     */
     public class CustomOnItemSelectedListener implements AdapterView.OnItemSelectedListener{
         Map<String, Location> nameToLocation;
         public CustomOnItemSelectedListener(Map<String, Location> nameToLocation){

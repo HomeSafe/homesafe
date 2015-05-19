@@ -31,6 +31,7 @@
         android:elevation="3dp"
         >
     </Spinner>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -40,12 +41,13 @@
         android:layout_below="@id/favoriteLocationSpinner"
         android:textColor="#000000"
         android:id="@+id/textView3" />
+
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="Map"
-        android:id="@+id/button4"
+        android:id="@+id/chooseFromMap"
         android:textSize="20dp"
         android:layout_marginLeft="20dp"
         android:textColor="#FFFFFF"
@@ -60,7 +62,7 @@
         android:textColor="#000000"
         android:textSize="20dp"
         android:id="@+id/currentDestinationText"
-        android:layout_below="@+id/button4"
+        android:layout_below="@+id/chooseFromMap"
         android:layout_centerHorizontal="true" />
 
     <TextView
@@ -93,4 +95,5 @@
         android:layout_below="@+id/textView2"
         android:layout_centerHorizontal="true">
     </TimePicker>
+
 </RelativeLayout>

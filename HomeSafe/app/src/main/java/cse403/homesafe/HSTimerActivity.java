@@ -261,6 +261,7 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
         input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
         input.setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
         input.setGravity(Gravity.CENTER_HORIZONTAL);
+
         alert.setView(input);
 
         alert.setPositiveButton("Enter", new DialogInterface.OnClickListener() {
@@ -271,8 +272,6 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
 
                 if (pin == null)
                     Log.e(TAG, "Password wasn't stored or accessed correctly");
-
-                //int pincode = Integer.parseInt(pin);
 
                 if (pin.equals(enteredPassword)) {
                     if (timer != null) {
@@ -289,8 +288,6 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
                     if (numAttempts == INCORRECT_TRIES) {
                         buildGoogleApiClient();
                         onStart();
-                        Messenger.sendNotifications(Contacts.Tier.ONE, mLastLocation, getApplicationContext(), Messenger.MessageType.DANGER);
-                        Toast.makeText(HSTimerActivity.this, "Contacts have been notified", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(HSTimerActivity.this, "Incorrect Password", Toast.LENGTH_SHORT).show();
                         promptForPassword();
@@ -316,7 +313,9 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
         if (mLastLocation != null) {
-            Log.e(TAG, "Connected!");
+            Log.i(TAG, "Connected!");
+            Messenger.sendNotifications(Contacts.Tier.ONE, mLastLocation, getApplicationContext(), Messenger.MessageType.DANGER);
+            Toast.makeText(HSTimerActivity.this, "Contacts have been notified", Toast.LENGTH_SHORT).show();
         } else {
             Log.e(TAG, "Failed on getting last location");
         }
