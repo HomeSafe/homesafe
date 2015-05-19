@@ -1,27 +1,21 @@
 package cse403.homesafe;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.text.InputFilter;
 import android.text.InputType;
-import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,11 +28,12 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import cse403.homesafe.Data.Contacts;
-import cse403.homesafe.Data.SecurityData;
 import cse403.homesafe.Messaging.Messenger;
 
 public class HSTimerActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -71,6 +66,8 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
         setContentView(R.layout.activity_hstimer);
         getSupportActionBar().setTitle("Trip in progress");
         numAttempts = 0;
+
+        buildGoogleApiClient();
 
         // creates the views for the on-screen components
         initProgressBar();
@@ -180,7 +177,14 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
 
             @Override
             public void onClick(View v) {
-                promptForPassword();
+//                promptForPassword();
+                Intent i = new Intent(getApplicationContext(), PasswordActivity.class);
+                String time = "120";
+                String message = "Bow-chicka-wowow";
+                String numChances = "3";
+                String confirmButtonMessage = "confirm 'dis dank shit yo";
+                i.putExtra("passwordParams", new ArrayList<String>(Arrays.asList(time, message, numChances, confirmButtonMessage)));
+                startActivityForResult(i, 1);
             }
         });
         return true;
@@ -366,4 +370,31 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
 
         return result;
     }
+
+    ////////////////////////CONSTRUCTION ZONE AHEAD - HERE THERE BE DRAGONS////////////////////////
+    // 1.) get text timer a ticking             ...DONE
+    // 2.) if timer has 5 seconds left you cannot end time
+    // 3.) handle failure
+    // 4.) fix buttons          ...DONE
+    // 5.) you have a max of how much time is fed into the password
+    // 6.) handle running out of time!          ...DONE
+    // 7.) looks like ticking continues to happen even if in different activity     ...DONE
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data.getExtras().containsKey("retval")) {
+            Serializable retcode = data.getExtras().getSerializable("retval");
+            if (retcode.equals(PasswordActivity.RetCode.SUCCESS)) {
+                timer.cancel();
+                startActivity(new Intent(HSTimerActivity.this, ArrivalScreenActivity.class));
+            } else if (retcode.equals(PasswordActivity.RetCode.FAILURE)) {
+                // do a thing...
+            } else if (retcode.equals (PasswordActivity.RetCode.SPECIAL)) {
+               onStart();
+            } else {
+                // nothing to do here. Have a lovely day.
+            }
+        }
+
+    }
+
 }
