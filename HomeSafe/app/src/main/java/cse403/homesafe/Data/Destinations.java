@@ -85,4 +85,7 @@ public class Destinations {
         return destinations;
     }
 
+    public int getSize() {
+        return destinations.size();
+    }
 }
