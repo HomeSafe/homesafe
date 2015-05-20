@@ -57,7 +57,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
             listPreference.setSummary(listPreference.getEntry());
         }
         if (preference instanceof EditTextPreference) {
-            if (!preference.getTitle().toString().equals("Passcode")) {  // Don't show if it's the passcode preference
+            if (!preference.getTitle().toString().equals("Passcode") && !preference.getTitle().toString().equals("Mock Passcode")) {  // Don't show if it's the passcode preference
                 EditTextPreference editTextPref = (EditTextPreference) preference;
                 Spannable summary = new SpannableString(editTextPref.getText());
                 summary.setSpan(new ForegroundColorSpan(0xFF000000), 0, summary.length(), 0);

@@ -1,27 +1,21 @@
 package cse403.homesafe;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.text.InputFilter;
 import android.text.InputType;
-import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,11 +28,12 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import cse403.homesafe.Data.Contacts;
-import cse403.homesafe.Data.SecurityData;
 import cse403.homesafe.Messaging.Messenger;
 
 public class HSTimerActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -180,7 +175,14 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
 
             @Override
             public void onClick(View v) {
-                promptForPassword();
+//                promptForPassword();
+                Intent i = new Intent(getApplicationContext(), PasswordActivity.class);
+                String time = "120";
+                String message = "Please enter your password to end-trip";
+                String numChances = "3";
+                String confirmButtonMessage = "End Trip";
+                i.putExtra("passwordParams", new ArrayList<String>(Arrays.asList(time, message, numChances, confirmButtonMessage)));
+                startActivityForResult(i, 1);
             }
         });
         return true;
@@ -257,6 +259,7 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
         input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
         input.setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
         input.setGravity(Gravity.CENTER_HORIZONTAL);
+
         alert.setView(input);
 
         alert.setPositiveButton("Enter", new DialogInterface.OnClickListener() {
@@ -267,8 +270,6 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
 
                 if (pin == null)
                     Log.e(TAG, "Password wasn't stored or accessed correctly");
-
-                //int pincode = Integer.parseInt(pin);
 
                 if (pin.equals(enteredPassword)) {
                     if (timer != null) {
@@ -285,8 +286,6 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
                     if (numAttempts == INCORRECT_TRIES) {
                         buildGoogleApiClient();
                         onStart();
-                        Messenger.sendNotifications(Contacts.Tier.ONE, mLastLocation, getApplicationContext(), Messenger.MessageType.DANGER);
-                        Toast.makeText(HSTimerActivity.this, "Contacts have been notified", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(HSTimerActivity.this, "Incorrect Password", Toast.LENGTH_SHORT).show();
                         promptForPassword();
@@ -312,7 +311,9 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
         if (mLastLocation != null) {
-            Log.e(TAG, "Connected!");
+            Log.i(TAG, "Connected!");
+            Messenger.sendNotifications(Contacts.Tier.ONE, mLastLocation, getApplicationContext(), Messenger.MessageType.DANGER);
+            Toast.makeText(HSTimerActivity.this, "Contacts have been notified", Toast.LENGTH_SHORT).show();
         } else {
             Log.e(TAG, "Failed on getting last location");
         }
@@ -366,4 +367,34 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
 
         return result;
     }
+
+    ////////////////////////CONSTRUCTION ZONE AHEAD - HERE THERE BE DRAGONS////////////////////////
+    // 1.) get text timer a ticking             ...DONE
+    // 2.) if timer has 5 seconds left you cannot end time
+    // 3.) handle failure
+    // 4.) fix buttons          ...DONE
+    // 5.) you have a max of how much time is fed into the password
+    // 6.) handle running out of time!          ...DONE
+    // 7.) looks like ticking continues to happen even if in different activity     ...DONE
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data.getExtras().containsKey("retval")) {
+            Serializable retcode = data.getExtras().getSerializable("retval");
+            if (retcode.equals(PasswordActivity.RetCode.SUCCESS)) {
+                timer.cancel();
+                startActivity(new Intent(HSTimerActivity.this, ArrivalScreenActivity.class));
+            } else if (retcode.equals(PasswordActivity.RetCode.FAILURE)) {
+                // do a thing...
+            } else if (retcode.equals(PasswordActivity.RetCode.SPECIAL)) {
+                buildGoogleApiClient();
+                onStart();
+                timer.cancel();
+                startActivity(new Intent(HSTimerActivity.this, ArrivalScreenActivity.class));
+            } else {
+                // nothing to do here. Have a lovely day.
+            }
+        }
+
+    }
+
 }

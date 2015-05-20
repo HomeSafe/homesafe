@@ -6,7 +6,7 @@
 
     <uses-sdk
         android:maxSdkVersion="22"
-        android:minSdkVersion="14"
+        android:minSdkVersion="19"
         android:targetSdkVersion="21" >
     </uses-sdk>
 
@@ -63,6 +63,14 @@
                 android:value=".StartScreenActivity" />
         </activity>
         <activity
+            android:name=".PasswordActivity"
+            android:exported="true"
+            android:label="@string/title_activity_password" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".HSTimerActivity" />
+        </activity>
+        <activity
             android:name=".Settings.SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
@@ -94,8 +102,6 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".HSTimerActivity" />
-        </activity>
-        <activity android:name=".Trip" >
         </activity>
         <activity android:name=".TripSettingActivity" >
             <meta-data
