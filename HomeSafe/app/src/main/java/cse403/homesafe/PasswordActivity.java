@@ -136,7 +136,7 @@ public class PasswordActivity extends ActionBarActivity {
                         Toast.makeText(PasswordActivity.this, "You entered an incorrect password", Toast.LENGTH_SHORT).show();
                         numchances--;
                         if (numchances <= 0) {
-                            Toast.makeText(PasswordActivity.this, "No more chances!!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PasswordActivity.this, "No more chances!", Toast.LENGTH_SHORT).show();
                             confirm.setEnabled(false);
                             i.putExtra("retval", RetCode.FAILURE);
                             setResult(RESULT_OK, i);
