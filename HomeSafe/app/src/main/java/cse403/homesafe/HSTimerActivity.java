@@ -67,8 +67,6 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
         getSupportActionBar().setTitle("Trip in progress");
         numAttempts = 0;
 
-        buildGoogleApiClient();
-
         // creates the views for the on-screen components
         initProgressBar();
         addItemsToTimeOptions();
@@ -387,8 +385,9 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
                 startActivity(new Intent(HSTimerActivity.this, ArrivalScreenActivity.class));
             } else if (retcode.equals(PasswordActivity.RetCode.FAILURE)) {
                 // do a thing...
-            } else if (retcode.equals (PasswordActivity.RetCode.SPECIAL)) {
-               onStart();
+            } else if (retcode.equals(PasswordActivity.RetCode.SPECIAL)) {
+                buildGoogleApiClient();
+                onStart();
                 timer.cancel();
                 startActivity(new Intent(HSTimerActivity.this, ArrivalScreenActivity.class));
             } else {

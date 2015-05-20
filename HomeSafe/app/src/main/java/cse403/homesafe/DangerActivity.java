@@ -16,6 +16,8 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -57,6 +59,7 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
     private final ArrayList<Contact> contacts3 = new ArrayList<Contact>(Contacts.getInstance().getContactsInTier(Contacts.Tier.THREE));
 
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1000;
+    private Button homescreenBtnDanger;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +71,10 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
         getSupportActionBar().setHomeButtonEnabled(false);
 
         contactsView = (RecyclerView) findViewById(R.id.contactsView);
+        homescreenBtnDanger = (Button) findViewById(R.id.homescreenBtnDanger);
+
+        // set listener for back to start screen
+        setBackToStartScreenListener();
 
         RecyclerView.LayoutManager rvLayoutManager = new LinearLayoutManager(this);
         contactsView.setLayoutManager(rvLayoutManager);
@@ -76,6 +83,21 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
         createTimer();
         numAttempts = 0;
         promptForPassword();
+    }
+
+    /* Ends the timer for the trip, taking the user automatically to the arrival screen.
+* */
+    private void setBackToStartScreenListener() {
+        homescreenBtnDanger.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // When this button is clicked, clear the activity stack and start fresh from
+                // the start screen.
+                startActivity(new Intent(getApplicationContext(),
+                        StartScreenActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            }
+        });
     }
 
     /**
