@@ -180,9 +180,9 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
 //                promptForPassword();
                 Intent i = new Intent(getApplicationContext(), PasswordActivity.class);
                 String time = "120";
-                String message = "Bow-chicka-wowow";
+                String message = "Please enter your password to end-trip";
                 String numChances = "3";
-                String confirmButtonMessage = "confirm 'dis dank shit yo";
+                String confirmButtonMessage = "End Trip";
                 i.putExtra("passwordParams", new ArrayList<String>(Arrays.asList(time, message, numChances, confirmButtonMessage)));
                 startActivityForResult(i, 1);
             }
@@ -389,6 +389,8 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
                 // do a thing...
             } else if (retcode.equals (PasswordActivity.RetCode.SPECIAL)) {
                onStart();
+                timer.cancel();
+                startActivity(new Intent(HSTimerActivity.this, ArrivalScreenActivity.class));
             } else {
                 // nothing to do here. Have a lovely day.
             }
