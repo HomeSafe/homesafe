@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--color sheet for below api 21-->
+<!--color sheet for api 21-->
 <resources>
     <color name="primary">#4CAF50</color>
     <color name="primary_dark">#388E3C</color>
@@ -7,5 +7,9 @@
     <color name="window_background">#FFFFFF</color>
     <color name="navi_bar">#A5D6A7</color>
     <color name="accent">#388E3C</color>
-
+    <color name="buttonColor">#BDBDBD</color>
+    <color name="buttonHighlightColor">#F5F5F5</color>
+    <color name="card_background">#F1F8E9</color>
+    <color name="colorControlNormal">#FFFFFF</color>
+    <color name="fabColor">#FFC107</color>
 </resources>
