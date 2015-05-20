@@ -175,14 +175,14 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
 
             @Override
             public void onClick(View v) {
-//                promptForPassword();
-                Intent i = new Intent(getApplicationContext(), PasswordActivity.class);
-                String time = "120";
-                String message = "Please enter your password to end-trip";
-                String numChances = "3";
-                String confirmButtonMessage = "End Trip";
-                i.putExtra("passwordParams", new ArrayList<String>(Arrays.asList(time, message, numChances, confirmButtonMessage)));
-                startActivityForResult(i, 1);
+                promptForPassword();
+//                Intent i = new Intent(getApplicationContext(), PasswordActivity.class);
+//                String time = "120";
+//                String message = "Please enter your password to end-trip";
+//                String numChances = "3";
+//                String confirmButtonMessage = "End Trip";
+//                i.putExtra("passwordParams", new ArrayList<String>(Arrays.asList(time, message, numChances, confirmButtonMessage)));
+//                startActivityForResult(i, 1);
             }
         });
         return true;
