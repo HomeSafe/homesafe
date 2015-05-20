@@ -53,7 +53,7 @@ public class ArrivalScreenActivity extends ActionBarActivity implements GoogleAp
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_arrival_screen);
-
+        getSupportActionBar().setTitle("SAFE ARRIVAL");
         contactsView = (RecyclerView) findViewById(R.id.contactsView);
         homescreenBtn = (Button) findViewById(R.id.homescreenBtn);
 
