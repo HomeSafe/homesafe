@@ -12,4 +12,5 @@
     <color name="card_background">#F1F8E9</color>
     <color name="colorControlNormal">#FFFFFF</color>
     <color name="fabColor">#FFC107</color>
+    <color name="button_material_light">#388E3C</color>
 </resources>
