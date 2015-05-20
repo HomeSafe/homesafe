@@ -57,7 +57,7 @@ public class ContactsActivity extends ActionBarActivity {
         // Setting the ViewPager For the SlidingTabsLayout
         tabs.setViewPager(pager);
 
-        tabs.setElevation(8); //red is fine, only for api21
+        //tabs.setElevation(8); //red is fine, only for api21
 
 
         fab = (FloatingActionButton) findViewById(R.id.contacts_fab);
