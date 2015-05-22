@@ -175,14 +175,14 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
 
             @Override
             public void onClick(View v) {
-                promptForPassword();
-//                Intent i = new Intent(getApplicationContext(), PasswordActivity.class);
-//                String time = "120";
-//                String message = "Please enter your password to end-trip";
-//                String numChances = "3";
-//                String confirmButtonMessage = "End Trip";
-//                i.putExtra("passwordParams", new ArrayList<String>(Arrays.asList(time, message, numChances, confirmButtonMessage)));
-//                startActivityForResult(i, 1);
+//                promptForPassword();
+                Intent i = new Intent(getApplicationContext(), PasswordActivity.class);
+                String time = "120";
+                String message = "Please enter your password to end-trip";
+                String numChances = "3";
+                String confirmButtonMessage = "End Trip";
+                i.putExtra("passwordParams", new ArrayList<String>(Arrays.asList(time, message, numChances, confirmButtonMessage)));
+                startActivityForResult(i, 1);
             }
         });
         return true;
@@ -369,13 +369,15 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
     }
 
     ////////////////////////CONSTRUCTION ZONE AHEAD - HERE THERE BE DRAGONS////////////////////////
-    // 1.) get text timer a ticking             ...DONE
-    // 2.) if timer has 5 seconds left you cannot end time
-    // 3.) handle failure
-    // 4.) fix buttons          ...DONE
-    // 5.) you have a max of how much time is fed into the password
-    // 6.) handle running out of time!          ...DONE
-    // 7.) looks like ticking continues to happen even if in different activity     ...DONE
+    // 1.) if timer has 5 seconds left you cannot end time
+    // 2.) handle failure in each calling activity
+    // 3.) Maximum amount of time a user has to put in password is 1 min 30 seconds. If there
+    //     is less than that amount left on the HSTimer activity then whatever time is left in
+    //     is how much time they have to put in their password.
+    // 4.) put on DangerActivity, change password Activity, add more time Activity
+    // 5.) make prettier: Maybe a dark grey background color to mimic the pop-up dialogue we
+    //     had before?
+    // 6.) limit to 4 nums when entering a password.
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data.getExtras().containsKey("retval")) {

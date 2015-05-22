@@ -20,16 +20,12 @@ import cse403.homesafe.Messaging.Messenger;
 /**
  * Represents a timed password field where a user can type their password to gain extended
  * authority in the HomeSafe App.
- *
- * SPECS: There are two buttons: Cancel, and confirmButtonMessage.  Cancel will always just return
- * enum CANCEL. confirmButtonMessage
- * returns true if password correct, and increments numWrongEntries if incorrect. Then, if
- * numWrongEntries > numChances (parameter), call setResult(false) and return to caller activity
  */
 public class PasswordActivity extends ActionBarActivity {
 
     // under-the-hood components
-    private CountDownTimer timer;
+    private CountDownTimer timer;   // how much time the user has left to put in correct password
+    private int numchances;         // how many chances the user has to put in correct password
 
     // on screen components
     private Button cancel;
@@ -37,12 +33,6 @@ public class PasswordActivity extends ActionBarActivity {
     private EditText passwordField;         // where user inputs their password
     private TextView timerView;             // how much time is left to correctly input password
     private TextView titleMsg;              // displays the purpose of entering the password
-
-    // parameter components
-    private int time;
-    private String message;
-    private int numchances;
-    private String confirmButtonMessage;
 
     /**
      * Represents the 3 possible user-interactions with the Password screen;
@@ -63,10 +53,10 @@ public class PasswordActivity extends ActionBarActivity {
 
         // get the parameters from the previous activity
         ArrayList<String> params = getIntent().getStringArrayListExtra("passwordParams");
-        time = Integer.parseInt(params.get(0));
-        message = params.get(1);
+        int time = Integer.parseInt(params.get(0));
+        String message = params.get(1);
         numchances = Integer.parseInt(params.get(2));
-        confirmButtonMessage = params.get(3);
+        String confirmButtonMessage = params.get(3);
 
         // Make on-screen components visible.
         cancel = (Button) findViewById(R.id.btnCancel);
@@ -103,12 +93,12 @@ public class PasswordActivity extends ActionBarActivity {
         }.start();
 
         // this will happen...eventually... (make the password field focus when clicked on.
-//        passwordField.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                passwordField.requestFocus();
-//            }
-//        });
+        passwordField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                passwordField.requestFocus();
+            }
+        });
 
         confirm.setOnClickListener(new View.OnClickListener() {
 
