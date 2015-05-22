@@ -1,0 +1,14 @@
+
+ * Disable/fix back button on certain screens [NOT STARTED]
+ 
+ * Add Logo / Icon [IN PROGRESS, Alex, Becky]
+
+ * Notifications [NOT STARTED]
+
+ * Make tier system functional [NOT STARTED]
+
+ * Password prompter [IN PROGRESS, Becky]
+
+ * Add password prompt to more actions [NOT STARTED]
+
+ * Force user to setup setting and contact on first run [IN PROGRESS, Jacob]
