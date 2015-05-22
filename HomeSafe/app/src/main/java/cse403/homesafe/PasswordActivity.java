@@ -6,6 +6,7 @@ import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,6 +24,7 @@ import cse403.homesafe.Messaging.Messenger;
  */
 public class PasswordActivity extends ActionBarActivity {
 
+    private static final String TAG = "PasswordActivity";
     // under-the-hood components
     private CountDownTimer timer;   // how much time the user has left to put in correct password
     private int numchances;         // how many chances the user has to put in correct password
@@ -113,11 +115,13 @@ public class PasswordActivity extends ActionBarActivity {
                     Toast.makeText(PasswordActivity.this, "You have not entered a password", Toast.LENGTH_SHORT).show();
                 } else {
                     if (comparePassword("pin", password)) {
-                        Toast.makeText(PasswordActivity.this, "Ended Trip", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "Return code Success");
+                        Toast.makeText(PasswordActivity.this, "You entered correct password", Toast.LENGTH_SHORT).show();
                         i.putExtra("retval", RetCode.SUCCESS);
                         setResult(RESULT_OK, i);
                         finish();
                     } else if (comparePassword("pin_mock", password)) {
+                        Log.d(TAG, "Return code Special");
                         Toast.makeText(PasswordActivity.this, "You entered your emergency password!", Toast.LENGTH_SHORT).show();
                         i.putExtra("retval", RetCode.SPECIAL);
                         setResult(RESULT_OK, i);
@@ -128,6 +132,7 @@ public class PasswordActivity extends ActionBarActivity {
                         if (numchances <= 0) {
                             Toast.makeText(PasswordActivity.this, "No more chances!", Toast.LENGTH_SHORT).show();
                             confirm.setEnabled(false);
+                            Log.d(TAG, "Return code Special");
                             i.putExtra("retval", RetCode.FAILURE);
                             setResult(RESULT_OK, i);
                             finish();
