@@ -26,7 +26,9 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import cse403.homesafe.Data.Contact;
 import cse403.homesafe.Data.Contacts;
@@ -42,10 +44,8 @@ import cse403.homesafe.Messaging.Messenger;
 public class DangerActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
 
     private static final String TAG = "DangerActivity";
-    private CountDownTimer timer;
     private Location mLastLocation;
     private GoogleApiClient mGoogleApiClient;
-    private int numAttempts;
 
     private RecyclerView contactsView;
 
@@ -80,8 +80,6 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
         contactsView.setLayoutManager(rvLayoutManager);
         contactsView.setHasFixedSize(true);
 
-        createTimer();
-        numAttempts = 0;
         promptForPassword();
     }
 
@@ -104,79 +102,60 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
      * Prompt user for password. Send entered password to appropriate callback.
      */
     private void promptForPassword() {
-        alert = new AlertDialog.Builder(this);
 
-        alert.setTitle("Enter Passcode");
-        alert.setMessage("To Stop Alerts, Enter Correct Passcode");
-
-        // Set an EditText view to get user input
-        final EditText input = new EditText(this);
-        input.setTextColor(0xFFFFFFFF);
-        input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
-        input.setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
-        input.setGravity(Gravity.CENTER_HORIZONTAL);
-        alert.setView(input);
-
-        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                String enteredPassword = input.getText().toString();
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                String pin = preferences.getString("pin", null);
-
-                if (pin == null)
-                    Log.e(TAG, "Password wasn't stored or accessed correctly");
-
-                if (pin.equals(enteredPassword)) {
-                    dialog.cancel();
-                    timer.cancel();
-                    Toast.makeText(DangerActivity.this, "Correct Pincode", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(DangerActivity.this, ArrivalScreenActivity.class));
-                } else {
-                    numAttempts++;
-                    if (numAttempts == 3) {
-                        numAttempts = 0;
-                        timer.cancel();
-                        if (checkPlayServices()) {
-                            Log.e(TAG, "Google Play Services is installed");
-                            buildGoogleApiClient();
-                            onStart();
-                        } else {
-                            Log.e(TAG, "Google Play Services is not installed");
-                        }
-                    } else {
-                        promptForPassword();
-                    }
-                }
-            }
-        });
-
-        alert.show();
+        Intent i = new Intent(getApplicationContext(), PasswordActivity.class);
+        String time;
+        if(currentTier == 1) {
+            time = "120"; // 2 minutes
+        } else if (currentTier == 2) {
+            time = 5 * 60 + "";
+        } else { // tier 3+
+            time = 30 * 60 + "";
+        }
+        String message = "Please enter your password to end-trip.";
+        String numChances = "3";
+        String confirmButtonMessage = "End Trip";
+        i.putExtra("passwordParams", new ArrayList<String>(Arrays.asList(time, message, numChances, confirmButtonMessage)));
+        startActivityForResult(i, 1);
     }
 
-    /* Creates and starts a new immutableCountDownTimer object.
-     * @effect creates a new CountDownTimer. The caller is responsible for canceling the
-     *         old timer.
-     * */
-    private void createTimer() {
-        timer = new CountDownTimer(60000, 1) {
-            @Override
-            public void onTick(long millisUntilFinished) {
+    private void onCorrectPinCode() {
+        Toast.makeText(DangerActivity.this, "Correct Pincode", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(DangerActivity.this, ArrivalScreenActivity.class));
+    }
 
-            }
+    /**
+     * Callback for PasswordActivity. If success, moves to end trip. If failure,
+     * notifies currentTier contacts, then
+     * increments currentTier up to a maximum of three.
+     *
+     * @param requestCode the request code
+     * @param resultCode the result code
+     * @param data
+     */
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data.getExtras().containsKey("retval")) {
+            Serializable retcode = data.getExtras().getSerializable("retval");
+            if (retcode.equals(PasswordActivity.RetCode.SUCCESS)) {
+                onCorrectPinCode();
+            } else if (retcode.equals(PasswordActivity.RetCode.FAILURE)) {
+                // Send alerts to currentTier contacts
+                buildGoogleApiClient();
+                onStart();
 
-            @Override
-            public void onFinish() {
-                timer.cancel();
-                if (checkPlayServices()) {
-                    Log.e(TAG, "Google Play Services is installed");
-                    buildGoogleApiClient();
-                    onStart();
-                } else {
-                    Log.e(TAG, "Google Play Services is not installed");
+                if (currentTier < 3) {
+                    currentTier++;
                 }
+                promptForPassword(); // keep asking
+            } else if (retcode.equals(PasswordActivity.RetCode.SPECIAL)) {
+                buildGoogleApiClient();
+                onStart();
+                startActivity(new Intent(DangerActivity.this, ArrivalScreenActivity.class));
+            } else {
+                // nothing to do here. Have a lovely day. assert(false);
             }
+        }
 
-        }.start();
     }
 
     @Override
@@ -204,10 +183,6 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
             Messenger.sendNotifications(tier, mLastLocation, getApplicationContext(), Messenger.MessageType.DANGER);
             rvAdapter = new ArrivalScreenAdapter(contacts);
             contactsView.setAdapter(rvAdapter);
-            currentTier++;
-
-            // TODO: Implement more levels of notification by creating additional timers and password prompts
-//            createTimer();
         }
     }
 

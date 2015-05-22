@@ -43,7 +43,15 @@ public class Messenger {
         customMessage = customMessage.trim();
 
         Contacts contacts = Contacts.getInstance();
-        List<Contact> contactsNotified = contacts.getContactsInTier(tier);
+
+        // grab cumulative list of contacts
+        List<Contact> contactsNotified = contacts.getContactsInTier(Contacts.Tier.ONE);
+        if(tier == Contacts.Tier.TWO || tier == Contacts.Tier.THREE) {
+            contactsNotified.addAll(contacts.getContactsInTier(Contacts.Tier.TWO));
+        }
+        if(tier == Contacts.Tier.THREE) {
+            contactsNotified.addAll(contacts.getContactsInTier(Contacts.Tier.THREE));
+        }
         for (Contact c : contactsNotified) {
             if (c.getEmail() != null)
                 email.sendMessage(c, location, customMessage, context, type);  // Change customMessage parameter to appropriate in SharedPreferences
