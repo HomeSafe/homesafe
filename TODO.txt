@@ -3,7 +3,7 @@
  
  * Add Logo / Icon [IN PROGRESS, Alex, Becky]
 
- * Notifications [NOT STARTED]
+ * Notifications [IN PROGRESS, Jacob]
 
  * Make tier system functional [NOT STARTED]
 
