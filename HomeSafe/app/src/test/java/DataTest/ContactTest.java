@@ -3,15 +3,10 @@ package DataTest;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import cse403.homesafe.Data.Contact;
 import cse403.homesafe.Data.Contacts;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  *  This class tests the Contact class
@@ -25,6 +20,10 @@ public class ContactTest {
     public void setUp() {
         contact1 = null;
     }
+
+    /**
+     * Test constructors
+     */
 
     @Test
     public void testSimpleConstructor() {
@@ -43,6 +42,10 @@ public class ContactTest {
         contact1 = new Contact("name", "test@example.com", "1234567890", Contacts.Tier.ONE);
         Assert.assertNotNull(contact1);
     }
+
+    /**
+    * Test getters and setters
+     */
 
     @Test
     public void testSetAndGetCid() {
@@ -78,6 +81,10 @@ public class ContactTest {
         contact1.setPhoneNumber("9999999999");
         Assert.assertEquals(contact1.getPhoneNumber(), "9999999999");
     }
+
+    /**
+     * test toString
+     */
 
     @Test
     public void testToString() {

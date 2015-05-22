@@ -11,7 +11,7 @@ import cse403.homesafe.Data.Destination;
 import cse403.homesafe.Data.Destinations;
 
 /**
- * Created by Ethan on 5/19/15.
+ * This suite tests the Destinations class
  */
 @PrepareForTest(Destinations.class)
 public class DestinationsTest {
@@ -22,9 +22,9 @@ public class DestinationsTest {
     @Before
     public void setUp() {
         destinations = null;
-        uw = new Destination("UW");
+        uw = new Destination("UW", 99);
         uw.setDid(1);
-        cse = new Destination("CSE");
+        cse = new Destination("CSE", 98);
         cse.setDid(2);
     }
 
@@ -34,6 +34,10 @@ public class DestinationsTest {
         Assert.assertNotNull(destinations);
     }
 
+    /**
+     * Test clearing all destinations
+     */
+
     @Test
     public void testClearDestinations() {
         destinations = Destinations.getInstance();
@@ -42,6 +46,10 @@ public class DestinationsTest {
         destinations.clearDestinations();
         Assert.assertEquals(0, destinations.getSize());
     }
+
+    /**
+     * Test basic functionality
+     */
 
     @Test
     public void testAddDestination() {
