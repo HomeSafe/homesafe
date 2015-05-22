@@ -232,8 +232,6 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
 
             @Override
             public void onClick(View v) {
-//                promptForPassword();
-
                 Intent i = new Intent(getApplicationContext(), PasswordActivity.class);
                 String time = "90";
                 if ( (currentTimeMillis / 1000)  < 90 ) {
@@ -303,67 +301,6 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
         return true;
     }
 
-    /**
-     * A dialog that prompts the user for password. If user enters password
-     * correctly, then user will be directed to Arrival Screen, otherwise if the
-     * user inputs the password incorrectly 3 times then
-     */
-    private boolean promptForPassword() {
-        final HSTimerActivity that = this;
-        final AlertDialog.Builder alert = new AlertDialog.Builder(that);
-
-        alert.setTitle("Unlock");
-        alert.setMessage("Please Enter Password");
-
-        // Set an EditText view to get user input
-        final EditText input = new EditText(that);
-        input.setTextColor(0xFFFFFFFF);
-        input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
-        input.setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
-        input.setGravity(Gravity.CENTER_HORIZONTAL);
-
-        alert.setView(input);
-
-        alert.setPositiveButton("Enter", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                String enteredPassword = input.getText().toString();
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                String pin = prefs.getString("pin", null);
-
-                if (pin == null)
-                    Log.e(TAG, "Password wasn't stored or accessed correctly");
-
-                if (pin.equals(enteredPassword)) {
-                    if (timer != null) {
-                        timer.cancel();
-                        countDownPeriod = 0;
-                        txtTimer.setText("00:00:00");
-                        pb.setProgress(0);
-                        numAttempts = 0;
-                    }
-                    Toast.makeText(HSTimerActivity.this, "Ended Trip", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(HSTimerActivity.this, ArrivalScreenActivity.class));
-                } else {
-                    numAttempts++;
-                    if (numAttempts == INCORRECT_TRIES) {
-                        buildGoogleApiClient();
-                        onStart();
-                    } else {
-                        Toast.makeText(HSTimerActivity.this, "Incorrect Password", Toast.LENGTH_SHORT).show();
-                        promptForPassword();
-                    }
-                }
-            }
-        });
-        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                dialog.cancel();
-            }
-        });
-        alert.show();
-
-        return true;
-    }
 
     /**
      * Callback method of Google API Client if connected
@@ -448,7 +385,7 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
                 timer.cancel();
                 startActivity(new Intent(HSTimerActivity.this, ArrivalScreenActivity.class));
             } else if (retcode.equals(PasswordActivity.RetCode.FAILURE)) {
-                // do a thing...
+                startActivity(new Intent(HSTimerActivity.this, DangerActivity.class));
             } else if (retcode.equals(PasswordActivity.RetCode.SPECIAL)) {
                 buildGoogleApiClient();
                 onStart();
