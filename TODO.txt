@@ -1,17 +1,17 @@
 
- * Disable/fix back button on certain screens [IN PROGRESS, Ethan]
+ * Disable/fix back button on certain screens [DONE, Ethan]
  
  * Add Logo / Icon [IN PROGRESS, Alex, Becky]
 
  * Notifications [DONE, Jacob]
 
- * Make tier system functional [IN PROGRESS, Vivek]
+ * Make tier system functional [DONE, Vivek]
 
  * Password prompter [DONE, Becky, Kitson, Ethan]
 
  * Add password prompt to more actions [DONE, Ethan]
 
- * Force user to setup setting and contact on first run [IN PROGRESS, Jacob]
+ * Force user to setup setting and contact on first run [DONE, Jacob]
 
  * Special message when mock password is enterted [NOT STARTED]
 

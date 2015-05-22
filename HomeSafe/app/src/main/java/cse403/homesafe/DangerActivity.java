@@ -1,6 +1,7 @@
 package cse403.homesafe;
 
 import android.app.AlertDialog;
+import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -242,6 +243,14 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        String ns = getApplicationContext().NOTIFICATION_SERVICE;
+        NotificationManager nMgr = (NotificationManager) getApplicationContext().getSystemService(ns);
+        nMgr.cancelAll();
     }
 
     // Do nothing when the back button is pressed
