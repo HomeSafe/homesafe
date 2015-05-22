@@ -140,8 +140,12 @@ public class StartScreenActivity extends ActionBarActivity implements GoogleApiC
         buttonStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(StartScreenActivity.this, TripSettingActivity.class);
-                startActivity(i);
+                if(Contacts.getInstance().getNumContactInInstance() != 0) {
+                    Intent i = new Intent(StartScreenActivity.this, TripSettingActivity.class);
+                    startActivity(i);
+                } else {
+                    Toast.makeText(StartScreenActivity.this, "Set up emergency contact before start a trip", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }

@@ -38,6 +38,10 @@ public class Contacts{
         contacts = new LinkedList<Contact>();
     }
 
+    public int getNumContactInInstance(){
+        return contacts.size();
+    }
+
     public static Contacts getInstance() {
         if (instance == null) {
             instance = new Contacts();
