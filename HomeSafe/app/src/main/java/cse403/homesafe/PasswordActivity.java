@@ -60,7 +60,7 @@ public class PasswordActivity extends ActionBarActivity {
         numchances = Integer.parseInt(params.get(2));
         String confirmButtonMessage = params.get(3);
         boolean enableCancelButton = true;
-        if (params.size() >= 4) {
+        if (params.size() >= 5) {
             enableCancelButton = Boolean.parseBoolean(params.get(4));
         }
 
