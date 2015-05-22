@@ -59,6 +59,10 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
     private static final int INCORRECT_TRIES = 3;           // max number of incorrect password attempts
     private static final String TAG = "HSTimerActivity";    // for logcat purposes
 
+    @Override
+    public void onBackPressed() {
+        //We don't allow back after trip started.
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
