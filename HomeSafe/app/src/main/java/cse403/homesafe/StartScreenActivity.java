@@ -234,7 +234,7 @@ public class StartScreenActivity extends ActionBarActivity implements GoogleApiC
     //*************** After returning from PasswordActivity *********************
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data.getExtras().containsKey("retval")) {
+        if (data != null && data.getExtras().containsKey("retval")) {
             Serializable retcode = data.getExtras().getSerializable("retval");
             if (retcode.equals(PasswordActivity.RetCode.SUCCESS)) {
                 startActivity(new Intent(StartScreenActivity.this, SettingsActivity.class));
