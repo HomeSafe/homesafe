@@ -1,0 +1,18 @@
+
+ * Disable/fix back button on certain screens [NOT STARTED]
+ 
+ * Add Logo / Icon [IN PROGRESS, Alex, Becky]
+
+ * Notifications [NOT STARTED]
+
+ * Make tier system functional [NOT STARTED]
+
+ * Password prompter [IN PROGRESS, Becky, Kitson]
+
+ * Add password prompt to more actions [IN PROGRESS, Ethan]
+
+ * Force user to setup setting and contact on first run [IN PROGRESS, Jacob]
+
+ * Special message when mock password is enterted [NOT STARTED]
+
+ * Require internet access to use app [NOT STARTED]
