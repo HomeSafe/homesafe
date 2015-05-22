@@ -5,9 +5,9 @@
 
  * Notifications [IN PROGRESS, Jacob]
 
- * Make tier system functional [NOT STARTED]
+ * Make tier system functional [IN PROGRESS, Vivek]
 
- * Password prompter [IN PROGRESS, Becky, Kitson]
+ * Password prompter [IN PROGRESS, Becky, Kitson, Ethan]
 
  * Add password prompt to more actions [IN PROGRESS, Ethan]
 
@@ -15,4 +15,4 @@
 
  * Special message when mock password is enterted [NOT STARTED]
 
- * Require internet access to use app [NOT STARTED]
+ * Require internet access to use app [IN PROGRESS, Jacob]
