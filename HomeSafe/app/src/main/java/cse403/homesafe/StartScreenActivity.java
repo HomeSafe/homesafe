@@ -1,8 +1,10 @@
 package cse403.homesafe;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,15 +24,24 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import cse403.homesafe.Data.Contacts;
 import cse403.homesafe.Data.DbFactory;
 import cse403.homesafe.Data.Destinations;
 import cse403.homesafe.Data.HomeSafeDbHelper;
+import cse403.homesafe.Messaging.Messenger;
 import cse403.homesafe.Settings.SettingsActivity;
 import cse403.homesafe.Util.ContextHolder;
 
 //This class is for Start Screen Activity, where it handles the side bar menu and start trip events
-public class StartScreenActivity extends ActionBarActivity {
+public class StartScreenActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -37,6 +49,9 @@ public class StartScreenActivity extends ActionBarActivity {
     private Button buttonStart;
     private HomeSafeDbHelper mDbHelper;
 
+    private GoogleApiClient mGoogleApiClient;
+    private static final String TAG = "StartScreenActivity";    // for logcat purposes
+    private Location mLastLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +71,7 @@ public class StartScreenActivity extends ActionBarActivity {
             return;
         }
 
-        if (!isAccountSetUp()) {
+        if (!isAccountSetUp(getApplicationContext())) {
             Toast.makeText(getApplicationContext(),
                     "Set a first/last name and passcode.", Toast.LENGTH_LONG)
                     .show();
@@ -104,19 +119,27 @@ public class StartScreenActivity extends ActionBarActivity {
                 Intent i;
                 if(position == 0){
                     i = new Intent(StartScreenActivity.this, ContactsActivity.class);
+                    startActivity(i);
                 } else if(position == 1){
                     i = new Intent(StartScreenActivity.this, FavLocationsActivity.class);
+                    startActivity(i);
                 } else {
-                    i = new Intent(StartScreenActivity.this, SettingsActivity.class);
+                    // i = new Intent(StartScreenActivity.this, SettingsActivity.class);
+                    i = new Intent(getApplicationContext(), PasswordActivity.class);
+                    String time = "90";
+                    String message = "Please enter your password to access settings";
+                    String numChances = "3";
+                    String confirmButtonMessage = "Enter";
+                    i.putExtra("passwordParams", new ArrayList<String>(Arrays.asList(time, message, numChances, confirmButtonMessage)));
+                    startActivityForResult(i, 1);
                 }
-                startActivity(i);
             }
         });
     }
 
     //check if personal information of homesafe user is set up
-    private boolean isAccountSetUp() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+    public static boolean isAccountSetUp(Context ctx) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ctx);
         String password = preferences.getString("pin", null);
         String userFirstName = preferences.getString("firstName", null);
         String userLastName = preferences.getString("lastName", null);
@@ -206,5 +229,85 @@ public class StartScreenActivity extends ActionBarActivity {
         super.onConfigurationChanged(newConfig);
         // Pass any configuration change to the drawer toggles
         mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    //*************** After returning from PasswordActivity *********************
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data.getExtras().containsKey("retval")) {
+            Serializable retcode = data.getExtras().getSerializable("retval");
+            if (retcode.equals(PasswordActivity.RetCode.SUCCESS)) {
+                startActivity(new Intent(StartScreenActivity.this, SettingsActivity.class));
+            } else if (retcode.equals(PasswordActivity.RetCode.SPECIAL)) {
+                buildGoogleApiClient();
+                onStart();
+                startActivity(new Intent(StartScreenActivity.this, SettingsActivity.class));
+            }
+        }
+    }
+
+    /**
+     * Starts the Google API Client
+     */
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (mGoogleApiClient != null) {
+            Log.e(TAG, "Connection Started");
+            mGoogleApiClient.connect();
+        }
+    }
+
+    /**
+     * Builds the Google API Client
+     */
+    protected synchronized boolean buildGoogleApiClient() {
+        boolean result = false;
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+        if (mGoogleApiClient != null) {
+            Log.e(TAG, "Build Complete");
+            result = true;
+        } else {
+            Log.e(TAG, "Build Incomplete");
+        }
+
+        return result;
+    }
+
+    /**
+     * Callback method of Google API Client if connected
+     */
+    @Override
+    public void onConnected(Bundle bundle) {
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+        if (mLastLocation != null) {
+            Log.i(TAG, "Connected!");
+            Messenger.sendNotifications(Contacts.Tier.ONE, mLastLocation, getApplicationContext(), Messenger.MessageType.DANGER);
+            Toast.makeText(StartScreenActivity.this, "Contacts have been notified", Toast.LENGTH_SHORT).show();
+        } else {
+            Log.e(TAG, "Failed on getting last location");
+        }
+    }
+
+    /**
+     * Callback method for Google API Client if connection is suspended
+     */
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.e(TAG, "Connection Suspended");
+    }
+
+    /**
+     * Callback method for Google API Client if connection fails
+     */
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.e(TAG, "Connection Failed");
     }
 }

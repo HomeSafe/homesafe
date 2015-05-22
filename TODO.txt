@@ -3,16 +3,16 @@
  
  * Add Logo / Icon [IN PROGRESS, Alex, Becky]
 
- * Notifications [IN PROGRESS, Jacob]
+ * Notifications [DONE, Jacob]
 
  * Make tier system functional [IN PROGRESS, Vivek]
 
- * Password prompter [IN PROGRESS, Becky, Kitson, Ethan]
+ * Password prompter [DONE, Becky, Kitson, Ethan]
 
- * Add password prompt to more actions [IN PROGRESS, Ethan]
+ * Add password prompt to more actions [DONE, Ethan]
 
  * Force user to setup setting and contact on first run [IN PROGRESS, Jacob]
 
  * Special message when mock password is enterted [NOT STARTED]
 
- * Require internet access to use app [IN PROGRESS, Jacob]
+ * Require internet access to use app [DONE, Jacob]
