@@ -1,13 +1,19 @@
 package cse403.homesafe;
 
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -52,11 +58,16 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
 
     private int numAttempts;    // current number of incorrect password entries
 
+    private long currentTimeMillis; // the time left on the timer in millis
+
 
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
+    private AlertDialog.Builder alert;
+
 
     private static final int INCORRECT_TRIES = 3;           // max number of incorrect password attempts
+    private static final long TIME_BUFFER = 5;
     private static final String TAG = "HSTimerActivity";    // for logcat purposes
 
     @Override
@@ -70,6 +81,9 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
         setContentView(R.layout.activity_hstimer);
         getSupportActionBar().setTitle("Trip in progress");
         numAttempts = 0;
+
+        currentTimeMillis = 0;
+
 
         // creates the views for the on-screen components
         initProgressBar();
@@ -119,8 +133,12 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
         timer = new CountDownTimer(countDownPeriod, 1) {
             @Override
             public void onTick(long millisUntilFinished) {
+                currentTimeMillis = millisUntilFinished;
                 countDownPeriod = millisUntilFinished;  // update how much time is left in the timer
                 long seconds = millisUntilFinished / 1000;
+                if (seconds == TIME_BUFFER) {
+                    btnEnd.setEnabled(false);
+                }
                 int barVal = (int) (millisUntilFinished/ 1000);  // update progress bar animation
                 pb.setProgress(barVal);
 
@@ -135,6 +153,26 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
 
             @Override
             public void onFinish() {
+                // buzz to alert user
+                Vibrator vib = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+                vib.vibrate(500);
+
+                // notification to further alert user
+                NotificationCompat.Builder builder =
+                        new NotificationCompat.Builder(getApplicationContext())
+                                .setSmallIcon(R.drawable.ic_done_white_24dp)
+                                .setContentTitle("Time Running Out")
+                                .setContentText("Enter password or alert will be sent out!");
+
+                Intent notificationIntent = new Intent(getApplicationContext(), DangerActivity.class);
+                PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+                builder.setContentIntent(contentIntent);
+
+                NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                manager.notify(0, builder.build());
+
+                // ask for password
                 timer.cancel();
                 pb.setProgress(0);
                 Toast.makeText(HSTimerActivity.this, "Your Trip Has Ended", Toast.LENGTH_SHORT).show();
@@ -153,23 +191,64 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
 
             @Override
             public void onClick(View v) {
-                // Each timer object is immutable so we must cancel the old one to create
-                // a new timer object with more time in it.
-                if (timer != null) {
-                    timer.cancel();
-                }
-                // the selected time in the drop down menu
-                String selectedTime = timeOptions.getSelectedItem().toString();
-                countDownPeriod += parseTimeString(selectedTime);
+                alert = new AlertDialog.Builder(HSTimerActivity.this);
 
-                // the maximum capacity for the progress bar must be increased
-                pb.setMax((int) (countDownPeriod / 1000));
-                createTimer();
-                Toast.makeText(HSTimerActivity.this, "Added " + selectedTime,
-                        Toast.LENGTH_SHORT).show();
+                alert.setTitle("Enter Passcode");
+                alert.setMessage("To Add more time, Enter Correct Passcode");
+
+                // Set an EditText view to get user input
+                final EditText input = new EditText(HSTimerActivity.this);
+                input.setTextColor(0xFFFFFFFF);
+                input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+                input.setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
+                input.setGravity(Gravity.CENTER_HORIZONTAL);
+                alert.setView(input);
+
+                alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        String enteredPassword = input.getText().toString();
+                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        String pin = preferences.getString("pin", null);
+                        if (pin == null)
+                            Log.e(TAG, "Password wasn't stored or accessed correctly");
+
+                        if (pin.equals(enteredPassword)) {
+                            Log.d(TAG, "Password input correctly!");
+                            Toast.makeText(HSTimerActivity.this, "Correct Pincode", Toast.LENGTH_SHORT).show();
+                            // Each timer object is immutable so we must cancel the old one to create
+                            // a new timer object with more time in it.
+                            if (timer != null) {
+                                timer.cancel();
+                            }
+                            // the selected time in the drop down menu
+                            String selectedTime = timeOptions.getSelectedItem().toString();
+                            countDownPeriod += parseTimeString(selectedTime);
+
+                            // the maximum capacity for the progress bar must be increased
+                            pb.setMax((int) (countDownPeriod / 1000));
+                            createTimer();
+                            Toast.makeText(HSTimerActivity.this, "Added " + selectedTime,
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            Log.d(TAG, "Password input incorrectly!");
+                            dialog.cancel();
+                            Toast.makeText(HSTimerActivity.this, "Incorrect Pincode. Please enter again", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+                alert.show();
             }
         });
         return true;
+    }
+
+    /**
+     * Prompt user for password. Send entered password to appropriate callback.
+     */
+    private void promptPassword() {
+
+
     }
 
     /* Ends the timer for the trip, taking the user automatically to the arrival screen.
@@ -179,9 +258,12 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
 
             @Override
             public void onClick(View v) {
-//                promptForPassword();
                 Intent i = new Intent(getApplicationContext(), PasswordActivity.class);
-                String time = "120";
+                String time = "90";
+                if ( (currentTimeMillis / 1000)  < 90 ) {
+                    time = (currentTimeMillis / 1000) + "";
+                }
+                Log.e(TAG, currentTimeMillis + "");
                 String message = "Please enter your password to end-trip";
                 String numChances = "3";
                 String confirmButtonMessage = "End Trip";
@@ -245,67 +327,6 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
         return true;
     }
 
-    /**
-     * A dialog that prompts the user for password. If user enters password
-     * correctly, then user will be directed to Arrival Screen, otherwise if the
-     * user inputs the password incorrectly 3 times then
-     */
-    private boolean promptForPassword() {
-        final HSTimerActivity that = this;
-        final AlertDialog.Builder alert = new AlertDialog.Builder(that);
-
-        alert.setTitle("Unlock");
-        alert.setMessage("Please Enter Password");
-
-        // Set an EditText view to get user input
-        final EditText input = new EditText(that);
-        input.setTextColor(0xFFFFFFFF);
-        input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
-        input.setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
-        input.setGravity(Gravity.CENTER_HORIZONTAL);
-
-        alert.setView(input);
-
-        alert.setPositiveButton("Enter", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                String enteredPassword = input.getText().toString();
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                String pin = prefs.getString("pin", null);
-
-                if (pin == null)
-                    Log.e(TAG, "Password wasn't stored or accessed correctly");
-
-                if (pin.equals(enteredPassword)) {
-                    if (timer != null) {
-                        timer.cancel();
-                        countDownPeriod = 0;
-                        txtTimer.setText("00:00:00");
-                        pb.setProgress(0);
-                        numAttempts = 0;
-                    }
-                    Toast.makeText(HSTimerActivity.this, "Ended Trip", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(HSTimerActivity.this, ArrivalScreenActivity.class));
-                } else {
-                    numAttempts++;
-                    if (numAttempts == INCORRECT_TRIES) {
-                        buildGoogleApiClient();
-                        onStart();
-                    } else {
-                        Toast.makeText(HSTimerActivity.this, "Incorrect Password", Toast.LENGTH_SHORT).show();
-                        promptForPassword();
-                    }
-                }
-            }
-        });
-        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                dialog.cancel();
-            }
-        });
-        alert.show();
-
-        return true;
-    }
 
     /**
      * Callback method of Google API Client if connected
@@ -390,7 +411,7 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
                 timer.cancel();
                 startActivity(new Intent(HSTimerActivity.this, ArrivalScreenActivity.class));
             } else if (retcode.equals(PasswordActivity.RetCode.FAILURE)) {
-                // do a thing...
+                startActivity(new Intent(HSTimerActivity.this, DangerActivity.class));
             } else if (retcode.equals(PasswordActivity.RetCode.SPECIAL)) {
                 buildGoogleApiClient();
                 onStart();
