@@ -100,7 +100,7 @@ public class EditLocationActivity extends ActionBarActivity {
                         && !stateStr.equals(EMPTY_STR)) {
                     Intent i = new Intent(EditLocationActivity.this, FavLocationsActivity.class);
                     String finalAddr = capitalize(stAddrStr) + ", " + capitalize(cityStr) + ", " + stateStr.toUpperCase();
-                    Log.e("EditLocation: ", finalAddr);
+                    Log.d("EditLocation: ", finalAddr);
                     Destination newDes = new Destination(nameStr, finalAddr);
                     newDes.setDid(did);
                     if (!newDes.isReady()) {

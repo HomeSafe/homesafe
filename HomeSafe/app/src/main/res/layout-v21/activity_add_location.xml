@@ -13,14 +13,16 @@ tools:context="cse403.homesafe.AddLocationActivity">
 <Button
 android:layout_width="wrap_content"
 android:layout_height="wrap_content"
-android:text="Discard Changes"
+android:text="Cancel"
 android:id="@+id/discard"
-android:layout_alignParentBottom="true"
-android:layout_centerHorizontal="true"
 android:textColor="@android:color/black"
 android:paddingLeft="10dp"
 android:paddingRight="10dp"
-android:background="@drawable/ripple" />
+android:background="@drawable/ripple"
+android:layout_marginBottom="45dp"
+android:layout_marginRight="48dp"
+android:layout_alignParentBottom="true"
+android:layout_alignEnd="@+id/state_text" />
 
 <com.rengwuxian.materialedittext.MaterialEditText
 android:layout_width="match_parent"
@@ -81,5 +83,19 @@ app:met_textColorHint="#BDBDBD"/>
     app:met_baseColor="@android:color/black"
     app:met_primaryColor="@color/accent"
     app:met_textColorHint="#BDBDBD"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:id="@+id/save"
+        android:textColor="@android:color/black"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:background="@drawable/ripple"
+        android:layout_alignTop="@+id/discard"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="48dp"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
