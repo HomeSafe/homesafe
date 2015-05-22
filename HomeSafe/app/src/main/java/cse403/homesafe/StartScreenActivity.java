@@ -1,5 +1,6 @@
 package cse403.homesafe;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -70,7 +71,7 @@ public class StartScreenActivity extends ActionBarActivity implements GoogleApiC
             return;
         }
 
-        if (!isAccountSetUp()) {
+        if (!isAccountSetUp(getApplicationContext())) {
             Toast.makeText(getApplicationContext(),
                     "Set a first/last name and passcode.", Toast.LENGTH_LONG)
                     .show();
@@ -137,8 +138,8 @@ public class StartScreenActivity extends ActionBarActivity implements GoogleApiC
     }
 
     //check if personal information of homesafe user is set up
-    private boolean isAccountSetUp() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+    public static boolean isAccountSetUp(Context ctx) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ctx);
         String password = preferences.getString("pin", null);
         String userFirstName = preferences.getString("firstName", null);
         String userLastName = preferences.getString("lastName", null);

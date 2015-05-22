@@ -15,4 +15,4 @@
 
  * Special message when mock password is enterted [NOT STARTED]
 
- * Require internet access to use app [IN PROGRESS, Jacob]
+ * Require internet access to use app [DONE, Jacob]

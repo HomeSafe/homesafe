@@ -3,8 +3,10 @@ package cse403.homesafe.Settings;
 import android.app.Activity;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.widget.Toast;
 
 import cse403.homesafe.R;
+import cse403.homesafe.StartScreenActivity;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -27,5 +29,16 @@ public class SettingsActivity extends Activity {
         getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (StartScreenActivity.isAccountSetUp(getApplicationContext())) {
+            super.onBackPressed();
+        } else {
+            Toast.makeText(getApplicationContext(),
+                    "Set a first/last name and passcode.", Toast.LENGTH_LONG)
+                    .show();
+        }
     }
 }
