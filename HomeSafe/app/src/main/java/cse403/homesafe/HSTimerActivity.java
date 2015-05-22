@@ -51,10 +51,11 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
     private TextView txtTimer;      // textual representation of the time left in timer
 
     private int numAttempts;    // current number of incorrect password entries
-
+    private boolean mPinRes;
 
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
+    private AlertDialog.Builder alert;
 
     private static final int INCORRECT_TRIES = 3;           // max number of incorrect password attempts
     private static final String TAG = "HSTimerActivity";    // for logcat purposes
@@ -70,6 +71,7 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
         setContentView(R.layout.activity_hstimer);
         getSupportActionBar().setTitle("Trip in progress");
         numAttempts = 0;
+        mPinRes = false;
 
         // creates the views for the on-screen components
         initProgressBar();
@@ -153,23 +155,65 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
 
             @Override
             public void onClick(View v) {
-                // Each timer object is immutable so we must cancel the old one to create
-                // a new timer object with more time in it.
-                if (timer != null) {
-                    timer.cancel();
-                }
-                // the selected time in the drop down menu
-                String selectedTime = timeOptions.getSelectedItem().toString();
-                countDownPeriod += parseTimeString(selectedTime);
+                alert = new AlertDialog.Builder(HSTimerActivity.this);
 
-                // the maximum capacity for the progress bar must be increased
-                pb.setMax((int) (countDownPeriod / 1000));
-                createTimer();
-                Toast.makeText(HSTimerActivity.this, "Added " + selectedTime,
-                        Toast.LENGTH_SHORT).show();
+                alert.setTitle("Enter Passcode");
+                alert.setMessage("To Add more time, Enter Correct Passcode");
+
+                // Set an EditText view to get user input
+                final EditText input = new EditText(HSTimerActivity.this);
+                input.setTextColor(0xFFFFFFFF);
+                input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+                input.setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
+                input.setGravity(Gravity.CENTER_HORIZONTAL);
+                alert.setView(input);
+
+                alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        String enteredPassword = input.getText().toString();
+                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        String pin = preferences.getString("pin", null);
+                        if (pin == null)
+                            Log.e(TAG, "Password wasn't stored or accessed correctly");
+
+                        if (pin.equals(enteredPassword)) {
+                            Log.d(TAG, "Password input correctly!");
+                            Toast.makeText(HSTimerActivity.this, "Correct Pincode", Toast.LENGTH_SHORT).show();
+                            // Each timer object is immutable so we must cancel the old one to create
+                            // a new timer object with more time in it.
+                            if (timer != null) {
+                                timer.cancel();
+                            }
+                            // the selected time in the drop down menu
+                            String selectedTime = timeOptions.getSelectedItem().toString();
+                            countDownPeriod += parseTimeString(selectedTime);
+
+                            // the maximum capacity for the progress bar must be increased
+                            pb.setMax((int) (countDownPeriod / 1000));
+                            createTimer();
+                            Toast.makeText(HSTimerActivity.this, "Added " + selectedTime,
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            Log.d(TAG, "Password input incorrectly!");
+                            dialog.cancel();
+                            mPinRes = false;
+                            Toast.makeText(HSTimerActivity.this, "Incorrect Pincode. Please enter again", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+                alert.show();
             }
         });
         return true;
+    }
+
+    /**
+     * Prompt user for password. Send entered password to appropriate callback.
+     */
+    private void promptPassword() {
+
+
     }
 
     /* Ends the timer for the trip, taking the user automatically to the arrival screen.
