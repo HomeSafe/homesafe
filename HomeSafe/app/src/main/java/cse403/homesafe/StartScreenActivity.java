@@ -323,14 +323,5 @@ public class StartScreenActivity extends ActionBarActivity implements GoogleApiC
             Intent i = new Intent(StartScreenActivity.this, SettingsActivity.class);
             startActivity(i);
         }
-
-        if (Contacts.getInstance().getContactsInTier(Contacts.Tier.ONE).isEmpty()) {
-            Toast.makeText(getApplicationContext(),
-                    "Add an emergency contact.", Toast.LENGTH_LONG)
-                    .show();
-            Intent i = new Intent(StartScreenActivity.this, AddContactActivity.class);
-            i.putExtra("TAB", "1");
-            startActivity(i);
-        }
     }
 }
