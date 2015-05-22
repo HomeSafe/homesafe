@@ -78,6 +78,10 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
         contactsView.setLayoutManager(rvLayoutManager);
         contactsView.setHasFixedSize(true);
         currentTier = 1;
+
+        buildGoogleApiClient();
+        onStart();
+
         promptForPassword();
     }
 
@@ -140,16 +144,14 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
                 onCorrectPinCode();
             } else if (retcode.equals(PasswordActivity.RetCode.FAILURE)) {
                 // Send alerts to currentTier contacts
-                buildGoogleApiClient();
-                onStart();
+                alertContacts();
 
                 if (currentTier < 3) {
                     currentTier++;
                 }
                 promptForPassword(); // keep asking
             } else if (retcode.equals(PasswordActivity.RetCode.SPECIAL)) {
-                buildGoogleApiClient();
-                onStart();
+                alertContacts();
                 startActivity(new Intent(DangerActivity.this, ArrivalScreenActivity.class));
             } else {
                 // nothing to do here. Have a lovely day. assert(false);
@@ -158,8 +160,7 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
 
     }
 
-    @Override
-    public void onConnected(Bundle bundle) {
+    public void alertContacts() {
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
         if (mLastLocation != null) {
@@ -184,6 +185,11 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
             rvAdapter = new ArrivalScreenAdapter(contacts);
             contactsView.setAdapter(rvAdapter);
         }
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+
     }
 
     @Override
