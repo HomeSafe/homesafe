@@ -63,22 +63,6 @@ public class StartScreenActivity extends ActionBarActivity implements GoogleApiC
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.navList);
 
-        setupDrawer();
-
-        if (!isNetworkAvailable()) {
-            TextView mainTxt = (TextView) findViewById(R.id.textView);
-            mainTxt.setText("No Network Access");
-            return;
-        }
-
-        if (!isAccountSetUp(getApplicationContext())) {
-            Toast.makeText(getApplicationContext(),
-                    "Set a first/last name and passcode.", Toast.LENGTH_LONG)
-                    .show();
-            Intent i = new Intent(StartScreenActivity.this, SettingsActivity.class);
-            startActivity(i);
-        }
-
         // Retrieve data from database
         Contacts.getInstance().clearContacts();
         Destinations.getInstance().clearDestinations();
@@ -86,6 +70,7 @@ public class StartScreenActivity extends ActionBarActivity implements GoogleApiC
         DbFactory.retrieveFromDb(mDbHelper);
 
         addDrawerItems();
+        setupDrawer();
         setupButton();
 
         // enable ActionBar app icon to behave as action to toggle nav drawer
@@ -309,5 +294,39 @@ public class StartScreenActivity extends ActionBarActivity implements GoogleApiC
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         Log.e(TAG, "Connection Failed");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        TextView mainTxt = (TextView) findViewById(R.id.textView);
+        if (!isNetworkAvailable()) {
+            mainTxt.setText("No Network Access");
+            buttonStart.setEnabled(false);
+            mDrawerToggle.setDrawerIndicatorEnabled(false);
+            return;
+        } else {
+            mainTxt.setText("Home Safe");
+            buttonStart.setEnabled(true);
+            mDrawerToggle.setDrawerIndicatorEnabled(true);
+
+        }
+
+        if (!isAccountSetUp(getApplicationContext())) {
+            Toast.makeText(getApplicationContext(),
+                    "Set a first/last name and passcode.", Toast.LENGTH_LONG)
+                    .show();
+            Intent i = new Intent(StartScreenActivity.this, SettingsActivity.class);
+            startActivity(i);
+        }
+
+        if (Contacts.getInstance().getContactsInTier(Contacts.Tier.ONE).isEmpty()) {
+            Toast.makeText(getApplicationContext(),
+                    "Add an emergency contact.", Toast.LENGTH_LONG)
+                    .show();
+            Intent i = new Intent(StartScreenActivity.this, AddContactActivity.class);
+            i.putExtra("TAB", "1");
+            startActivity(i);
+        }
     }
 }
