@@ -67,9 +67,6 @@
             android:name=".PasswordActivity"
             android:exported="true"
             android:label="@string/title_activity_password" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".HSTimerActivity" />
         </activity>
         <activity
             android:name=".Settings.SettingsActivity"
