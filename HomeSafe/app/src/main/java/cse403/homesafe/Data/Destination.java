@@ -82,6 +82,7 @@ public class Destination implements GoogleMapsUtilsCallback {
     public Destination (String name){
         this.name = name;
     }
+
     /**
      * Constructs a new Destination object with a name, address, and location
      * @param name name of the location

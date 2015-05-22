@@ -29,6 +29,10 @@ public class ContactsTest {
         Assert.assertNotNull(contacts);
     }
 
+    /**
+     * Test basic functions
+     */
+
     @Test
     public void testAddContact() {
         Contact contact1 = new Contact("Amy");
@@ -74,6 +78,10 @@ public class ContactsTest {
         Assert.assertEquals(contact1.getTier(), Contacts.Tier.TWO);
     }
 
+    /**
+     * Test tier functionality
+     */
+
     @Test
     public void testGetContactsInTier() {
         Contact contact1 = new Contact("Amy");
@@ -112,6 +120,10 @@ public class ContactsTest {
         Assert.assertFalse(resultContacts.contains(contact2));
         Assert.assertFalse(resultContacts.contains(contact3));
     }
+
+    /**
+     * Test clear functionality
+     */
 
     @Test
     public void testClearContacts() {
