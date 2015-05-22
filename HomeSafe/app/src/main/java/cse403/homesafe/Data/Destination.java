@@ -67,10 +67,20 @@ public class Destination implements GoogleMapsUtilsCallback {
      * Constructs a new place-holder location in the drop down
      * so that no real address validation is required
      * @param name name of the location
+     * @param did destination id of destination
      */
     public Destination (String name, long did){
         this.name = name;
         this.did = did;
+    }
+
+    /**
+     * Constructs a new place-holder location in the drop down
+     * so that no real address validation is required
+     * @param name name of the location
+     */
+    public Destination (String name){
+        this.name = name;
     }
     /**
      * Constructs a new Destination object with a name, address, and location
