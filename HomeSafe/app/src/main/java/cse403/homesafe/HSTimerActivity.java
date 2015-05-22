@@ -51,13 +51,17 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
     private TextView txtTimer;      // textual representation of the time left in timer
 
     private int numAttempts;    // current number of incorrect password entries
-    private boolean mPinRes;
+
+    private long currentTimeMillis; // the time left on the timer in millis
+
 
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private AlertDialog.Builder alert;
 
+
     private static final int INCORRECT_TRIES = 3;           // max number of incorrect password attempts
+    private static final long TIME_BUFFER = 5;
     private static final String TAG = "HSTimerActivity";    // for logcat purposes
 
     @Override
@@ -71,7 +75,9 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
         setContentView(R.layout.activity_hstimer);
         getSupportActionBar().setTitle("Trip in progress");
         numAttempts = 0;
-        mPinRes = false;
+
+        currentTimeMillis = 0;
+
 
         // creates the views for the on-screen components
         initProgressBar();
@@ -121,8 +127,12 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
         timer = new CountDownTimer(countDownPeriod, 1) {
             @Override
             public void onTick(long millisUntilFinished) {
+                currentTimeMillis = millisUntilFinished;
                 countDownPeriod = millisUntilFinished;  // update how much time is left in the timer
                 long seconds = millisUntilFinished / 1000;
+                if (seconds == TIME_BUFFER) {
+                    btnEnd.setEnabled(false);
+                }
                 int barVal = (int) (millisUntilFinished/ 1000);  // update progress bar animation
                 pb.setProgress(barVal);
 
@@ -196,7 +206,6 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
                         } else {
                             Log.d(TAG, "Password input incorrectly!");
                             dialog.cancel();
-                            mPinRes = false;
                             Toast.makeText(HSTimerActivity.this, "Incorrect Pincode. Please enter again", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -224,8 +233,13 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
             @Override
             public void onClick(View v) {
 //                promptForPassword();
+
                 Intent i = new Intent(getApplicationContext(), PasswordActivity.class);
-                String time = "120";
+                String time = "90";
+                if ( (currentTimeMillis / 1000)  < 90 ) {
+                    time = (currentTimeMillis / 1000) + "";
+                }
+                Log.e(TAG, currentTimeMillis + "");
                 String message = "Please enter your password to end-trip";
                 String numChances = "3";
                 String confirmButtonMessage = "End Trip";
