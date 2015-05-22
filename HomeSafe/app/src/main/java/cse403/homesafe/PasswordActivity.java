@@ -160,4 +160,12 @@ public class PasswordActivity extends ActionBarActivity {
         String pin = prefs.getString(key, null);
         return enteredPassword.equals(pin);
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent();
+        i.putExtra("retval", RetCode.CANCEL);
+        setResult(RESULT_OK, i);
+        finish();
+    }
 }

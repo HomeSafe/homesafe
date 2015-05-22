@@ -1,5 +1,5 @@
 
- * Disable/fix back button on certain screens [NOT STARTED]
+ * Disable/fix back button on certain screens [IN PROGRESS, Ethan]
  
  * Add Logo / Icon [IN PROGRESS, Alex, Becky]
 
