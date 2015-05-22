@@ -155,4 +155,25 @@ public class StartScreenActivitySystemTest extends ActivityInstrumentationTestCa
         solo.typeText(2, "test@example.com");
         solo.clickOnButton("Save");
     }
+
+    public void testAddDestination() throws Exception {
+        solo.clickOnActionBarHomeButton();
+        solo.clickOnMenuItem("Favorite Locations");
+        Object lock = new Object();
+
+        synchronized (lock) {
+            lock.wait(500);
+        }
+
+        solo.clickOnView(solo.getView(R.id.location_fab));
+        synchronized(lock) {
+            lock.wait(500);
+        }
+
+        solo.typeText(0, "UW CSE");
+        solo.typeText(1, "185 Stevens Way");
+        solo.typeText(2, "Seattle");
+        solo.typeText(3, "WA");
+        solo.clickOnButton("Save");
+    }
 }
