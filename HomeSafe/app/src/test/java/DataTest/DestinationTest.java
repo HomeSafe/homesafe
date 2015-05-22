@@ -1,5 +1,7 @@
 package DataTest;
 
+import android.location.Location;
+
 import junit.framework.Assert;
 
 import org.junit.After;
@@ -7,14 +9,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 
-import cse403.homesafe.Data.Contact;
 import cse403.homesafe.Data.Destination;
 
 /**
- * Created by Alex on 5/19/15.
  * Class to test Destination.java
  */
-@PrepareForTest(Contact.class)
+@PrepareForTest(Destination.class)
 public class DestinationTest {
     Destination dest1;
     Destination dest2;
@@ -23,9 +23,13 @@ public class DestinationTest {
     @Before
     public void setUp() { dest1 = null; dest2 = null; dest3 = null; }
 
+    /**
+     * Constructor tests
+     */
+
     @Test
     public void testNameConstructor() {
-        dest1 = new Destination("TestName");
+        dest1 = new Destination("TestName", 99);
 
         Assert.assertEquals("Dest name was not properly set", "TestName", dest1.getName());
         Assert.assertNull("Location should be null", dest1.getLocation());
@@ -57,8 +61,33 @@ public class DestinationTest {
 
         Assert.assertFalse("Location shouldn't have been recognized", dest1.isReady());
         Assert.assertNotNull("Address shouldn't be null", dest1.getAddress());
-        Assert.assertNotNull("Location should've been set", dest1.getLocation());
+        Assert.assertNull("Location should not have been set", dest1.getLocation()); // because address invalid
         Assert.assertEquals("Dest name was not properly set", "TestName", dest1.getName());
+    }
+
+    /**
+     * Test getters and setters
+     */
+
+    @Test
+    public void testSetAndGetDid() {
+        dest1 = new Destination("name");
+        dest1.setDid(5);
+        Assert.assertEquals(dest1.getDid(), 5);
+    }
+
+    @Test
+    public void testSetAndGetAddress() {
+        dest1 = new Destination("name");
+        dest1.setAddress("2220 E Aloha St, Seattle, WA");
+        Assert.assertEquals(dest1.getAddress(), "2220 E Aloha St, Seattle, WA");
+    }
+
+    @Test
+    public void testSetAndGetName() {
+        dest1 = new Destination("nameOld");
+        dest1.setName("nameNEW");
+        Assert.assertEquals(dest1.getName(), "nameNEW");
     }
 
     @After
