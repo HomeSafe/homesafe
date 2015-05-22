@@ -44,6 +44,8 @@ import cse403.homesafe.Util.GoogleMapsUtilsCallback;
  */
 public class TripSettingActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleMapsUtilsCallback {
 
+    public static final int SPINNER_PLACEHOLDER = -100;
+    public static final String PLACEHOLDER_STR = "Select From Favorites";
     TimePicker ETA;     // time picker for user to set ETA
     Button startTrip;     // button for starting trip
     Button selectFromMap; // button for selecting location from map
@@ -68,12 +70,17 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
         List<Destination> destinationList = Destinations.getInstance().getDestinations();
         if(destinationList.isEmpty()){
             destinationList.add(defaultDest);
+        } else {
+            if(destinationList.get(0).getDid() > 0){
+                destinationList.add(0, new Destination(PLACEHOLDER_STR, SPINNER_PLACEHOLDER));
+            }
         }
         final Map<String, Location> nameToLocation = new HashMap<String, Location>();
         ArrayList<String> stringList = new ArrayList<String>();
         for (Destination dest : destinationList) {
             stringList.add(dest.getName());
             nameToLocation.put(dest.getName(), dest.getLocation());
+
         }
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
                 R.layout.spinner_item, stringList);
@@ -103,6 +110,8 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
         ETA.setIs24HourView(true);
         ETA.setCurrentHour(0);
         ETA.setCurrentMinute(0);
+        TextView estimateTime = (TextView) findViewById(R.id.hint);
+        estimateTime.setText("Est. Time in Hour and Minute");
 
         startTrip = (Button) findViewById(R.id.startTripButton);
         startTrip.setOnClickListener(
@@ -113,11 +122,11 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
                         if (time == 0) {
                             Toast.makeText(TripSettingActivity.this,
                                     "You cannot start a trip with no time set",
-                                    Toast.LENGTH_SHORT).show();
+                                    Toast.LENGTH_LONG).show();
                         } else if (destination == null) {
                             Toast.makeText(TripSettingActivity.this,
                                     "You cannot start a trip with no destination set",
-                                    Toast.LENGTH_SHORT).show();
+                                    Toast.LENGTH_LONG).show();
                         } else {
                             Intent i = new Intent(getApplicationContext(), HSTimerActivity.class);
                             i.putExtra("timefromuser", time);
@@ -252,12 +261,25 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
                     int minutes = ((int) distAndTime.getTime() - hours * 3600) / 60;
                     ETA.setCurrentHour(hours);
                     ETA.setCurrentMinute(minutes);
-
+                    TextView estimateTime = (TextView) findViewById(R.id.hint);
+                    estimateTime.setText("Est. Arrival in Hour and Minute");
                     if (distAndTime != null && mLastLocation != null) {
                         startTrip.setEnabled(true);
-                        String estimationMsg = "Your estimated time of arrival is " + hours +
-                                " hours and " + minutes + " minutes.";
-                        Toast.makeText(TripSettingActivity.this, estimationMsg, Toast.LENGTH_SHORT).show();
+                        StringBuilder estimationMsg = new StringBuilder();
+                        estimationMsg.append("Your estimated time of arrival is ");
+                        estimationMsg.append(hours);
+                        if (hours == 1 || hours == 0) {
+                            estimationMsg.append(" hour and ");
+                        } else {
+                            estimationMsg.append(" hours and ");
+                        }
+                        estimationMsg.append(minutes);
+                        if (minutes == 1) {
+                            estimationMsg.append(" minute.");
+                        } else {
+                            estimationMsg.append(" minutes.");
+                        }
+                        Toast.makeText(TripSettingActivity.this, estimationMsg, Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -303,18 +325,27 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
 
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            String nameOfDest = parent.getItemAtPosition(position).toString() + "";
-            destination = nameToLocation.get(nameOfDest);
-            if (checkPlayServices()) {
-                Log.e(TAG, "Google Play Services is installed");
-                buildGoogleApiClient();
-                onStart();
-            } else {
-                Log.e(TAG, "Google Play Services is not installed");
-            }
+            if(position != 0) {
+                String nameOfDest = parent.getItemAtPosition(position).toString() + "";
+                destination = nameToLocation.get(nameOfDest);
+                if (checkPlayServices()) {
+                    Log.e(TAG, "Google Play Services is installed");
+                    buildGoogleApiClient();
+                    onStart();
+                } else {
+                    Log.e(TAG, "Google Play Services is not installed");
+                }
 
-            TextView currentDestinationText = (TextView) findViewById(R.id.currentDestinationText);
-            currentDestinationText.setText("Destination: " + nameOfDest);
+                TextView currentDestinationText = (TextView) findViewById(R.id.currentDestinationText);
+                currentDestinationText.setText("Destination: " + nameOfDest);
+            } else {
+                TextView currentDestinationText = (TextView) findViewById(R.id.currentDestinationText);
+                currentDestinationText.setText("No Destination Selected");
+                TextView estimateTime = (TextView) findViewById(R.id.hint);
+                estimateTime.setText("");
+                ETA.setCurrentHour(0);
+                ETA.setCurrentMinute(0);
+            }
         }
 
         @Override
