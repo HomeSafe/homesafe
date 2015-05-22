@@ -13,9 +13,9 @@ import cse403.homesafe.StartScreenActivity;
 /**
  * Created by dliuxy94 on 5/14/15.
  */
-public class StartScreenActivitySystemTest extends ActivityInstrumentationTestCase2<StartScreenActivity> {
+public class SystemTest extends ActivityInstrumentationTestCase2<StartScreenActivity> {
     private Solo solo;
-    public StartScreenActivitySystemTest() {
+    public SystemTest() {
         super(StartScreenActivity.class);
     }
 
@@ -26,19 +26,22 @@ public class StartScreenActivitySystemTest extends ActivityInstrumentationTestCa
         super.setUp();
         solo = new Solo(getInstrumentation(), getActivity());
         setActivityInitialTouchMode(false);
-        Context context = getActivity();
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        prefs.edit().putString("firstName", "TestFirstName").apply();
-        prefs.edit().putString("lastName", "TestLastName").apply();
-        prefs.edit().putString("pin", PASSWORD).apply();
-        prefs.edit().putString("pin_mock", SPECIAL_PASSWORD).apply();
-        solo.goBack();
     }
 
     @Override
     public void tearDown() throws Exception {
         solo.finishOpenedActivities();
         super.tearDown();
+    }
+
+    //weird name but sure this will get executed first
+    public void testAASetupAccount(){
+        Context context = getActivity();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        prefs.edit().putString("firstName", "TestFirstName").apply();
+        prefs.edit().putString("lastName", "TestLastName").apply();
+        prefs.edit().putString("pin", PASSWORD).apply();
+        prefs.edit().putString("pin_mock", SPECIAL_PASSWORD).apply();
     }
 
     public void testStartTripSettingActivity() throws Exception {
