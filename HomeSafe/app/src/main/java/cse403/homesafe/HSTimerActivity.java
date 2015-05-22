@@ -412,8 +412,20 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
                 } else if (retcode.equals(PasswordActivity.RetCode.SPECIAL)) {
                     buildGoogleApiClient();
                     onStart();
-                    timer.cancel();
-                    startActivity(new Intent(HSTimerActivity.this, ArrivalScreenActivity.class));
+                    // extend timer as usual
+                    // Each timer object is immutable so we must cancel the old one to create
+                    // a new timer object with more time in it.
+                    if (timer != null) {
+                        timer.cancel();
+                    }
+                    // the selected time in the drop down menu
+                    String selectedTime = timeOptions.getSelectedItem().toString();
+                    countDownPeriod += parseTimeString(selectedTime);
+                    // the maximum capacity for the progress bar must be increased
+                    pb.setMax((int) (countDownPeriod / 1000));
+                    createTimer();
+                    Toast.makeText(HSTimerActivity.this, "Added " + selectedTime,
+                            Toast.LENGTH_SHORT).show();
                 } else {
                     // nothing to do here. Have a lovely day.
                 }
