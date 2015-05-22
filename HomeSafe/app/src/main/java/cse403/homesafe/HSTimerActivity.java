@@ -191,54 +191,19 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
 
             @Override
             public void onClick(View v) {
-                alert = new AlertDialog.Builder(HSTimerActivity.this);
-
-                alert.setTitle("Enter Passcode");
-                alert.setMessage("To Add more time, Enter Correct Passcode");
-
-                // Set an EditText view to get user input
-                final EditText input = new EditText(HSTimerActivity.this);
-                input.setTextColor(0xFFFFFFFF);
-                input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
-                input.setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
-                input.setGravity(Gravity.CENTER_HORIZONTAL);
-                alert.setView(input);
-
-                alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        String enteredPassword = input.getText().toString();
-                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                        String pin = preferences.getString("pin", null);
-                        if (pin == null)
-                            Log.e(TAG, "Password wasn't stored or accessed correctly");
-
-                        if (pin.equals(enteredPassword)) {
-                            Log.d(TAG, "Password input correctly!");
-                            Toast.makeText(HSTimerActivity.this, "Correct Pincode", Toast.LENGTH_SHORT).show();
-                            // Each timer object is immutable so we must cancel the old one to create
-                            // a new timer object with more time in it.
-                            if (timer != null) {
-                                timer.cancel();
-                            }
-                            // the selected time in the drop down menu
-                            String selectedTime = timeOptions.getSelectedItem().toString();
-                            countDownPeriod += parseTimeString(selectedTime);
-
-                            // the maximum capacity for the progress bar must be increased
-                            pb.setMax((int) (countDownPeriod / 1000));
-                            createTimer();
-                            Toast.makeText(HSTimerActivity.this, "Added " + selectedTime,
-                                    Toast.LENGTH_SHORT).show();
-                        } else {
-                            Log.d(TAG, "Password input incorrectly!");
-                            dialog.cancel();
-                            Toast.makeText(HSTimerActivity.this, "Incorrect Pincode. Please enter again", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-
-                alert.show();
+                Intent i = new Intent(getApplicationContext(), PasswordActivity.class);
+                String time = "90";
+                if ((currentTimeMillis / 1000) < 90) {
+                    time = (currentTimeMillis / 1000) + "";
+                }
+                Log.e(TAG, currentTimeMillis + "");
+                String message = "Please enter your password to extend timer";
+                String numChances = "3";
+                String confirmButtonMessage = "Extend timer";
+                i.putExtra("passwordParams", new ArrayList<String>(Arrays.asList(time, message, numChances, confirmButtonMessage)));
+                startActivityForResult(i, 2);
             }
+
         });
         return true;
     }
@@ -403,25 +368,70 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
     // 5.) make prettier: Maybe a dark grey background color to mimic the pop-up dialogue we
     //     had before?
     // 6.) limit to 4 nums when entering a password.
-
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data.getExtras().containsKey("retval")) {
             Serializable retcode = data.getExtras().getSerializable("retval");
-            if (retcode.equals(PasswordActivity.RetCode.SUCCESS)) {
-                timer.cancel();
-                startActivity(new Intent(HSTimerActivity.this, ArrivalScreenActivity.class));
-            } else if (retcode.equals(PasswordActivity.RetCode.FAILURE)) {
-                startActivity(new Intent(HSTimerActivity.this, DangerActivity.class));
-            } else if (retcode.equals(PasswordActivity.RetCode.SPECIAL)) {
-                buildGoogleApiClient();
-                onStart();
-                timer.cancel();
-                startActivity(new Intent(HSTimerActivity.this, ArrivalScreenActivity.class));
+            if (requestCode == 1) {
+                // Triggered from end trip
+                Log.d(TAG, "Password activity call back from end trip");
+                if (retcode.equals(PasswordActivity.RetCode.SUCCESS)) {
+                    timer.cancel();
+                    startActivity(new Intent(HSTimerActivity.this, ArrivalScreenActivity.class));
+                } else if (retcode.equals(PasswordActivity.RetCode.FAILURE)) {
+                    startActivity(new Intent(HSTimerActivity.this, DangerActivity.class));
+                } else if (retcode.equals(PasswordActivity.RetCode.SPECIAL)) {
+                    buildGoogleApiClient();
+                    onStart();
+                    timer.cancel();
+                    startActivity(new Intent(HSTimerActivity.this, ArrivalScreenActivity.class));
+                } else {
+                    // nothing to do here. Have a lovely day.
+                }
             } else {
-                // nothing to do here. Have a lovely day.
+                // Triggered from extend timer
+                Log.d(TAG, "Password activity call back from extend timer");
+
+                if (retcode.equals(PasswordActivity.RetCode.SUCCESS)) {
+                    // extend timer
+                    // Each timer object is immutable so we must cancel the old one to create
+                    // a new timer object with more time in it.
+                    if (timer != null) {
+                        timer.cancel();
+                    }
+                    // the selected time in the drop down menu
+                    String selectedTime = timeOptions.getSelectedItem().toString();
+                    countDownPeriod += parseTimeString(selectedTime);
+                    // the maximum capacity for the progress bar must be increased
+                    pb.setMax((int) (countDownPeriod / 1000));
+                    createTimer();
+                    Toast.makeText(HSTimerActivity.this, "Added " + selectedTime,
+                            Toast.LENGTH_SHORT).show();
+                } else if (retcode.equals(PasswordActivity.RetCode.FAILURE)) {
+                    // stay
+                } else if (retcode.equals(PasswordActivity.RetCode.SPECIAL)) {
+                    buildGoogleApiClient();
+                    onStart();
+                    // extend timer as usual
+                    // Each timer object is immutable so we must cancel the old one to create
+                    // a new timer object with more time in it.
+                    if (timer != null) {
+                        timer.cancel();
+                    }
+                    // the selected time in the drop down menu
+                    String selectedTime = timeOptions.getSelectedItem().toString();
+                    countDownPeriod += parseTimeString(selectedTime);
+                    // the maximum capacity for the progress bar must be increased
+                    pb.setMax((int) (countDownPeriod / 1000));
+                    createTimer();
+                    Toast.makeText(HSTimerActivity.this, "Added " + selectedTime,
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    // nothing to do here. Have a lovely day.
+                }
+
             }
         }
-
     }
 
 }
