@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Set Destination From"
+        android:text="Choose Destination"
         android:textColor="@android:color/black"
         android:id="@+id/textView1"
         android:textSize="13pt"
@@ -21,14 +21,12 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/favoriteLocationSpinner"
-        android:textColor="#ffffff"
-        android:background="@color/primary_dark"
+        style="@android:style/Widget.Holo.Light.Spinner"
         android:textSize="30dp"
-        android:layout_below="@+id/textView1"
         android:layout_centerHorizontal="true"
+        android:layout_below="@+id/textView1"
         android:layout_marginLeft="30dp"
         android:popupBackground="@android:color/white"
-        android:elevation="3dp"
         >
     </Spinner>
 
@@ -46,7 +44,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Map"
+        android:text="Select From Map"
+        android:textAllCaps="false"
         android:id="@+id/chooseFromMap"
         android:textSize="20dp"
         android:layout_marginLeft="20dp"
@@ -65,17 +64,6 @@
         android:layout_below="@+id/chooseFromMap"
         android:layout_centerHorizontal="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Set Timer"
-        android:textColor="@android:color/black"
-        android:id="@+id/textView2"
-        android:textSize="13pt"
-        android:layout_marginTop="10pt"
-        android:layout_below="@+id/currentDestinationText"
-        android:layout_centerHorizontal="true" />
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -87,12 +75,24 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:layout_marginTop="10dp"
+        android:text="Hr : Min"
+        android:textSize="20dp"
+        android:id="@+id/hint"
+        android:layout_below="@+id/currentDestinationText"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"/>
+
     <TimePicker
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/spinnerETA"
         android:timePickerMode="spinner"
-        android:layout_below="@+id/textView2"
+        android:layout_below="@+id/hint"
         android:layout_centerHorizontal="true">
     </TimePicker>
 

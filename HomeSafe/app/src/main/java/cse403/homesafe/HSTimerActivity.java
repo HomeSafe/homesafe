@@ -240,7 +240,7 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
         list.add("1 hr");
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, list);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dataAdapter.setDropDownViewResource(R.layout.spinner_drop_down);
         timeOptions.setAdapter(dataAdapter);
         return true;
     }
