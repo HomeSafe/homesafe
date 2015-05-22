@@ -1,12 +1,17 @@
 package cse403.homesafe;
 
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.text.InputFilter;
@@ -180,6 +185,21 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
             @Override
             public void onClick(View v) {
 //                promptForPassword();
+                // buzz to alert user
+                Vibrator vib = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+                vib.vibrate(500);
+
+                // notification to further alert user
+                NotificationManager notificationManager;
+                notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                Notification notification;
+                notification = new Notification();
+                PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0,
+                        null, 0);
+                notification.setLatestEventInfo(getApplicationContext(), "Enter password", "Enter password", pendingIntent);
+                notificationManager.notify(1010, notification);
+
+                // prompt for password
                 Intent i = new Intent(getApplicationContext(), PasswordActivity.class);
                 String time = "120";
                 String message = "Please enter your password to end-trip";
