@@ -14,3 +14,5 @@
  * Force user to setup setting and contact on first run [IN PROGRESS, Jacob]
 
  * Special message when mock password is enterted [NOT STARTED]
+
+ * Require internet access to use app [NOT STARTED]
