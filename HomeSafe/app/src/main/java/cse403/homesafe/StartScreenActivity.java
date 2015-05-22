@@ -3,6 +3,8 @@ package cse403.homesafe;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
@@ -16,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import cse403.homesafe.Data.Contacts;
@@ -41,6 +44,18 @@ public class StartScreenActivity extends ActionBarActivity {
         setContentView(R.layout.activity_start_screen);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        buttonStart = (Button)findViewById(R.id.button);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.navList);
+
+        setupDrawer();
+
+        if (!isNetworkAvailable()) {
+            TextView mainTxt = (TextView) findViewById(R.id.textView);
+            mainTxt.setText("No Network Access");
+            return;
+        }
+
         if (!isAccountSetUp()) {
             Toast.makeText(getApplicationContext(),
                     "Set a first/last name and passcode.", Toast.LENGTH_LONG)
@@ -55,12 +70,7 @@ public class StartScreenActivity extends ActionBarActivity {
         mDbHelper = new HomeSafeDbHelper(this);
         DbFactory.retrieveFromDb(mDbHelper);
 
-        buttonStart = (Button)findViewById(R.id.button);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.navList);
-
         addDrawerItems();
-        setupDrawer();
         setupButton();
 
         // enable ActionBar app icon to behave as action to toggle nav drawer
@@ -68,6 +78,14 @@ public class StartScreenActivity extends ActionBarActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
 
         ContextHolder.setContext(getApplicationContext());
+    }
+
+    // return true if user can connect to internet
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(getApplicationContext().CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     //add the menu items to the drawer side bar

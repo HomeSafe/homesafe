@@ -261,7 +261,8 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
                     int minutes = ((int) distAndTime.getTime() - hours * 3600) / 60;
                     ETA.setCurrentHour(hours);
                     ETA.setCurrentMinute(minutes);
-
+                    TextView estimateTime = (TextView) findViewById(R.id.hint);
+                    estimateTime.setText("Est. Arrival in Hour and Minute");
                     if (distAndTime != null && mLastLocation != null) {
                         startTrip.setEnabled(true);
                         StringBuilder estimationMsg = new StringBuilder();
@@ -337,8 +338,6 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
 
                 TextView currentDestinationText = (TextView) findViewById(R.id.currentDestinationText);
                 currentDestinationText.setText("Destination: " + nameOfDest);
-                TextView estimateTime = (TextView) findViewById(R.id.hint);
-                estimateTime.setText("Est. Time in Hours and Minute");
             } else {
                 TextView currentDestinationText = (TextView) findViewById(R.id.currentDestinationText);
                 currentDestinationText.setText("No Destination Selected");
