@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Instrumentation;
 import android.app.Instrumentation.ActivityMonitor;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.TouchUtils;
 import android.test.UiThreadTest;
@@ -36,6 +38,11 @@ public class StartScreenActivitySystemTest extends ActivityInstrumentationTestCa
         super.setUp();
         solo = new Solo(getInstrumentation(), getActivity());
         setActivityInitialTouchMode(false);
+
+        SharedPreferences prefs = this.getActivity().getSharedPreferences("cse403.homesafe.app", Context.MODE_PRIVATE);
+        String first = prefs.getString("cse403.homesafe.app.firstName", new String());
+        prefs.edit().putString("cse403.homesafe.app.firstName", "Luyi").apply();
+        prefs.edit().putString("cse403.homesafe.app.lastName", "Lu").apply();
     }
 
     public void testStartTripSettingActivity() throws Exception {
