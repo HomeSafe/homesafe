@@ -1,6 +1,5 @@
 package cse403.homesafe;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -102,7 +101,6 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
      * Prompt user for password. Send entered password to appropriate callback.
      */
     private void promptForPassword() {
-
         Intent i = new Intent(getApplicationContext(), PasswordActivity.class);
         String time;
         if(currentTier == 1) {
