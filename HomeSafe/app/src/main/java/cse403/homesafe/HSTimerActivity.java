@@ -411,6 +411,7 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
                 timer.cancel();
                 startActivity(new Intent(HSTimerActivity.this, ArrivalScreenActivity.class));
             } else if (retcode.equals(PasswordActivity.RetCode.FAILURE)) {
+                Log.i(TAG, "FAILURE -- calling DangerActivity again");
                 startActivity(new Intent(HSTimerActivity.this, DangerActivity.class));
             } else if (retcode.equals(PasswordActivity.RetCode.SPECIAL)) {
                 buildGoogleApiClient();

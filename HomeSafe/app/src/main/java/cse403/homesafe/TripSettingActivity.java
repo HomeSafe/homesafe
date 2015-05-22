@@ -159,7 +159,11 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
                 } else {
                     Log.e(TAG, "Google Play Services is not installed");
                 }
+            } else {
+                Log.e(TAG, "result code was not okay: " + resultCode);
             }
+        } else {
+            Log.e(TAG, "request code was not PLACE_PICKER_REQUEST: " + requestCode);
         }
     }
 

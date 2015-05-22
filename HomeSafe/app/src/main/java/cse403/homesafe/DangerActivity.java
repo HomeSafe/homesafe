@@ -51,7 +51,6 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
     private RecyclerView.Adapter rvAdapter;
 
     private int currentTier;
-    private AlertDialog.Builder alert;
 
     private final ArrayList<Contact> contacts1 = new ArrayList<Contact>(Contacts.getInstance().getContactsInTier(Contacts.Tier.ONE));
     private final ArrayList<Contact> contacts2 = new ArrayList<Contact>(Contacts.getInstance().getContactsInTier(Contacts.Tier.TWO));
@@ -78,7 +77,7 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
         RecyclerView.LayoutManager rvLayoutManager = new LinearLayoutManager(this);
         contactsView.setLayoutManager(rvLayoutManager);
         contactsView.setHasFixedSize(true);
-
+        currentTier = 1;
         promptForPassword();
     }
 
@@ -101,12 +100,14 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
      * Prompt user for password. Send entered password to appropriate callback.
      */
     private void promptForPassword() {
+        Log.i(TAG, "PROMPT FOR PASSWORD WITH currentTier is " + currentTier);
+        Log.i(TAG, Log.getStackTraceString(new Exception()));
         Intent i = new Intent(getApplicationContext(), PasswordActivity.class);
         String time;
         if(currentTier == 1) {
-            time = "120"; // 2 minutes
+            time = "12"; // 2 minutes
         } else if (currentTier == 2) {
-            time = 5 * 60 + "";
+            time = 5 * 6 + "";
         } else { // tier 3+
             time = 30 * 60 + "";
         }
