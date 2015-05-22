@@ -68,8 +68,9 @@ public class Destination implements GoogleMapsUtilsCallback {
      * so that no real address validation is required
      * @param name name of the location
      */
-    public Destination (String name){
+    public Destination (String name, long did){
         this.name = name;
+        this.did = did;
     }
     /**
      * Constructs a new Destination object with a name, address, and location
