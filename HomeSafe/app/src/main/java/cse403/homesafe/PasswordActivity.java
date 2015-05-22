@@ -90,7 +90,7 @@ public class PasswordActivity extends ActionBarActivity {
                 Intent i = new Intent();
                 i.putExtra("retval", RetCode.FAILURE);
                 setResult(RESULT_OK, i);
-                finish();
+                PasswordActivity.this.finish();
             }
         }.start();
 
