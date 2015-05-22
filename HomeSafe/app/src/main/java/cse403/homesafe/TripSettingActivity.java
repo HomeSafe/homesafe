@@ -145,7 +145,6 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == RESULT_OK) {
-                //TODO actually do something with the
                 Place place = PlacePicker.getPlace(data, this);
                 destination = new Location("New Destination");
                 destination.setLatitude(place.getLatLng().latitude);

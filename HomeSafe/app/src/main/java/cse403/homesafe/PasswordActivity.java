@@ -59,6 +59,10 @@ public class PasswordActivity extends ActionBarActivity {
         String message = params.get(1);
         numchances = Integer.parseInt(params.get(2));
         String confirmButtonMessage = params.get(3);
+        boolean enableCancelButton = true;
+        if (params.size() >= 4) {
+            enableCancelButton = Boolean.parseBoolean(params.get(4));
+        }
 
         // Make on-screen components visible.
         cancel = (Button) findViewById(R.id.btnCancel);
@@ -70,6 +74,8 @@ public class PasswordActivity extends ActionBarActivity {
         // set the button message and the test message
         confirm.setText(confirmButtonMessage);
         titleMsg.setText(message);
+
+        cancel.setEnabled(enableCancelButton);
 
         timer = new CountDownTimer(time * 1000, 1) {
             @Override
