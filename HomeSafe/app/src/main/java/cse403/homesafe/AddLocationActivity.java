@@ -29,6 +29,7 @@ import cse403.homesafe.Data.HomeSafeDbHelper;
 public class AddLocationActivity extends ActionBarActivity {
     public static final String EMPTY_STR = "";
     Button discardChange;
+    Button saveChange;
     ImageView saveLocation;
     Destinations mDesList;
     HomeSafeDbHelper mDbHelper;
@@ -51,6 +52,7 @@ public class AddLocationActivity extends ActionBarActivity {
         mActionBar.setCustomView(mCustomView);
         mActionBar.setDisplayShowCustomEnabled(true);
         discardChange = (Button)findViewById(R.id.discard);
+        saveChange = (Button)findViewById(R.id.save);
         saveLocation = (ImageView) findViewById(R.id.save_menu_item);
         setUpButton();
     }
@@ -99,6 +101,12 @@ public class AddLocationActivity extends ActionBarActivity {
                 } else {
                     Toast.makeText(AddLocationActivity.this, "Missing Information", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+        saveChange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveLocation.callOnClick();
             }
         });
     }

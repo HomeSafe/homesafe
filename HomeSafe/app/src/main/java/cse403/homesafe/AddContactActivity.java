@@ -34,6 +34,7 @@ import cse403.homesafe.Data.HomeSafeDbHelper;
 public class AddContactActivity extends ActionBarActivity {
     public static final String EMPTY_STR = "";
     Button discardChange;
+    Button saveChange;
     ImageView saveContact;
     HomeSafeDbHelper mDbHelper;
     Contacts mContactList;
@@ -58,6 +59,7 @@ public class AddContactActivity extends ActionBarActivity {
         mActionBar.setCustomView(mCustomView);
         mActionBar.setDisplayShowCustomEnabled(true);
         discardChange = (Button)findViewById(R.id.discard);
+        saveChange = (Button)findViewById(R.id.save);
         saveContact = (ImageView) findViewById(R.id.save_menu_item);
         EditText mEditTier = (EditText)findViewById(R.id.tier_text);
         tierNum = getIntent().getStringExtra("TAB");
@@ -120,6 +122,12 @@ public class AddContactActivity extends ActionBarActivity {
                     //if information is incomplete, make a toast to notify user
                     Toast.makeText(AddContactActivity.this, "Missing Information", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+        saveChange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveContact.callOnClick();
             }
         });
     }
