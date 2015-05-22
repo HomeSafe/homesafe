@@ -2,6 +2,7 @@ package cse403.homesafe;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,6 +17,7 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -117,6 +119,8 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
         input.setGravity(Gravity.CENTER_HORIZONTAL);
         alert.setView(input);
 
+        alert.setCancelable(false);
+
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 String enteredPassword = input.getText().toString();
@@ -151,6 +155,7 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
         });
 
         alert.show();
+
     }
 
     /* Creates and starts a new immutableCountDownTimer object.
