@@ -38,6 +38,10 @@ public class Contacts{
         contacts = new LinkedList<Contact>();
     }
 
+    /**
+     * gets the number of contacts in Contacts instance
+     * @return number of contacts
+     */
     public int getNumContactInInstance(){
         return contacts.size();
     }
