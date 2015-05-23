@@ -6,8 +6,6 @@ The <i>updated</i> SDS can be found [here](https://drive.google.com/file/d/0B4eV
 
 The Design Changes and Rationale Document is located in the Design Changes and Rationale Directory in this repository.
 
-NOTE: As of Beta release, only Android 5.0 Lollipop (API level 21) and above is <i>fully</i> supported. Android 4.0 Ice Cream Sandwich (API level 14) through Android 4.4 KitKat (API level 19) have limited support at the time. All other Android versions have no support.
-
 Homesafe - Developer Documentation
 ========
 ###Table of Contents
@@ -86,7 +84,9 @@ app/build/outputs/reports/androidTests/connected/index.html.
 ```
 If you'd like to run individual tests, you'll find core class JUnit tests in app/src/main/java/UnitTests/ and Activity unit tests in app/src/androidTest/java/cse403/homesafe/test/.
 
-To run individual tests from Android Studio, you'll need to switch back and forth between modes. Makes sure unit testing is enabled first in Preferences > Build Tools > Gradle > Experimental. To test unit testing, go to View > Tool Windows > Build Variants and switch to Unit Tests. To run the instrumentation tests, switch it to Instrumentation Tests.
+To run individual tests from Android Studio, you'll need to manually switch back and forth between the two modes: unit testing mode and instrumentation testing mode. If you're running Android Studio 1.1 or below, make sure unit testing is enabled first by going to Preferences > Build Tools > Gradle > Experimental and ticking the Unit Testing box (this step is unnecesssary in newer versions).
+
+To run unit tests, go to View > Tool Windows > Build Variants and pick Unit Tests in the dropdown. To run instrumentation (i.e. Activity) tests, switch it to Instrumentation Tests.
 
 ###Setting Up Automated Builds and Tests
 Building and testing can be a pain; if you're interesting in setting up automated daily builds the following sites can help you on your way to setting some up: [Jenkins](http://jenkins-ci.org/ "Jenkins"), [CruiseControl](http://cruisecontrol.sourceforge.net/ "CruiseControl"), [Cron](http://en.wikipedia.org/wiki/Cron "Cron").
