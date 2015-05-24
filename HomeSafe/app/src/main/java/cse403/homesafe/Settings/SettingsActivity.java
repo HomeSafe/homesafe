@@ -5,8 +5,7 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.widget.Toast;
 
-import cse403.homesafe.R;
-import cse403.homesafe.StartScreenActivity;
+import cse403.homesafe.StartActivity;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -33,7 +32,7 @@ public class SettingsActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        if (StartScreenActivity.isAccountSetUp(getApplicationContext())) {
+        if (StartActivity.isAccountSetUp(getApplicationContext())) {
             super.onBackPressed();
         } else {
             Toast.makeText(getApplicationContext(),

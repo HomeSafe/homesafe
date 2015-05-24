@@ -8,15 +8,15 @@ import android.test.ActivityInstrumentationTestCase2;
 import com.robotium.solo.Solo;
 
 import cse403.homesafe.R;
-import cse403.homesafe.StartScreenActivity;
+import cse403.homesafe.StartActivity;
 
 /**
  * Created by dliuxy94 on 5/14/15.
  */
-public class SystemTest extends ActivityInstrumentationTestCase2<StartScreenActivity> {
+public class SystemTest extends ActivityInstrumentationTestCase2<StartActivity> {
     private Solo solo;
     public SystemTest() {
-        super(StartScreenActivity.class);
+        super(StartActivity.class);
     }
 
     public static final String PASSWORD = "1111";

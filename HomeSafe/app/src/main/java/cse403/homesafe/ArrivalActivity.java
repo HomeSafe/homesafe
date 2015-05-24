@@ -9,8 +9,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -21,11 +19,9 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import cse403.homesafe.Data.Contact;
 import cse403.homesafe.Data.Contacts;
-import cse403.homesafe.Messaging.Email;
 import cse403.homesafe.Messaging.Messenger;
 
 /**
@@ -36,7 +32,7 @@ import cse403.homesafe.Messaging.Messenger;
  * would like to have contacts notified on safe arrival, these messages are sent out
  * after contacting google play services.
  */
-public class ArrivalScreenActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class ArrivalActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     // on screen components
     private final String TAG = "ArrivalScreenActivity";
     private RecyclerView.Adapter rvAdapter;
@@ -86,7 +82,7 @@ public class ArrivalScreenActivity extends ActionBarActivity implements GoogleAp
                 // When this button is clicked, clear the activity stack and start fresh from
                 // the start screen.
                 startActivity(new Intent(getApplicationContext(),
-                        StartScreenActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        StartActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
             }
         });
     }
@@ -129,12 +125,12 @@ public class ArrivalScreenActivity extends ActionBarActivity implements GoogleAp
                 // Notify contacts on safe arrival
                 Messenger.sendNotifications(Contacts.Tier.ONE, lastKnownLocation,
                         getApplicationContext(), Messenger.MessageType.HOMESAFE);
-                rvAdapter = new ArrivalScreenAdapter(contacts);
+                rvAdapter = new ArrivalAdapter(contacts);
             } else {
                 // Don't contact anyone
                 ArrayList<Contact> c = new ArrayList<Contact>();
                 c.add(new Contact("No one", "", "", Contacts.Tier.ONE));
-                rvAdapter = new ArrivalScreenAdapter(c);
+                rvAdapter = new ArrivalAdapter(c);
             }
             contactsView.setAdapter(rvAdapter);
 

@@ -12,7 +12,7 @@ import java.util.List;
 
 import cse403.homesafe.Data.Contact;
 
-public class ArrivalScreenAdapter extends RecyclerView.Adapter<ArrivalScreenAdapter.ViewHolder> {
+public class ArrivalAdapter extends RecyclerView.Adapter<ArrivalAdapter.ViewHolder> {
      private List<Contact> contacts;
 
     // Provide a reference to the views for each data item
@@ -32,23 +32,23 @@ public class ArrivalScreenAdapter extends RecyclerView.Adapter<ArrivalScreenAdap
 //    public ArrivalScreenAdapter(String[] dataset) {
 //        this.dataset = dataset;
 //    }
-    public ArrivalScreenAdapter(ArrayList<Contact> contacts) {
+    public ArrivalAdapter(ArrayList<Contact> contacts) {
         this.contacts = Collections.unmodifiableList(contacts);
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public ArrivalScreenAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ArrivalAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.arrival_screen_card_view, parent, false);
         // set the view's size, margins, paddings, and layout parameters
 
-        return new ArrivalScreenAdapter.ViewHolder(v);
+        return new ArrivalAdapter.ViewHolder(v);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ArrivalScreenAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(ArrivalAdapter.ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
 //        holder.name.setText(dataset[position] + " has been notified");
