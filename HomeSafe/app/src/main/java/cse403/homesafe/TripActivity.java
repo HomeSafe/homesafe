@@ -183,7 +183,7 @@ public class TripActivity extends ActionBarActivity implements GoogleApiClient.C
                     time = (currentTimeMillis / 1000) + "";
                 }
                 Log.i(TAG, currentTimeMillis + "");
-                String message = "Enter Pin to Extend Timer";
+                String message = "";
                 String numChances = "3";
                 String confirmButtonMessage = "Extend timer";
                 i.putExtra("passwordParams", new ArrayList<String>(Arrays.asList(time, message, numChances, confirmButtonMessage)));
@@ -206,7 +206,7 @@ public class TripActivity extends ActionBarActivity implements GoogleApiClient.C
                     time = (currentTimeMillis / 1000) + "";
                 }
                 Log.e(TAG, currentTimeMillis + "");
-                String message = "Enter Pin to End Trip";
+                String message = "";
                 String numChances = "3";
                 String confirmButtonMessage = "End Trip";
                 i.putExtra("passwordParams", new ArrayList<String>(Arrays.asList(time, message, numChances, confirmButtonMessage)));
