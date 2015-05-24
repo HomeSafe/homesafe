@@ -37,18 +37,12 @@ public class FavLocationsActivity extends ActionBarActivity {
         setUpFab();
     }
 
-//    @Override
-//    public void onResume(){
-//        super.onResume();
-//        System.out.println(Destinations.getInstance().getDestinations());
-//
-//    }
-
     private void setUpFab(){
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(FavLocationsActivity.this, AddLocationActivity.class);
+                Intent i = new Intent(FavLocationsActivity.this, EditLocationActivity.class);
+                i.putExtra("ACTIVITY", "ADD");
                 startActivity(i);
             }
         });

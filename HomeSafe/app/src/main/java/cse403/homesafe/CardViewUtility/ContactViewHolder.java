@@ -46,6 +46,7 @@ public class ContactViewHolder extends RecyclerView.ViewHolder {
                 i.putExtra("TIER", tierNum);
                 //trigger EditContactActivity
                 Activity activity = (Activity) v.getContext();
+                i.putExtra("ACTIVITY", "EDIT");
                 activity.startActivity(i);
                 //finish current activity
                 activity.finish();
