@@ -41,6 +41,7 @@ import cse403.homesafe.Destinations.DestinationsActivity;
 import cse403.homesafe.Messaging.Messenger;
 import cse403.homesafe.Settings.SettingsActivity;
 import cse403.homesafe.Util.ContextHolder;
+import cse403.homesafe.Util.GoogleGPSUtils;
 
 //This class is for Start Screen Activity, where it handles the side bar menu and start trip events
 public class StartActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -104,10 +105,10 @@ public class StartActivity extends ActionBarActivity implements GoogleApiClient.
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //TODO hardcoded case, needs a switch to go to three different screens
                 Intent i;
-                if(position == 0){
+                if (position == 0) {
                     i = new Intent(StartActivity.this, ContactsActivity.class);
                     startActivity(i);
-                } else if(position == 1){
+                } else if (position == 1) {
                     i = new Intent(StartActivity.this, DestinationsActivity.class);
                     startActivity(i);
                 } else {
@@ -142,7 +143,7 @@ public class StartActivity extends ActionBarActivity implements GoogleApiClient.
         buttonStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Contacts.getInstance().getNumContactInInstance() != 0) {
+                if (Contacts.getInstance().getNumContactInInstance() != 0) {
                     Intent i = new Intent(StartActivity.this, TripSettingActivity.class);
                     startActivity(i);
                 } else {
@@ -230,8 +231,15 @@ public class StartActivity extends ActionBarActivity implements GoogleApiClient.
             if (retcode.equals(PasswordActivity.RetCode.SUCCESS)) {
                 startActivity(new Intent(StartActivity.this, SettingsActivity.class));
             } else if (retcode.equals(PasswordActivity.RetCode.SPECIAL)) {
-                buildGoogleApiClient();
-                onStart();
+//                buildGoogleApiClient();
+//                onStart();
+                GoogleGPSUtils gpsUtils = null;
+                try {
+                    gpsUtils = new GoogleGPSUtils(this);
+                    gpsUtils.alertContacts(this, 1); // Util is not connected prior to running this method. need to be fixed
+                } catch (Exception ex) {
+                    Log.e(TAG, "Start gpsUtils failed");
+                }
                 startActivity(new Intent(StartActivity.this, SettingsActivity.class));
             }
         }
