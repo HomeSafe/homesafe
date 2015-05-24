@@ -18,7 +18,7 @@ import cse403.homesafe.CardViewUtility.LocationRecyclerAdapter;
 import cse403.homesafe.Data.Destinations;
 
 
-public class FavLocationsActivity extends ActionBarActivity {
+public class DestinationsActivity extends ActionBarActivity {
     FloatingActionButton fab;
     RecyclerView recyclerView;
     @Override
@@ -41,7 +41,7 @@ public class FavLocationsActivity extends ActionBarActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(FavLocationsActivity.this, EditLocationActivity.class);
+                Intent i = new Intent(DestinationsActivity.this, cse403.homesafe.EditDestinationActivity.class);
                 i.putExtra("ACTIVITY", "ADD");
                 startActivity(i);
             }
