@@ -34,7 +34,6 @@ public class PasswordActivity extends ActionBarActivity {
     private Button confirm;
     private EditText passwordField;         // where user inputs their password
     private TextView timerView;             // how much time is left to correctly input password
-    private TextView titleMsg;              // displays the purpose of entering the password
 
     /**
      * Represents the 3 possible user-interactions with the Password screen;
@@ -56,12 +55,11 @@ public class PasswordActivity extends ActionBarActivity {
         // get the parameters from the previous activity
         ArrayList<String> params = getIntent().getStringArrayListExtra("passwordParams");
         int time = Integer.parseInt(params.get(0));
-        String message = params.get(1);
-        numchances = Integer.parseInt(params.get(2));
-        String confirmButtonMessage = params.get(3);
+        numchances = Integer.parseInt(params.get(1));
+        String confirmButtonMessage = params.get(2);
         boolean enableCancelButton = true;
-        if (params.size() >= 5) {
-            enableCancelButton = Boolean.parseBoolean(params.get(4));
+        if (params.size() >= 4) {
+            enableCancelButton = Boolean.parseBoolean(params.get(3));
         }
 
         // Make on-screen components visible.
@@ -69,11 +67,9 @@ public class PasswordActivity extends ActionBarActivity {
         confirm = (Button) findViewById(R.id.btnConfirm);
         passwordField = (EditText) findViewById(R.id.passwordField);
         timerView = (TextView) findViewById(R.id.timerView);
-        titleMsg = (TextView) findViewById(R.id.titleMsg);
 
         // set the button message and the test message
         confirm.setText(confirmButtonMessage);
-        titleMsg.setText(message);
 
         cancel.setEnabled(enableCancelButton);
 
