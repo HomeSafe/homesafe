@@ -6,7 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
-import cse403.homesafe.EditLocationActivity;
+import cse403.homesafe.Destinations.EditDestinationActivity;
 import cse403.homesafe.R;
 
 /**
@@ -25,7 +25,7 @@ public class LocationViewHolder extends RecyclerView.ViewHolder {
         address = (TextView) itemView.findViewById(R.id.address);
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                Intent i = new Intent(v.getContext(), EditLocationActivity.class);
+                Intent i = new Intent(v.getContext(), EditDestinationActivity.class);
                 i.putExtra("NAME", name.getText().toString());
                 i.putExtra("ADDRESS", address.getText().toString());
                 i.putExtra("DID", did);

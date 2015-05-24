@@ -1,4 +1,4 @@
-package cse403.homesafe;
+package cse403.homesafe.Contacts;
 import android.content.Intent;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
@@ -11,6 +11,7 @@ import com.melnykov.fab.FloatingActionButton;
 import cse403.homesafe.ContactTabs.SlidingTabLayout;
 import cse403.homesafe.ContactTabs.ViewPagerAdapter;
 import cse403.homesafe.Data.HomeSafeDbHelper;
+import cse403.homesafe.R;
 
 //ContactActivity retrieves three different tier's list of contacts
 //and displays them in different tabs

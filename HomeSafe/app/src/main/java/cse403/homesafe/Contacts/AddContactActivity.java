@@ -1,16 +1,11 @@
-package cse403.homesafe;
+package cse403.homesafe.Contacts;
 
 
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -23,6 +18,7 @@ import cse403.homesafe.Data.Contact;
 import cse403.homesafe.Data.Contacts;
 import cse403.homesafe.Data.DbFactory;
 import cse403.homesafe.Data.HomeSafeDbHelper;
+import cse403.homesafe.R;
 
 /**
  * AddContactActivity manages the adding of a single contact,

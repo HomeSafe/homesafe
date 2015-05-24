@@ -1,24 +1,15 @@
 package cse403.homesafe;
 
-import android.app.AlertDialog;
 import android.app.NotificationManager;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.InputFilter;
-import android.text.InputType;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -96,7 +87,7 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
                 // When this button is clicked, clear the activity stack and start fresh from
                 // the start screen.
                 startActivity(new Intent(getApplicationContext(),
-                        StartScreenActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        StartActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
             }
         });
     }
@@ -126,7 +117,7 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
 
     private void onCorrectPinCode() {
         Toast.makeText(DangerActivity.this, "Correct Pincode", Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(DangerActivity.this, ArrivalScreenActivity.class));
+        startActivity(new Intent(DangerActivity.this, ArrivalActivity.class));
     }
 
     /**
@@ -153,7 +144,7 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
                 promptForPassword(); // keep asking
             } else if (retcode.equals(PasswordActivity.RetCode.SPECIAL)) {
                 alertContacts();
-                startActivity(new Intent(DangerActivity.this, ArrivalScreenActivity.class));
+                startActivity(new Intent(DangerActivity.this, ArrivalActivity.class));
             } else {
                 // nothing to do here. Have a lovely day. assert(false);
             }
@@ -183,7 +174,7 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
             }
 
             Messenger.sendNotifications(tier, mLastLocation, getApplicationContext(), Messenger.MessageType.DANGER);
-            rvAdapter = new ArrivalScreenAdapter(contacts);
+            rvAdapter = new ArrivalAdapter(contacts);
             contactsView.setAdapter(rvAdapter);
         }
     }
