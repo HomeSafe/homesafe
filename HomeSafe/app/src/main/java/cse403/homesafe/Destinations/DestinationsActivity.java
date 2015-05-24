@@ -1,21 +1,18 @@
-package cse403.homesafe;
+package cse403.homesafe.Destinations;
 
 import android.content.Intent;
-import android.location.Location;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
 import com.melnykov.fab.FloatingActionButton;
 
-import java.util.ArrayList;
-
 import cse403.homesafe.CardViewUtility.LocationRecyclerAdapter;
 import cse403.homesafe.Data.Destinations;
+import cse403.homesafe.R;
 
 
 public class DestinationsActivity extends ActionBarActivity {
@@ -41,7 +38,7 @@ public class DestinationsActivity extends ActionBarActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(DestinationsActivity.this, cse403.homesafe.EditDestinationActivity.class);
+                Intent i = new Intent(DestinationsActivity.this, cse403.homesafe.Destinations.EditDestinationActivity.class);
                 i.putExtra("ACTIVITY", "ADD");
                 startActivity(i);
             }

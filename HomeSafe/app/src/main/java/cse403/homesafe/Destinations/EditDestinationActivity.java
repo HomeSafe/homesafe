@@ -18,7 +18,6 @@ import cse403.homesafe.Data.DbFactory;
 import cse403.homesafe.Data.Destination;
 import cse403.homesafe.Data.Destinations;
 import cse403.homesafe.Data.HomeSafeDbHelper;
-import cse403.homesafe.DestinationsActivity;
 import cse403.homesafe.R;
 
 
