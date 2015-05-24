@@ -31,6 +31,7 @@ public class LocationViewHolder extends RecyclerView.ViewHolder {
                 i.putExtra("DID", did);
                 //trigger EditLocationActivity
                 Activity activity = (Activity) v.getContext();
+                i.putExtra("ACTIVITY", "EDIT");
                 activity.startActivity(i);
                 //finish current activity
                 activity.finish();

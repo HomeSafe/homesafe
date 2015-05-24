@@ -95,6 +95,7 @@ public class ContactsActivity extends ActionBarActivity {
                 tabNum = pager.getCurrentItem();
                 tabNum++;
                 i.putExtra("TAB", String.valueOf(tabNum));
+                i.putExtra("ACTIVITY", "ADD");
                 startActivity(i);
                 finish();
             }
