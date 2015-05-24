@@ -38,7 +38,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".StartScreenActivity"
+            android:name=".StartActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -47,21 +47,21 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ContactsActivity"
+            android:name=".Contacts.ContactsActivity"
             android:exported="true"
             android:label="@string/title_activity_contacts"
-            android:parentActivityName=".StartScreenActivity" >
+            android:parentActivityName=".StartActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".StartScreenActivity" />
+                android:value=".StartActivity" />
         </activity>
         <activity
-            android:name=".FavLocationsActivity"
+            android:name=".Destinations.DestinationsActivity"
             android:exported="true"
             android:label="@string/title_activity_fav_locations" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".StartScreenActivity" />
+                android:value=".StartActivity" />
         </activity>
         <activity
             android:name=".PasswordActivity"
@@ -73,38 +73,38 @@
             android:label="@string/title_activity_settings" >
         </activity>
         <activity
-            android:name=".AddContactActivity"
+            android:name=".Contacts.AddContactActivity"
             android:label="@string/title_activity_add_contact" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ContactsActivity" />
+                android:value=".Contacts.ContactsActivity" />
         </activity>
         <activity
-            android:name=".AddLocationActivity"
+            android:name=".Destinations.AddDestinationActivity"
             android:label="@string/title_activity_add_location" >
         </activity>
         <activity
-            android:name=".EditLocationActivity"
+            android:name=".Destinations.EditDestinationActivity"
             android:label=".EditLocationActivity" >
         </activity>
         <activity
-            android:name=".EditContactActivity"
+            android:name=".Contacts.EditContactActivity"
             android:label=".EditContactActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ContactsActivity" />
+                android:value=".Contacts.ContactsActivity" />
         </activity>
         <activity
             android:name=".DangerActivity"
             android:label=".DangerActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".HSTimerActivity" />
+                android:value=".TripActivity" />
         </activity>
         <activity android:name=".TripSettingActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".StartScreenActivity" />
+                android:value=".StartActivity" />
         </activity>
 
         <meta-data
@@ -118,11 +118,11 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".HSTimerActivity"
+            android:name=".TripActivity"
             android:label="@string/title_activity_hstimer" >
         </activity>
         <activity
-            android:name=".ArrivalScreenActivity"
+            android:name=".ArrivalActivity"
             android:label="@string/title_activity_arrival_screen" >
         </activity>
     </application>

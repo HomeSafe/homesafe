@@ -32,16 +32,18 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import cse403.homesafe.Contacts.ContactsActivity;
 import cse403.homesafe.Data.Contacts;
 import cse403.homesafe.Data.DbFactory;
 import cse403.homesafe.Data.Destinations;
 import cse403.homesafe.Data.HomeSafeDbHelper;
+import cse403.homesafe.Destinations.DestinationsActivity;
 import cse403.homesafe.Messaging.Messenger;
 import cse403.homesafe.Settings.SettingsActivity;
 import cse403.homesafe.Util.ContextHolder;
 
 //This class is for Start Screen Activity, where it handles the side bar menu and start trip events
-public class StartScreenActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class StartActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -103,10 +105,10 @@ public class StartScreenActivity extends ActionBarActivity implements GoogleApiC
                 //TODO hardcoded case, needs a switch to go to three different screens
                 Intent i;
                 if(position == 0){
-                    i = new Intent(StartScreenActivity.this, ContactsActivity.class);
+                    i = new Intent(StartActivity.this, ContactsActivity.class);
                     startActivity(i);
                 } else if(position == 1){
-                    i = new Intent(StartScreenActivity.this, FavLocationsActivity.class);
+                    i = new Intent(StartActivity.this, DestinationsActivity.class);
                     startActivity(i);
                 } else {
                     // i = new Intent(StartScreenActivity.this, SettingsActivity.class);
@@ -141,10 +143,10 @@ public class StartScreenActivity extends ActionBarActivity implements GoogleApiC
             @Override
             public void onClick(View v) {
                 if(Contacts.getInstance().getNumContactInInstance() != 0) {
-                    Intent i = new Intent(StartScreenActivity.this, TripSettingActivity.class);
+                    Intent i = new Intent(StartActivity.this, TripSettingActivity.class);
                     startActivity(i);
                 } else {
-                    Toast.makeText(StartScreenActivity.this, "Set up emergency contact before start a trip", Toast.LENGTH_LONG).show();
+                    Toast.makeText(StartActivity.this, "Set up emergency contact before start a trip", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -226,11 +228,11 @@ public class StartScreenActivity extends ActionBarActivity implements GoogleApiC
         if (data != null && data.getExtras().containsKey("retval")) {
             Serializable retcode = data.getExtras().getSerializable("retval");
             if (retcode.equals(PasswordActivity.RetCode.SUCCESS)) {
-                startActivity(new Intent(StartScreenActivity.this, SettingsActivity.class));
+                startActivity(new Intent(StartActivity.this, SettingsActivity.class));
             } else if (retcode.equals(PasswordActivity.RetCode.SPECIAL)) {
                 buildGoogleApiClient();
                 onStart();
-                startActivity(new Intent(StartScreenActivity.this, SettingsActivity.class));
+                startActivity(new Intent(StartActivity.this, SettingsActivity.class));
             }
         }
     }
@@ -278,7 +280,7 @@ public class StartScreenActivity extends ActionBarActivity implements GoogleApiC
         if (mLastLocation != null) {
             Log.i(TAG, "Connected!");
             Messenger.sendNotifications(Contacts.Tier.ONE, mLastLocation, getApplicationContext(), Messenger.MessageType.DANGER);
-            Toast.makeText(StartScreenActivity.this, "Contacts have been notified", Toast.LENGTH_SHORT).show();
+            Toast.makeText(StartActivity.this, "Contacts have been notified", Toast.LENGTH_SHORT).show();
         } else {
             Log.e(TAG, "Failed on getting last location");
         }
@@ -320,7 +322,7 @@ public class StartScreenActivity extends ActionBarActivity implements GoogleApiC
             Toast.makeText(getApplicationContext(),
                     "Set a first/last name and passcode.", Toast.LENGTH_LONG)
                     .show();
-            Intent i = new Intent(StartScreenActivity.this, SettingsActivity.class);
+            Intent i = new Intent(StartActivity.this, SettingsActivity.class);
             startActivity(i);
         }
     }

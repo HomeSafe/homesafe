@@ -1,4 +1,4 @@
-package cse403.homesafe;
+package cse403.homesafe.Destinations;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -17,6 +17,7 @@ import cse403.homesafe.Data.DbFactory;
 import cse403.homesafe.Data.Destination;
 import cse403.homesafe.Data.Destinations;
 import cse403.homesafe.Data.HomeSafeDbHelper;
+import cse403.homesafe.R;
 
 /**
  * AddLocationActivity manages the adding of a single location,
@@ -26,7 +27,7 @@ import cse403.homesafe.Data.HomeSafeDbHelper;
  * via google. If not,
  * toasts that these must be filled.
  */
-public class AddLocationActivity extends ActionBarActivity {
+public class AddDestinationActivity extends ActionBarActivity {
     public static final String EMPTY_STR = "";
     Button discardChange;
     Button saveChange;
@@ -63,7 +64,7 @@ public class AddLocationActivity extends ActionBarActivity {
         discardChange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(AddLocationActivity.this, FavLocationsActivity.class);
+                Intent i = new Intent(AddDestinationActivity.this, DestinationsActivity.class);
                 startActivity(i);
                 finish();
             }
@@ -72,7 +73,7 @@ public class AddLocationActivity extends ActionBarActivity {
         saveLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(AddLocationActivity.this, FavLocationsActivity.class);
+                Intent i = new Intent(AddDestinationActivity.this, DestinationsActivity.class);
                 EditText mEditName = (EditText)findViewById(R.id.name_text);
                 String nameText = mEditName.getText().toString();
                 EditText mEditAddress = (EditText) findViewById(R.id.st_address_text);
@@ -88,18 +89,18 @@ public class AddLocationActivity extends ActionBarActivity {
                     Destination newDes = new Destination(nameText, finalAddr);
                     //address is not valid
                     if (!newDes.isReady()) {
-                        Toast.makeText(AddLocationActivity.this, "Please enter a valid address", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddDestinationActivity.this, "Please enter a valid address", Toast.LENGTH_SHORT).show();
                     } else {
                         //add destination to cache list
                         mDesList.addDestination(newDes);
                         //add to database
                         DbFactory.addDestinationToDb(newDes, mDbHelper);
-                        Toast.makeText(AddLocationActivity.this, "Added Location", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddDestinationActivity.this, "Added Location", Toast.LENGTH_SHORT).show();
                         startActivity(i);
                         finish();
                     }
                 } else {
-                    Toast.makeText(AddLocationActivity.this, "Missing Information", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddDestinationActivity.this, "Missing Information", Toast.LENGTH_SHORT).show();
                 }
             }
         });

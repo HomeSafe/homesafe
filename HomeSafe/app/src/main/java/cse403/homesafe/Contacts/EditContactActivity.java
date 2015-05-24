@@ -1,4 +1,4 @@
-package cse403.homesafe;
+package cse403.homesafe.Contacts;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -18,6 +18,7 @@ import cse403.homesafe.Data.Contact;
 import cse403.homesafe.Data.Contacts;
 import cse403.homesafe.Data.DbFactory;
 import cse403.homesafe.Data.HomeSafeDbHelper;
+import cse403.homesafe.R;
 
 /**
  * EditContactActivity manages the editing of a single contact,

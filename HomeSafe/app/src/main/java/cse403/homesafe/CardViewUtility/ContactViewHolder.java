@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import cse403.homesafe.Data.Contacts;
-import cse403.homesafe.EditContactActivity;
+import cse403.homesafe.Contacts.EditContactActivity;
 import cse403.homesafe.R;
 
 //holder to contain one contact

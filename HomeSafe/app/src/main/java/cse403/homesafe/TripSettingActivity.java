@@ -128,7 +128,7 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
                                     "You cannot start a trip with no destination set",
                                     Toast.LENGTH_LONG).show();
                         } else {
-                            Intent i = new Intent(getApplicationContext(), HSTimerActivity.class);
+                            Intent i = new Intent(getApplicationContext(), TripActivity.class);
                             i.putExtra("timefromuser", time);
                             startActivity(i);
                         }

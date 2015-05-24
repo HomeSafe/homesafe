@@ -1,30 +1,22 @@
 package cse403.homesafe;
 
 import android.app.AlertDialog;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
-import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.ActionBarActivity;
-import android.text.InputFilter;
-import android.text.InputType;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -42,7 +34,7 @@ import java.util.List;
 import cse403.homesafe.Data.Contacts;
 import cse403.homesafe.Messaging.Messenger;
 
-public class HSTimerActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class TripActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     // TODO round the corners of the spinner and add a shadow OR do something to make it stand
     // out from the background and obvious that it's a drop down menu.
@@ -103,7 +95,7 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
         txtTimer.setText("00:00");
         countDownPeriod = getIntent().getExtras().getLong("timefromuser");
         if (countDownPeriod == 0) {
-            Toast.makeText(HSTimerActivity.this, "You entered 0 time!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(TripActivity.this, "You entered 0 time!", Toast.LENGTH_SHORT).show();
             finish();
         }
 
@@ -175,8 +167,8 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
                 // ask for password
                 timer.cancel();
                 pb.setProgress(0);
-                Toast.makeText(HSTimerActivity.this, "Your Trip Has Ended", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(HSTimerActivity.this, DangerActivity.class));
+                Toast.makeText(TripActivity.this, "Your Trip Has Ended", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(TripActivity.this, DangerActivity.class));
             }
 
         }.start();
@@ -303,7 +295,7 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
         if (mLastLocation != null) {
             Log.i(TAG, "Connected!");
             Messenger.sendNotifications(Contacts.Tier.ONE, mLastLocation, getApplicationContext(), Messenger.MessageType.DANGER);
-            Toast.makeText(HSTimerActivity.this, "Contacts have been notified", Toast.LENGTH_SHORT).show();
+            Toast.makeText(TripActivity.this, "Contacts have been notified", Toast.LENGTH_SHORT).show();
         } else {
             Log.e(TAG, "Failed on getting last location");
         }
@@ -377,14 +369,14 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
                 Log.d(TAG, "Password activity call back from end trip");
                 if (retcode.equals(PasswordActivity.RetCode.SUCCESS)) {
                     timer.cancel();
-                    startActivity(new Intent(HSTimerActivity.this, ArrivalScreenActivity.class));
+                    startActivity(new Intent(TripActivity.this, ArrivalActivity.class));
                 } else if (retcode.equals(PasswordActivity.RetCode.FAILURE)) {
-                    startActivity(new Intent(HSTimerActivity.this, DangerActivity.class));
+                    startActivity(new Intent(TripActivity.this, DangerActivity.class));
                 } else if (retcode.equals(PasswordActivity.RetCode.SPECIAL)) {
                     buildGoogleApiClient();
                     onStart();
                     timer.cancel();
-                    startActivity(new Intent(HSTimerActivity.this, ArrivalScreenActivity.class));
+                    startActivity(new Intent(TripActivity.this, ArrivalActivity.class));
                 } else {
                     // nothing to do here. Have a lovely day.
                 }
@@ -405,7 +397,7 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
                     // the maximum capacity for the progress bar must be increased
                     pb.setMax((int) (countDownPeriod / 1000));
                     createTimer();
-                    Toast.makeText(HSTimerActivity.this, "Added " + selectedTime,
+                    Toast.makeText(TripActivity.this, "Added " + selectedTime,
                             Toast.LENGTH_SHORT).show();
                 } else if (retcode.equals(PasswordActivity.RetCode.FAILURE)) {
                     // stay
@@ -424,7 +416,7 @@ public class HSTimerActivity extends ActionBarActivity implements GoogleApiClien
                     // the maximum capacity for the progress bar must be increased
                     pb.setMax((int) (countDownPeriod / 1000));
                     createTimer();
-                    Toast.makeText(HSTimerActivity.this, "Added " + selectedTime,
+                    Toast.makeText(TripActivity.this, "Added " + selectedTime,
                             Toast.LENGTH_SHORT).show();
                 } else {
                     // nothing to do here. Have a lovely day.

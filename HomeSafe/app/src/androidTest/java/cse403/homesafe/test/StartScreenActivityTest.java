@@ -4,30 +4,25 @@ import android.content.Intent;
 import android.test.ActivityUnitTestCase;
 import android.test.suitebuilder.annotation.MediumTest;
 
-import cse403.homesafe.StartScreenActivity;
-
-import android.util.Log;
-
-import cse403.homesafe.Util.GoogleMapsUtils;
-import cse403.homesafe.Util.GoogleMapsUtilsCallback;
+import cse403.homesafe.StartActivity;
 
 
 /**
  * Test case for StartScreenActivity
  */
-public class StartScreenActivityTest extends ActivityUnitTestCase<StartScreenActivity> {
+public class StartScreenActivityTest extends ActivityUnitTestCase<StartActivity> {
 
-    private StartScreenActivity startScreenActivity;
+    private StartActivity startActivity;
     private Intent startIntent;
 
     public StartScreenActivityTest() {
-        super(StartScreenActivity.class);
+        super(StartActivity.class);
     }
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        startScreenActivity = getActivity();
+        startActivity = getActivity();
         startIntent = new Intent(Intent.ACTION_MAIN);
     }
 

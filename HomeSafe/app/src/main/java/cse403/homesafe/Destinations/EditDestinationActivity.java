@@ -1,4 +1,4 @@
-package cse403.homesafe;
+package cse403.homesafe.Destinations;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -18,6 +18,7 @@ import cse403.homesafe.Data.DbFactory;
 import cse403.homesafe.Data.Destination;
 import cse403.homesafe.Data.Destinations;
 import cse403.homesafe.Data.HomeSafeDbHelper;
+import cse403.homesafe.R;
 
 
 /**
@@ -28,7 +29,7 @@ import cse403.homesafe.Data.HomeSafeDbHelper;
  * to modify based on the original information. Incomplete information will not
  * be processed
  */
-public class EditLocationActivity extends ActionBarActivity {
+public class EditDestinationActivity extends ActionBarActivity {
     public static final String EMPTY_STR = "";
     Button discardChange;
     ImageView saveLocation;
@@ -83,7 +84,7 @@ public class EditLocationActivity extends ActionBarActivity {
         discardChange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(EditLocationActivity.this, FavLocationsActivity.class);
+                Intent i = new Intent(EditDestinationActivity.this, DestinationsActivity.class);
                 startActivity(i);
                 finish();
             }
@@ -98,23 +99,23 @@ public class EditLocationActivity extends ActionBarActivity {
                 String stateStr = mEditState.getText().toString();
                 if(!nameStr.equals(EMPTY_STR) && !stAddrStr.equals(EMPTY_STR) && !cityStr.equals(EMPTY_STR)
                         && !stateStr.equals(EMPTY_STR)) {
-                    Intent i = new Intent(EditLocationActivity.this, FavLocationsActivity.class);
+                    Intent i = new Intent(EditDestinationActivity.this, DestinationsActivity.class);
                     String finalAddr = capitalize(stAddrStr) + ", " + capitalize(cityStr) + ", " + stateStr.toUpperCase();
                     Log.d("EditLocation: ", finalAddr);
                     Destination newDes = new Destination(nameStr, finalAddr);
                     newDes.setDid(did);
                     if (!newDes.isReady()) {
-                        Toast.makeText(EditLocationActivity.this, "Please enter a valid address", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditDestinationActivity.this, "Please enter a valid address", Toast.LENGTH_SHORT).show();
                     } else {
                         mDesList.removeDestination(did);
                         mDesList.addDestination(newDes);
                         DbFactory.updateDestination(newDes, mDbHelper);
-                        Toast.makeText(EditLocationActivity.this, "Edited Location", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditDestinationActivity.this, "Edited Location", Toast.LENGTH_SHORT).show();
                         startActivity(i);
                         finish();
                     }
                 } else {
-                    Toast.makeText(EditLocationActivity.this, "Missing Information", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditDestinationActivity.this, "Missing Information", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -124,8 +125,8 @@ public class EditLocationActivity extends ActionBarActivity {
             public void onClick(View v) {
                 mDesList.removeDestination(did);
                 DbFactory.deleteDestinationFromDb(did, mDbHelper);
-                Toast.makeText(EditLocationActivity.this, "Location Deleted", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(EditLocationActivity.this, FavLocationsActivity.class);
+                Toast.makeText(EditDestinationActivity.this, "Location Deleted", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(EditDestinationActivity.this, DestinationsActivity.class);
                 startActivity(i);
                 finish();
             }
