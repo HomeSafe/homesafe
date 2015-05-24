@@ -65,6 +65,7 @@
         </activity>
         <activity
             android:name=".PasswordActivity"
+            android:theme="@style/Theme.AppCompat.Dialog"
             android:exported="true"
             android:label="@string/title_activity_password" >
         </activity>
