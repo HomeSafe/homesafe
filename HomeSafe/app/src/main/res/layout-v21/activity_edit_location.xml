@@ -14,7 +14,7 @@ tools:context="cse403.homesafe.EditLocationActivity">
 <Button
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="Discard Changes"
+    android:text="Cancel"
     android:id="@+id/discard"
     android:textColor="@android:color/black"
     android:paddingLeft="10dp"

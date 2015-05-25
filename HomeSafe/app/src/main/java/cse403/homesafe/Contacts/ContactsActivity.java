@@ -91,7 +91,7 @@ public class ContactsActivity extends ActionBarActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(ContactsActivity.this, AddContactActivity.class);
+                Intent i = new Intent(ContactsActivity.this, EditContactActivity.class);
                 tabNum = pager.getCurrentItem();
                 tabNum++;
                 i.putExtra("TAB", String.valueOf(tabNum));

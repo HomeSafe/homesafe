@@ -35,6 +35,7 @@ public class EditDestinationActivity extends ActionBarActivity {
     Button discardChange;
     ImageView saveLocation;
     Button deleteLocation;
+    Button saveButton;
     EditText mEditName;
     EditText mEditStAddr;
     EditText mEditCity;
@@ -66,6 +67,7 @@ public class EditDestinationActivity extends ActionBarActivity {
         this.mEditStAddr = (EditText) findViewById(R.id.st_address_text);
         this.mEditCity = (EditText) findViewById(R.id.city_text);
         this.mEditState = (EditText) findViewById(R.id.state_text);
+
         if(activityType.equals("EDIT")) {
             edit = true;
             String name = intent.getStringExtra("NAME");
@@ -77,20 +79,36 @@ public class EditDestinationActivity extends ActionBarActivity {
             mEditStAddr.setText(splitAddr[0]);
             mEditCity.setText(splitAddr[1]);
             mEditState.setText(splitAddr[2]);
-            mTitleTextView.setText("Edit location");
+            mTitleTextView.setText("Edit Location");
 
             deleteLocation = new Button(this);
-            deleteLocation.setText("Delete Contact");
+            deleteLocation.setText("Delete");
             deleteLocation.setBackground(getResources().getDrawable(R.drawable.ripple));
+            RelativeLayout layout = ((RelativeLayout) findViewById(R.id.edit_layout));
             RelativeLayout.LayoutParams layoutParam = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.WRAP_CONTENT,
                     RelativeLayout.LayoutParams.WRAP_CONTENT);
             layoutParam.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
             layoutParam.addRule(RelativeLayout.ALIGN_PARENT_END);
             layoutParam.setMargins(10, 0, 10, 0);
-            ((RelativeLayout) findViewById(R.id.edit_layout)).addView(deleteLocation, layoutParam);
+
+            layout.addView(deleteLocation, layoutParam);
+
         } else {
-            mTitleTextView.setText("Add location");
+            mTitleTextView.setText("Add Location");
+            saveButton = new Button(this);
+            saveButton.setText("Save");
+            saveButton.setBackground(getResources().getDrawable(R.drawable.ripple));
+            RelativeLayout layout = ((RelativeLayout) findViewById(R.id.edit_layout));
+            RelativeLayout.LayoutParams layoutParam = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.WRAP_CONTENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT);
+            layoutParam.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+            layoutParam.addRule(RelativeLayout.ALIGN_PARENT_END);
+            layoutParam.setMargins(10, 0, 10, 0);
+
+            layout.addView(saveButton, layoutParam);
+
             add = true;
         }
 
@@ -162,6 +180,14 @@ public class EditDestinationActivity extends ActionBarActivity {
                     Intent i = new Intent(EditDestinationActivity.this, DestinationsActivity.class);
                     startActivity(i);
                     finish();
+                }
+            });
+        }
+        if(add){
+            saveButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    saveLocation.callOnClick();
                 }
             });
         }
