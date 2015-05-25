@@ -2,6 +2,7 @@ package cse403.homesafe.Contacts;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -80,7 +81,9 @@ public class EditContactActivity extends ActionBarActivity {
             mEditTier.setText(tier);
             saveButton = new Button(this);
             saveButton.setText("Save");
-            saveButton.setBackground(getResources().getDrawable(R.drawable.ripple));
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                saveButton.setBackground(getResources().getDrawable(R.drawable.ripple));
+            }
             RelativeLayout layout = ((RelativeLayout) findViewById(R.id.edit_layout));
             RelativeLayout.LayoutParams layoutParam = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.WRAP_CONTENT,
@@ -103,7 +106,9 @@ public class EditContactActivity extends ActionBarActivity {
             mTitleTextView.setText("Edit Contact");
             deleteContact = new Button(this);
             deleteContact.setText("Delete Contact");
-            deleteContact.setBackground(getResources().getDrawable(R.drawable.ripple));
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                deleteContact.setBackground(getResources().getDrawable(R.drawable.ripple));
+            }
             RelativeLayout layout = ((RelativeLayout) findViewById(R.id.edit_layout));
             RelativeLayout.LayoutParams layoutParam = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.WRAP_CONTENT,

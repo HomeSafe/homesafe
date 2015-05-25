@@ -2,6 +2,7 @@ package cse403.homesafe.Destinations;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -83,7 +84,9 @@ public class EditDestinationActivity extends ActionBarActivity {
 
             deleteLocation = new Button(this);
             deleteLocation.setText("Delete");
-            deleteLocation.setBackground(getResources().getDrawable(R.drawable.ripple));
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                deleteLocation.setBackground(getResources().getDrawable(R.drawable.ripple));
+            }
             RelativeLayout layout = ((RelativeLayout) findViewById(R.id.edit_layout));
             RelativeLayout.LayoutParams layoutParam = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.WRAP_CONTENT,
@@ -98,7 +101,9 @@ public class EditDestinationActivity extends ActionBarActivity {
             mTitleTextView.setText("Add Location");
             saveButton = new Button(this);
             saveButton.setText("Save");
-            saveButton.setBackground(getResources().getDrawable(R.drawable.ripple));
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                saveButton.setBackground(getResources().getDrawable(R.drawable.ripple));
+            }
             RelativeLayout layout = ((RelativeLayout) findViewById(R.id.edit_layout));
             RelativeLayout.LayoutParams layoutParam = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.WRAP_CONTENT,
