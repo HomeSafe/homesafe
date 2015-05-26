@@ -15,6 +15,11 @@ import cse403.homesafe.R;
 //holder to contain one destination
 public class LocationViewHolder extends RecyclerView.ViewHolder {
 
+    public static final String NAME = "NAME";
+    public static final String ADDRESS = "ADDRESS";
+    public static final String DID = "DID";
+    public static final String ACTIVITY = "ACTIVITY";
+    public static final String EDIT = "EDIT";
     protected TextView name;
     protected TextView address;
     protected long did;
@@ -26,12 +31,12 @@ public class LocationViewHolder extends RecyclerView.ViewHolder {
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 Intent i = new Intent(v.getContext(), EditDestinationActivity.class);
-                i.putExtra("NAME", name.getText().toString());
-                i.putExtra("ADDRESS", address.getText().toString());
-                i.putExtra("DID", did);
+                i.putExtra(NAME, name.getText().toString());
+                i.putExtra(ADDRESS, address.getText().toString());
+                i.putExtra(DID, did);
                 //trigger EditLocationActivity
                 Activity activity = (Activity) v.getContext();
-                i.putExtra("ACTIVITY", "EDIT");
+                i.putExtra(ACTIVITY, EDIT);
                 activity.startActivity(i);
                 //finish current activity
                 activity.finish();
