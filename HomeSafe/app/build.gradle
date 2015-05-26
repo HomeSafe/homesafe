@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "cse403.homesafe"
-        minSdkVersion 21
+        minSdkVersion 19
         targetSdkVersion 21
         versionCode 3
         versionName "1.1"

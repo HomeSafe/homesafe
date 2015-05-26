@@ -7,34 +7,21 @@ android:paddingLeft="@dimen/activity_horizontal_margin"
 android:paddingRight="@dimen/activity_horizontal_margin"
 android:paddingTop="@dimen/activity_vertical_margin"
 android:paddingBottom="@dimen/activity_vertical_margin"
-tools:context="cse403.homesafe.Destinations.AddDestinationActivity">
+    android:id="@+id/edit_layout"
+tools:context="cse403.homesafe.EditLocationActivity">
 
 
 <Button
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="Discard Changes"
+    android:text="Cancel"
     android:id="@+id/discard"
     android:textColor="@android:color/black"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
     android:background="@drawable/ripple"
-    android:layout_alignTop="@+id/delete"
-    android:layout_alignParentLeft="true"
+    android:layout_alignParentBottom="true"
     android:layout_alignParentStart="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Delete Location"
-        android:id="@+id/delete"
-        android:textColor="@android:color/black"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:background="@drawable/ripple"
-        android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/state_text"
-        android:layout_alignEnd="@+id/state_text" />
 
     <com.rengwuxian.materialedittext.MaterialEditText
         android:layout_width="match_parent"

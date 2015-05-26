@@ -11,7 +11,6 @@ import java.util.List;
  *
  * This is a Singleton class and should be accessed with Contacts.getInstance()
  *
- * TODO: use Android ContentProvider?
  */
 public class Contacts{
     private List<Contact> contacts;

@@ -107,11 +107,10 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
         } else { // tier 3+
             time = 30 * 60 + "";
         }
-        String message = "Please enter your password to end-trip.";
         String numChances = "3";
         String confirmButtonMessage = "End Trip";
         String enableCancelButton = "false";
-        i.putExtra("passwordParams", new ArrayList<String>(Arrays.asList(time, message, numChances, confirmButtonMessage, enableCancelButton)));
+        i.putExtra("passwordParams", new ArrayList<String>(Arrays.asList(time, numChances, confirmButtonMessage, enableCancelButton)));
         startActivityForResult(i, 1);
     }
 
