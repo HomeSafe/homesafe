@@ -57,9 +57,8 @@ public class Contacts{
      * @param c the contact to be added
      * @return true on success
      */
-    public boolean addContact(Contact c, Tier tier){
-        contacts.add(c);
-        return true;
+    public boolean addContact(Contact c){
+        return contacts.add(c);
     }
 
     /**
