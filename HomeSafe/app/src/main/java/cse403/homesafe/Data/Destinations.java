@@ -14,7 +14,6 @@ import java.util.List;
  *
  * This is a Singleton class -- access by calling Destinations.getInstance()
  *
- * TODO: Switch to android ContentProvider
  */
 public class Destinations {
     private List<Destination> destinations;
