@@ -26,45 +26,60 @@ import cse403.homesafe.Messaging.Messenger;
 
 /**
  * Manages interaction with user on the Arrival Screen -- when the trip has ended.
- * Offers functionality to return to homescreen.
+ * Offers functionality to start a new trip.
  *
  * If the user specified in settings that they
  * would like to have contacts notified on safe arrival, these messages are sent out
- * after contacting google play services.
+ * after contacting google play services, and the contact names that have been notified will be
+ * displayed on screen.
  */
-public class ArrivalActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
-    // on screen components
-    private final String TAG = "ArrivalScreenActivity";
+public class ArrivalActivity extends ActionBarActivity
+        implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+
+    private RecyclerView contactsView;  // Provides a view of contacts that have been notified
+
+    // Provides a binding from a list of contacts to be displayed within RecyclerView "contactsView"
     private RecyclerView.Adapter rvAdapter;
-    private RecyclerView contactsView;
-    private Button homescreenBtn;
-    private final ArrayList<Contact> contacts = new ArrayList<Contact>(Contacts.getInstance().getContactsInTier(Contacts.Tier.ONE));
 
-    private GoogleApiClient mGoogleApiClient;
-    private Location lastKnownLocation;
+    private Button homeScreenBtn; // Button to start a new trip
 
-    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1000;
+    private Location lastKnownLocation; // Current location
+    private GoogleApiClient mGoogleApiClient; // Google API Client to retrieve current location
+
+    private Messenger.MessageType messageType;  // The message alert type
+
+    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1000; // Google play services resolution request
+    private final String TAG = "ArrivalActivity";   // For logcat debugging purposes
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_arrival_screen);
         getSupportActionBar().setTitle("SAFE ARRIVAL");
-        contactsView = (RecyclerView) findViewById(R.id.contactsView);
-        homescreenBtn = (Button) findViewById(R.id.homescreenBtn);
 
-        // set listener for back to start screen
+        String alertType = getIntent().getStringExtra("AlertType");
+        if (alertType.equals("DANGER")) {
+            messageType = Messenger.MessageType.DANGER;
+        } else {
+            messageType = Messenger.MessageType.HOMESAFE;
+        }
+
+        contactsView = (RecyclerView) findViewById(R.id.contactsView);
+        homeScreenBtn = (Button) findViewById(R.id.homescreenBtn);
+
+        // Sets listener for back to start screen
         setBackToStartScreenListener();
 
-        // use this setting to improve performance if you know that changes
+        // Use this setting to improve performance if you know that changes
         // in content to do change the layout size of the RecyclerView
         contactsView.setHasFixedSize(true);
 
-        // use a linear layout manager
+        // Uses a linear layout manager
         RecyclerView.LayoutManager rvLayoutManager = new LinearLayoutManager(this);
         contactsView.setLayoutManager(rvLayoutManager);
 
         if (checkPlayServices()) {
+            Log.e(TAG, "Google Play Services is installed");
             buildGoogleApiClient();
             onStart();
         } else {
@@ -72,10 +87,11 @@ public class ArrivalActivity extends ActionBarActivity implements GoogleApiClien
         }
     }
 
-    /* Ends the timer for the trip, taking the user automatically to the arrival screen.
-* */
+    /**
+     * Ends the timer for the trip, taking the user automatically to the arrival screen.
+     */
     private void setBackToStartScreenListener() {
-        homescreenBtn.setOnClickListener(new View.OnClickListener() {
+        homeScreenBtn.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -87,19 +103,36 @@ public class ArrivalActivity extends ActionBarActivity implements GoogleApiClien
         });
     }
 
+    /**
+     * Do nothing when the back button is pressed.
+     */
+    @Override
+    public void onBackPressed() {
+        return;
+    }
+
+    /**
+     * Builds the Google API Client.
+     */
     protected synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
         if (mGoogleApiClient != null) {
-            Log.e(TAG, "Build Complete");
+            Log.i(TAG, "Build Complete");
         } else {
-            Log.e(TAG, "Build Incomplete");
+            Log.i(TAG, "Build Incomplete");
         }
     }
 
+    /**
+     * Attempts to start Google API Client. Connection to Google API Client
+     * can be successful, failure, or suspended.
+     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -124,8 +157,8 @@ public class ArrivalActivity extends ActionBarActivity implements GoogleApiClien
             if (shouldNotify) {
                 // Notify contacts on safe arrival
                 Messenger.sendNotifications(Contacts.Tier.ONE, lastKnownLocation,
-                        getApplicationContext(), Messenger.MessageType.HOMESAFE);
-                rvAdapter = new ArrivalAdapter(contacts);
+                        getApplicationContext(), messageType);
+                rvAdapter = new ArrivalAdapter(new ArrayList<Contact>(Contacts.getInstance().getContactsInTier(Contacts.Tier.ONE)));
             } else {
                 // Don't contact anyone
                 ArrayList<Contact> c = new ArrayList<Contact>();
@@ -134,21 +167,32 @@ public class ArrivalActivity extends ActionBarActivity implements GoogleApiClien
             }
             contactsView.setAdapter(rvAdapter);
 
-        } else {  // FusedLocationApi returned null, meaning current location is not currently available
+        } else {
+            // FusedLocationApi returned null, meaning current location is not currently available
             Log.e(TAG, "Current location is not available!");
         }
     }
 
+    /**
+     * Callback method if connection to Google API Client is suspended.
+     */
     @Override
     public void onConnectionSuspended(int i) {
-        Log.e(TAG, "Connection Suspended");
+        Log.i(TAG, "Connection to Google API Client is suspended");
     }
 
+    /**
+     * Callback method if connection to Google API Client is failed.
+     */
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.e(TAG, "Connection Failed");
+        Log.i(TAG, "Connection to Google API Client failed");
     }
 
+    /**
+     * Returns true if GooglePlayServices is installed on the device otherwise
+     * false.
+     */
     private boolean checkPlayServices() {
         int resultCode = GooglePlayServicesUtil
                 .isGooglePlayServicesAvailable(this);
@@ -167,8 +211,4 @@ public class ArrivalActivity extends ActionBarActivity implements GoogleApiClien
         return true;
     }
 
-    @Override
-    public void onBackPressed() {
-        return;
-    }
 }

@@ -25,35 +25,41 @@ import cse403.homesafe.Data.Contact;
 import cse403.homesafe.Data.Contacts;
 import cse403.homesafe.Messaging.Messenger;
 
-
 /**
  * This activity displays a password prompt to the user.
  * If the user fails to correctly enter the password within
  * some amount of time then the phone will contact the emergency
  * contacts.
  */
-public class DangerActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
+public class DangerActivity extends ActionBarActivity
+        implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
 
-    private static final String TAG = "DangerActivity";
-    private Location mLastLocation;
-    private GoogleApiClient mGoogleApiClient;
+    private Location mLastLocation; // Current location
+    private GoogleApiClient mGoogleApiClient; // Google API Client to retrieve current location
 
-    private RecyclerView contactsView;
+    private Button homeScreenBtnDanger; // Button to start a new trip
 
+    private RecyclerView contactsView;  // Provides a view of contacts that have been notified
+
+    // Provides a binding from a list of contacts to be displayed within RecyclerView "contactsView"
     private RecyclerView.Adapter rvAdapter;
 
-    private int currentTier;
+    private int currentTier; // Current tier level
 
-    private final ArrayList<Contact> contacts1 = new ArrayList<Contact>(Contacts.getInstance().getContactsInTier(Contacts.Tier.ONE));
-    private final ArrayList<Contact> contacts2 = new ArrayList<Contact>(Contacts.getInstance().getContactsInTier(Contacts.Tier.TWO));
-    private final ArrayList<Contact> contacts3 = new ArrayList<Contact>(Contacts.getInstance().getContactsInTier(Contacts.Tier.THREE));
+    private final int TIER_ONE = 1;     // Tier 1
+    private final int TIER_TWO = 2;     // Tier 2
+    private final int TIER_THREE = 3;   // Tier 3
 
-    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1000;
-    private Button homescreenBtnDanger;
+    private final int PASSWORD_PROMPT_TIME = 30; // Time allowed for user to enter password
+    private final int NUM_PASSWORD_ATTEMPTS = 3; // Num of password attempts the user has
+
+    private final int PLAY_SERVICES_RESOLUTION_REQUEST = 1000; // Google play services resolution request
+    private final String TAG = "DangerActivity"; // For logcat debugging purposes
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_danger);
 
         getSupportActionBar().setTitle("DANGER ZONE");
@@ -61,9 +67,9 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
         getSupportActionBar().setHomeButtonEnabled(false);
 
         contactsView = (RecyclerView) findViewById(R.id.contactsView);
-        homescreenBtnDanger = (Button) findViewById(R.id.homescreenBtnDanger);
+        homeScreenBtnDanger = (Button) findViewById(R.id.homescreenBtnDanger);
 
-        // set listener for back to start screen
+        // Sets listener for back to start screen
         setBackToStartScreenListener();
 
         RecyclerView.LayoutManager rvLayoutManager = new LinearLayoutManager(this);
@@ -71,52 +77,14 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
         contactsView.setHasFixedSize(true);
         currentTier = 1;
 
-        buildGoogleApiClient();
-        onStart();
-
-        promptForPassword();
-    }
-
-    /* Ends the timer for the trip, taking the user automatically to the arrival screen.
-* */
-    private void setBackToStartScreenListener() {
-        homescreenBtnDanger.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // When this button is clicked, clear the activity stack and start fresh from
-                // the start screen.
-                startActivity(new Intent(getApplicationContext(),
-                        StartActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-            }
-        });
-    }
-
-    /**
-     * Prompt user for password. Send entered password to appropriate callback.
-     */
-    private void promptForPassword() {
-        Log.i(TAG, "PROMPT FOR PASSWORD WITH currentTier is " + currentTier);
-        Log.i(TAG, Log.getStackTraceString(new Exception()));
-        Intent i = new Intent(getApplicationContext(), PasswordActivity.class);
-        String time;
-        if(currentTier == 1) {
-            time = "12"; // 2 minutes
-        } else if (currentTier == 2) {
-            time = 5 * 6 + "";
-        } else { // tier 3+
-            time = 30 * 60 + "";
+        if (checkPlayServices()) {
+            Log.e(TAG, "Device has Google Play Services installed");
+            buildGoogleApiClient();
+            onStart();
+        } else {
+            Log.e(TAG, "Device does not have Google Play Services installed");
         }
-        String numChances = "3";
-        String confirmButtonMessage = "End Trip";
-        String enableCancelButton = "false";
-        i.putExtra("passwordParams", new ArrayList<String>(Arrays.asList(time, numChances, confirmButtonMessage, enableCancelButton)));
-        startActivityForResult(i, 1);
-    }
-
-    private void onCorrectPinCode() {
-        Toast.makeText(DangerActivity.this, "Correct Pincode", Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(DangerActivity.this, ArrivalActivity.class));
+        promptForPassword();
     }
 
     /**
@@ -124,33 +92,39 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
      * notifies currentTier contacts, then
      * increments currentTier up to a maximum of three.
      *
-     * @param requestCode the request code
-     * @param resultCode the result code
-     * @param data
+     * @param requestCode : the request code
+     * @param resultCode : the result code
+     * @param data : intent object containing any data returned by the sub-activity
      */
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data.getExtras().containsKey("retval")) {
             Serializable retcode = data.getExtras().getSerializable("retval");
             if (retcode.equals(PasswordActivity.RetCode.SUCCESS)) {
                 onCorrectPinCode();
+
             } else if (retcode.equals(PasswordActivity.RetCode.FAILURE)) {
                 // Send alerts to currentTier contacts
                 alertContacts();
 
-                if (currentTier < 3) {
+                if (currentTier < TIER_THREE) {
                     currentTier++;
                 }
-                promptForPassword(); // keep asking
+
+                // Keep prompting the user to input their password.
+                promptForPassword();
             } else if (retcode.equals(PasswordActivity.RetCode.SPECIAL)) {
                 alertContacts();
+                Intent intent = new Intent(getApplicationContext(), ArrivalActivity.class);
+                intent.putExtra("AlertType", "DANGER");
+                startActivity(intent);
                 startActivity(new Intent(DangerActivity.this, ArrivalActivity.class));
-            } else {
-                // nothing to do here. Have a lovely day. assert(false);
             }
         }
-
     }
 
+    /**
+     * Send danger alerts to the current tier contacts.
+     */
     public void alertContacts() {
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
@@ -159,17 +133,20 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
             Contacts.Tier tier;
             ArrayList<Contact> contacts;
             switch (currentTier){
-                case 1 :    tier = Contacts.Tier.ONE;
-                            contacts = contacts1;
-                            break;
-                case 2 :    tier = Contacts.Tier.TWO;
-                            contacts = contacts2;
-                            break;
-                case 3 :    tier = Contacts.Tier.THREE;
-                            contacts = contacts3;
-                            break;
+                case TIER_ONE :
+                    tier = Contacts.Tier.ONE;
+                    contacts = new ArrayList<Contact>(Contacts.getInstance().getContactsInTier(Contacts.Tier.ONE));
+                    break;
+                case TIER_TWO :
+                    tier = Contacts.Tier.TWO;
+                    contacts = new ArrayList<Contact>(Contacts.getInstance().getContactsInTier(Contacts.Tier.TWO));
+                    break;
+                case TIER_THREE :
+                    tier = Contacts.Tier.THREE;
+                    contacts = new ArrayList<Contact>(Contacts.getInstance().getContactsInTier(Contacts.Tier.THREE));
+                    break;
                 default :   tier = Contacts.Tier.ONE;
-                            contacts = contacts1;
+                    contacts = new ArrayList<Contact>(Contacts.getInstance().getContactsInTier(Contacts.Tier.ONE));
             }
 
             Messenger.sendNotifications(tier, mLastLocation, getApplicationContext(), Messenger.MessageType.DANGER);
@@ -179,20 +156,16 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
     }
 
     @Override
-    public void onConnected(Bundle bundle) {
-
+    public void onResume() {
+        super.onResume();
+        String ns = getApplicationContext().NOTIFICATION_SERVICE;
+        NotificationManager nMgr = (NotificationManager) getApplicationContext().getSystemService(ns);
+        nMgr.cancelAll();
     }
 
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-
-    }
-
+    /**
+     * Builds the Google API Client.
+     */
     protected synchronized void buildGoogleApiClient() {
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -208,6 +181,10 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
         }
     }
 
+    /**
+     * Attempts to start Google API Client. Connection to Google API Client
+     * can be successful, failure, or suspended.
+     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -217,6 +194,57 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
         }
     }
 
+    /**
+     * Callback method if connection to Google API Client is successful.
+     */
+    @Override
+    public void onConnected(Bundle bundle) {
+        Log.i(TAG, "Connected to Google API Client");
+    }
+
+    /**
+     * Callback method if connection to Google API Client is suspended.
+     */
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.i(TAG, "Connection to Google API Client is suspended");
+    }
+
+    /**
+     * Callback method if connection to Google API Client is failed.
+     */
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.i(TAG, "Connection to Google API Client failed");
+    }
+
+    /**
+     * Do nothing when the back button is pressed.
+     */
+    @Override
+    public void onBackPressed() {
+        return;
+    }
+
+    /**
+     * Prompt user for password. Send entered password to appropriate callback.
+     */
+    private void promptForPassword() {
+        Log.i(TAG, "PROMPT FOR PASSWORD WITH currentTier is " + currentTier);
+        Log.i(TAG, Log.getStackTraceString(new Exception()));
+        Intent i = new Intent(getApplicationContext(), PasswordActivity.class);
+        String time = PASSWORD_PROMPT_TIME + "";
+        String numChances = NUM_PASSWORD_ATTEMPTS  + "";
+        String confirmButtonMessage = "End Trip";
+        String enableCancelButton = "false";
+        i.putExtra("passwordParams", new ArrayList<String>(Arrays.asList(time, numChances, confirmButtonMessage, enableCancelButton)));
+        startActivityForResult(i, 1);
+    }
+
+    /**
+     * Returns true if GooglePlayServices is installed on the device otherwise
+     * false.
+     */
     private boolean checkPlayServices() {
         int resultCode = GooglePlayServicesUtil
                 .isGooglePlayServicesAvailable(this);
@@ -235,17 +263,30 @@ public class DangerActivity extends ActionBarActivity implements GoogleApiClient
         return true;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        String ns = getApplicationContext().NOTIFICATION_SERVICE;
-        NotificationManager nMgr = (NotificationManager) getApplicationContext().getSystemService(ns);
-        nMgr.cancelAll();
+    /**
+     * Displays a message that the user inputted a correct pincode and directs the user
+     * to the safe arrival screen.
+     */
+    private void onCorrectPinCode() {
+        Toast.makeText(DangerActivity.this, "Correct Pincode", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getApplicationContext(), ArrivalActivity.class);
+        intent.putExtra("AlertType", "HOMESAFE");
+        startActivity(intent);
     }
 
-    // Do nothing when the back button is pressed
-    @Override
-    public void onBackPressed() {
-        return;
+    /**
+     * Ends the timer for the trip, taking the user automatically to the arrival screen.
+     */
+    private void setBackToStartScreenListener() {
+        homeScreenBtnDanger.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // When this button is clicked, clear the activity stack and start fresh from
+                // the start screen.
+                startActivity(new Intent(getApplicationContext(),
+                        StartActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            }
+        });
     }
+
 }
