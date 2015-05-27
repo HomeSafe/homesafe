@@ -359,17 +359,19 @@ public class TripActivity extends ActionBarActivity implements GoogleApiClient.C
 
                 if (retcode.equals(PasswordActivity.RetCode.SUCCESS)) {
                     timer.cancel();
-                    startActivity(new Intent(TripActivity.this, ArrivalActivity.class));
+                    Intent intent = new Intent(getApplicationContext(), ArrivalActivity.class);
+                    intent.putExtra("AlertType", "HOMESAFE");
+                    startActivity(intent);
                 } else if (retcode.equals(PasswordActivity.RetCode.FAILURE)) {
                     startActivity(new Intent(TripActivity.this, DangerActivity.class));
                 } else if (retcode.equals(PasswordActivity.RetCode.SPECIAL)) {
                     // TODO: Don't call location services or send messages from this activity
                     // Instead, arrange with Arrival activity to send in extra parameter in the
                     //  intent that specifies which type of message to send.
-                    buildGoogleApiClient();
-                    onStart();
                     timer.cancel();
-                    startActivity(new Intent(TripActivity.this, ArrivalActivity.class));
+                    Intent intent = new Intent(getApplicationContext(), ArrivalActivity.class);
+                    intent.putExtra("AlertType", "DANGER");
+                    startActivity(intent);
                 }
                 // Else Cancel was pressed, do nothing
             } else {
