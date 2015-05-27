@@ -202,19 +202,18 @@ public class StartActivity extends ActionBarActivity implements GoogleApiClient.
             if (retcode.equals(PasswordActivity.RetCode.SUCCESS)) {
                 startActivity(new Intent(StartActivity.this, SettingsActivity.class));
             } else if (retcode.equals(PasswordActivity.RetCode.SPECIAL)) {
-//                buildGoogleApiClient();
-//                onStart();
-                GoogleGPSUtils gpsUtils = null;
-                try {
-                    gpsUtils = new GoogleGPSUtils(this);
-                    synchronized (gpsUtils) {
-                        Log.e(TAG, "Waiting on gpsUtils");
-                        gpsUtils.wait();
+                final Context c = this;
+                (new Thread() {
+                    public void run() {
+                        GoogleGPSUtils gpsUtils = null;
+                        try {
+                            gpsUtils = new GoogleGPSUtils(c);
+                            Messenger.sendNotifications(Contacts.Tier.ONE, gpsUtils.getLastLocation(), c, Messenger.MessageType.DANGER);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
-                    gpsUtils.alertContacts(this, 1); // Util is not connected prior to running this method. need to be fixed
-                } catch (Exception ex) {
-                    Log.e(TAG, "Start gpsUtils failed");
-                }
+                }).start();
                 startActivity(new Intent(StartActivity.this, SettingsActivity.class));
             }
         }
