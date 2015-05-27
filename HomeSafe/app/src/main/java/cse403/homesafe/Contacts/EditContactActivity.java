@@ -47,7 +47,7 @@ public class EditContactActivity extends ActionBarActivity {
     public static final String TIER = "TIER";
     public static final String CID = "CID";
     public static final String EDIT_CONTACT = "Edit Contact";
-    public static final String DELETE_CONTACT = "Delete Contact";
+    public static final String DELETE_CONTACT = "Delete";
     public static final String MISSING_INFO_MSG = "Please enter either 1, 2 or 3 as tier level";
     public static final String MISSING_FIELDS = "Missing Fields";
     public static final String DELETE_MSG = "Contact Deleted";
