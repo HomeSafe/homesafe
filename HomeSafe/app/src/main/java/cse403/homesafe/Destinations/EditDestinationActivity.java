@@ -33,6 +33,20 @@ import cse403.homesafe.R;
  */
 public class EditDestinationActivity extends ActionBarActivity {
     public static final String EMPTY_STR = "";
+    public static final String ACTIVITY = "ACTIVITY";
+    public static final String EDIT = "EDIT";
+    public static final String NAME = "NAME";
+    public static final String ADDRESS = "ADDRESS";
+    public static final String DID = "DID";
+    public static final String EDIT_LOCATION = "Edit Location";
+    public static final String DELETE = "Delete";
+    public static final String ADD_LOCATION = "Add Location";
+    public static final String SAVE = "Save";
+    public static final String MISSING_INFO_MSG = "Missing Information";
+    public static final String DELETE_MSG = "Location Deleted";
+    public static final String ADD_MSG = "Added Location";
+    public static final String EDIT_MSG = "Edited Location";
+    public static final String INVALID_ADDR_MSG = "Please enter a valid address";
     Button discardChange;
     ImageView saveLocation;
     Button deleteLocation;
@@ -54,8 +68,7 @@ public class EditDestinationActivity extends ActionBarActivity {
         mDesList = Destinations.getInstance();
         mDbHelper = new HomeSafeDbHelper(this);
         Intent intent = getIntent();
-        String activityType = intent.getStringExtra("ACTIVITY");
-
+        String activityType = intent.getStringExtra(ACTIVITY);
 
         ActionBar mActionBar = getSupportActionBar();
         mActionBar.setDisplayShowHomeEnabled(false);
@@ -69,21 +82,21 @@ public class EditDestinationActivity extends ActionBarActivity {
         this.mEditCity = (EditText) findViewById(R.id.city_text);
         this.mEditState = (EditText) findViewById(R.id.state_text);
 
-        if(activityType.equals("EDIT")) {
+        if(activityType.equals(EDIT)) {
             edit = true;
-            String name = intent.getStringExtra("NAME");
-            String address = intent.getStringExtra("ADDRESS");
+            String name = intent.getStringExtra(NAME);
+            String address = intent.getStringExtra(ADDRESS);
             String[] splitAddr = address.split(", ");
-            did = intent.getLongExtra("DID", 0);
+            did = intent.getLongExtra(DID, 0);
 
             mEditName.setText(name);
             mEditStAddr.setText(splitAddr[0]);
             mEditCity.setText(splitAddr[1]);
             mEditState.setText(splitAddr[2]);
-            mTitleTextView.setText("Edit Location");
+            mTitleTextView.setText(EDIT_LOCATION);
 
             deleteLocation = new Button(this);
-            deleteLocation.setText("Delete");
+            deleteLocation.setText(DELETE);
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 deleteLocation.setBackground(getResources().getDrawable(R.drawable.ripple));
             }
@@ -98,9 +111,9 @@ public class EditDestinationActivity extends ActionBarActivity {
             layout.addView(deleteLocation, layoutParam);
 
         } else {
-            mTitleTextView.setText("Add Location");
+            mTitleTextView.setText(ADD_LOCATION);
             saveButton = new Button(this);
-            saveButton.setText("Save");
+            saveButton.setText(SAVE);
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 saveButton.setBackground(getResources().getDrawable(R.drawable.ripple));
             }
@@ -153,15 +166,15 @@ public class EditDestinationActivity extends ActionBarActivity {
                         newDes.setDid(did);
                     }
                     if (!newDes.isReady()) {
-                        Toast.makeText(EditDestinationActivity.this, "Please enter a valid address", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditDestinationActivity.this, INVALID_ADDR_MSG, Toast.LENGTH_SHORT).show();
                     } else {
                         String toastStr;
                         if(edit) {
                             mDesList.removeDestination(did);
-                            toastStr = "Edited Location";
+                            toastStr = EDIT_MSG;
                             DbFactory.updateDestination(newDes, mDbHelper);
                         } else {
-                            toastStr = "Added Location";
+                            toastStr = ADD_MSG;
                             DbFactory.addDestinationToDb(newDes, mDbHelper);
                         }
                         mDesList.addDestination(newDes);
@@ -170,7 +183,7 @@ public class EditDestinationActivity extends ActionBarActivity {
                         finish();
                     }
                 } else {
-                    Toast.makeText(EditDestinationActivity.this, "Missing Information", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditDestinationActivity.this, MISSING_INFO_MSG, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -181,7 +194,7 @@ public class EditDestinationActivity extends ActionBarActivity {
                 public void onClick(View v) {
                     mDesList.removeDestination(did);
                     DbFactory.deleteDestinationFromDb(did, mDbHelper);
-                    Toast.makeText(EditDestinationActivity.this, "Location Deleted", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditDestinationActivity.this, DELETE_MSG, Toast.LENGTH_SHORT).show();
                     Intent i = new Intent(EditDestinationActivity.this, DestinationsActivity.class);
                     startActivity(i);
                     finish();

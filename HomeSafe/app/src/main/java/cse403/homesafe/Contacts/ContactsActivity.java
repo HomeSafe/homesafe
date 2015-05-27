@@ -19,6 +19,7 @@ import cse403.homesafe.R;
  * displays them in their respective tabs.
  */
 public class ContactsActivity extends ActionBarActivity {
+<<<<<<< HEAD
     private FloatingActionButton fab;
     private ViewPager pager;
     private ViewPagerAdapter adapter;
@@ -34,6 +35,24 @@ public class ContactsActivity extends ActionBarActivity {
      * Sets up the main components of the contacts user interface, including displaying
      * the contacts card view
      */
+=======
+    public static final String TAB = "TAB";
+    public static final String TAB_2 = "TAB2";
+    public static final String TAB_3 = "TAB3";
+    public static final String ACTIVITY = "ACTIVITY";
+    public static final String ADD = "ADD";
+    FloatingActionButton fab;
+
+    ViewPager pager;
+    ViewPagerAdapter adapter;
+    SlidingTabLayout tabs;
+    HomeSafeDbHelper mDbHelper;
+    ViewPager.OnPageChangeListener onPageChangeListener;
+    CharSequence Titles[]={"Tier 1","Tier 2", "Tier 3"};
+    int Numboftabs = 3;
+    int tabNum;
+
+>>>>>>> 94a906051d46f0847ed87dc2f0fd1b843793811a
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,10 +99,10 @@ public class ContactsActivity extends ActionBarActivity {
     @Override
     public void onResume() {
         super.onResume();
-        if (getIntent().getStringExtra("TAB") != null) {
-            if (getIntent().getStringExtra("TAB").equals("TAB2")) {
+        if (getIntent().getStringExtra(TAB) != null) {
+            if (getIntent().getStringExtra(TAB).equals(TAB_2)) {
                 pager.setCurrentItem(1, true);
-            } else if (getIntent().getStringExtra("TAB").equals("TAB3")) {
+            } else if (getIntent().getStringExtra(TAB).equals(TAB_3)) {
                 pager.setCurrentItem(2, true);
             } else {
                 pager.setCurrentItem(0, true);
@@ -99,8 +118,8 @@ public class ContactsActivity extends ActionBarActivity {
                 Intent i = new Intent(ContactsActivity.this, EditContactActivity.class);
                 tabNum = pager.getCurrentItem();
                 tabNum++;
-                i.putExtra("TAB", String.valueOf(tabNum));
-                i.putExtra("ACTIVITY", "ADD");
+                i.putExtra(TAB, String.valueOf(tabNum));
+                i.putExtra(ACTIVITY, ADD);
                 startActivity(i);
                 finish();
             }

@@ -48,7 +48,7 @@ public class DbFactory {
                 Contacts.Tier tier = Contacts.Tier.valueOf(TierString);
                 Contact newContact = new Contact(name, email, phone, tier);
                 newContact.setCid(id);
-                mContactList.addContact(newContact, newContact.getTier());
+                mContactList.addContact(newContact);
             }
             c.close();
             Log.d(TAG, "Retrieve contacts info from Database successfully");
