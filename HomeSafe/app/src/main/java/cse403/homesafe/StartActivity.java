@@ -115,10 +115,9 @@ public class StartActivity extends ActionBarActivity implements GoogleApiClient.
                     // i = new Intent(StartScreenActivity.this, SettingsActivity.class);
                     i = new Intent(getApplicationContext(), PasswordActivity.class);
                     String time = "90";
-                    String message = "Enter PIN to access settings";
                     String numChances = "3";
                     String confirmButtonMessage = "Enter";
-                    i.putExtra("passwordParams", new ArrayList<String>(Arrays.asList(time, message, numChances, confirmButtonMessage)));
+                    i.putExtra("passwordParams", new ArrayList<String>(Arrays.asList(time, numChances, confirmButtonMessage)));
                     startActivityForResult(i, 1);
                 }
             }

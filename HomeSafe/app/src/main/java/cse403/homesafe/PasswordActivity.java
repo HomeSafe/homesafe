@@ -6,6 +6,8 @@ import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -34,7 +36,6 @@ public class PasswordActivity extends ActionBarActivity {
     private Button confirm;
     private EditText passwordField;         // where user inputs their password
     private TextView timerView;             // how much time is left to correctly input password
-    private TextView titleMsg;              // displays the purpose of entering the password
 
     /**
      * Represents the 3 possible user-interactions with the Password screen;
@@ -56,24 +57,25 @@ public class PasswordActivity extends ActionBarActivity {
         // get the parameters from the previous activity
         ArrayList<String> params = getIntent().getStringArrayListExtra("passwordParams");
         int time = Integer.parseInt(params.get(0));
-        String message = params.get(1);
-        numchances = Integer.parseInt(params.get(2));
-        String confirmButtonMessage = params.get(3);
+        numchances = Integer.parseInt(params.get(1));
+        String confirmButtonMessage = params.get(2);
         boolean enableCancelButton = true;
-        if (params.size() >= 5) {
-            enableCancelButton = Boolean.parseBoolean(params.get(4));
+        if (params.size() >= 4) {
+            enableCancelButton = Boolean.parseBoolean(params.get(3));
         }
 
         // Make on-screen components visible.
         cancel = (Button) findViewById(R.id.btnCancel);
         confirm = (Button) findViewById(R.id.btnConfirm);
         passwordField = (EditText) findViewById(R.id.passwordField);
+        InputFilter lengthFilter = new InputFilter.LengthFilter(4);
+        passwordField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        passwordField.setFilters(new InputFilter[]{lengthFilter});
+        passwordField.setSingleLine(true);
         timerView = (TextView) findViewById(R.id.timerView);
-        titleMsg = (TextView) findViewById(R.id.titleMsg);
 
         // set the button message and the test message
         confirm.setText(confirmButtonMessage);
-        titleMsg.setText(message);
 
         cancel.setEnabled(enableCancelButton);
 

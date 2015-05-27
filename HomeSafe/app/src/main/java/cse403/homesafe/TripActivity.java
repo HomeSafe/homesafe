@@ -41,6 +41,8 @@ import cse403.homesafe.Messaging.Messenger;
 public class TripActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
+    private static final String TAG = "TripActivity";  // for logcat purposes
+
     // TODO round the corners of the spinner and add a shadow OR do something to make it stand
     // out from the background and obvious that it's a drop down menu.
     private CountDownTimer timer;   // representation for a timer clock
@@ -60,7 +62,6 @@ public class TripActivity extends ActionBarActivity implements GoogleApiClient.C
     private static final int END_TRIP_PASSWORD_REQUEST = 1;
     private static final int ADD_TIME_PASSWORD_REQUEST = 2;
     private static final long TIME_BUFFER = 5;
-    private static final String TAG = "TripActivity";    // for logcat purposes
 
     @Override
     public void onBackPressed() {
@@ -73,7 +74,7 @@ public class TripActivity extends ActionBarActivity implements GoogleApiClient.C
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hstimer);
-        getSupportActionBar().setTitle("Trip in progress");
+        getSupportActionBar().setTitle("Trip in Progress");
 
         currentTimeMillis = 0;
 
@@ -87,7 +88,7 @@ public class TripActivity extends ActionBarActivity implements GoogleApiClient.C
         btnAdd = (Button) findViewById(R.id.btnAdd);
         btnEnd = (Button) findViewById(R.id.btnEnd);
 
-        // attaches the listeners for the two buttons
+        // Attaches the listeners for the two buttons
         addToTimer();
         endTimer();
 
@@ -183,10 +184,9 @@ public class TripActivity extends ActionBarActivity implements GoogleApiClient.C
                     time = (currentTimeMillis / 1000) + "";
                 }
                 Log.i(TAG, currentTimeMillis + "");
-                String message = "Enter Pin to Extend Timer";
                 String numChances = "3";
                 String confirmButtonMessage = "Extend timer";
-                i.putExtra("passwordParams", new ArrayList<String>(Arrays.asList(time, message, numChances, confirmButtonMessage)));
+                i.putExtra("passwordParams", new ArrayList<String>(Arrays.asList(time, numChances, confirmButtonMessage)));
                 startActivityForResult(i, ADD_TIME_PASSWORD_REQUEST);
             }
 
@@ -206,10 +206,9 @@ public class TripActivity extends ActionBarActivity implements GoogleApiClient.C
                     time = (currentTimeMillis / 1000) + "";
                 }
                 Log.e(TAG, currentTimeMillis + "");
-                String message = "Enter Pin to End Trip";
                 String numChances = "3";
                 String confirmButtonMessage = "End Trip";
-                i.putExtra("passwordParams", new ArrayList<String>(Arrays.asList(time, message, numChances, confirmButtonMessage)));
+                i.putExtra("passwordParams", new ArrayList<String>(Arrays.asList(time, numChances, confirmButtonMessage)));
                 startActivityForResult(i, END_TRIP_PASSWORD_REQUEST);
             }
         });
@@ -364,6 +363,9 @@ public class TripActivity extends ActionBarActivity implements GoogleApiClient.C
                 } else if (retcode.equals(PasswordActivity.RetCode.FAILURE)) {
                     startActivity(new Intent(TripActivity.this, DangerActivity.class));
                 } else if (retcode.equals(PasswordActivity.RetCode.SPECIAL)) {
+                    // TODO: Don't call location services or send messages from this activity
+                    // Instead, arrange with Arrival activity to send in extra parameter in the
+                    //  intent that specifies which type of message to send.
                     buildGoogleApiClient();
                     onStart();
                     timer.cancel();
@@ -374,7 +376,7 @@ public class TripActivity extends ActionBarActivity implements GoogleApiClient.C
                 // Triggered from extend timer
                 Log.d(TAG, "Password activity call back from extend timer");
 
-                if (retcode.equals(PasswordActivity.RetCode.SUCCESS)) {
+                if (retcode == PasswordActivity.RetCode.SUCCESS) {
                     // We'll extend the timer.
                     // Each timer object is immutable so we must cancel the old one to create
                     // a new timer object with more time in it.
@@ -389,9 +391,7 @@ public class TripActivity extends ActionBarActivity implements GoogleApiClient.C
                     createTimer();
                     Toast.makeText(TripActivity.this, "Added " + selectedTime,
                             Toast.LENGTH_SHORT).show();
-                } else if (retcode.equals(PasswordActivity.RetCode.FAILURE)) {
-                    // Do nothing
-                } else if (retcode.equals(PasswordActivity.RetCode.SPECIAL)) {
+                } else if (retcode == PasswordActivity.RetCode.SPECIAL) {
                     buildGoogleApiClient();
                     onStart();
                     // Extend timer
