@@ -46,9 +46,9 @@ public class DangerActivity extends ActionBarActivity
 
     private int currentTier; // Current tier level
 
-    private final int TIER_ONE = 1;     // Tier 1
-    private final int TIER_TWO = 2;     // Tier 2
-    private final int TIER_THREE = 3;   // Tier 3
+    private static final int TIER_ONE = 1;      // Tier 1
+    private static final int TIER_TWO = 2;      // Tier 2
+    private static final int TIER_THREE = 3;    // Tier 3
 
     private final int PASSWORD_PROMPT_TIME = 30; // Time allowed for user to enter password
     private final int NUM_PASSWORD_ATTEMPTS = 3; // Num of password attempts the user has

@@ -43,12 +43,10 @@ public class TripActivity extends ActionBarActivity implements GoogleApiClient.C
 
     private static final String TAG = "TripActivity";  // for logcat purposes
 
-    // TODO round the corners of the spinner and add a shadow OR do something to make it stand
-    // out from the background and obvious that it's a drop down menu.
     private CountDownTimer timer;   // representation for a timer clock
     private long countDownPeriod;   // how much time is left in the timer
 
-    // on-screen components
+    // On-screen components
     private ProgressBar pb;         // the timer animation
     private Button btnAdd;          // the button for adding time
     private Button btnEnd;          // the button for ending the trip early
@@ -99,7 +97,6 @@ public class TripActivity extends ActionBarActivity implements GoogleApiClient.C
             Toast.makeText(TripActivity.this, "You entered 0 time!", Toast.LENGTH_SHORT).show();
             finish();
         }
-
         pb.setMax((int) countDownPeriod / 1000);
         createTimer();
     }
@@ -131,22 +128,22 @@ public class TripActivity extends ActionBarActivity implements GoogleApiClient.C
                 int barVal = (int) (millisUntilFinished/ 1000);  // update progress bar animation
                 pb.setProgress(barVal);
 
-                // re-calculate the text display for the timer
+                // Re-calculate the text display for the timer
                 String hrs = String.format("%02d", seconds / 3600);
-                seconds %= 3600;       // strip off seconds that got converted to hours
+                seconds %= 3600;  // Strip off seconds that got converted to hours
                 String mins = String.format("%02d", seconds / 60);
-                seconds %= 60;         // strip off seconds that got converted to minutes
+                seconds %= 60;  // Strip off seconds that got converted to minutes
                 String secs = String.format("%02d", seconds % 60);
                 txtTimer.setText(hrs + ":" + mins + ":" + secs);
             }
 
             @Override
             public void onFinish() {
-                // buzz to alert user
+                // Buzz to alert user
                 Vibrator vib = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
                 vib.vibrate(500);
 
-                // notification to further alert user
+                // Notification to further alert user
                 NotificationCompat.Builder builder =
                         new NotificationCompat.Builder(getApplicationContext())
                                 .setSmallIcon(R.drawable.ic_done_white_24dp)
@@ -161,7 +158,7 @@ public class TripActivity extends ActionBarActivity implements GoogleApiClient.C
                 NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 manager.notify(0, builder.build());
 
-                // ask for password
+                // Ask for password
                 timer.cancel();
                 pb.setProgress(0);
                 Toast.makeText(TripActivity.this, "Your Trip Has Ended", Toast.LENGTH_SHORT).show();
@@ -181,9 +178,9 @@ public class TripActivity extends ActionBarActivity implements GoogleApiClient.C
                 Intent i = new Intent(getApplicationContext(), PasswordActivity.class);
                 String time = "90";
                 if ((currentTimeMillis / 1000) < 90) {
-                    time = (currentTimeMillis / 1000) + "";
+                    time = String.format("%d", currentTimeMillis / 1000);
                 }
-                Log.i(TAG, currentTimeMillis + "");
+                Log.d(TAG, String.format("%d", currentTimeMillis));
                 String numChances = "3";
                 String confirmButtonMessage = "Extend timer";
                 i.putExtra("passwordParams", new ArrayList<String>(Arrays.asList(time, numChances, confirmButtonMessage)));
@@ -202,10 +199,10 @@ public class TripActivity extends ActionBarActivity implements GoogleApiClient.C
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), PasswordActivity.class);
                 String time = "90";
-                if ( (currentTimeMillis / 1000)  < 90 ) {
-                    time = (currentTimeMillis / 1000) + "";
+                if ((currentTimeMillis / 1000) < 90 ) {
+                    time = String.format("%d", currentTimeMillis / 1000);
                 }
-                Log.e(TAG, currentTimeMillis + "");
+                Log.d(TAG, String.format("%d", currentTimeMillis));
                 String numChances = "3";
                 String confirmButtonMessage = "End Trip";
                 i.putExtra("passwordParams", new ArrayList<String>(Arrays.asList(time, numChances, confirmButtonMessage)));
@@ -218,10 +215,8 @@ public class TripActivity extends ActionBarActivity implements GoogleApiClient.C
     /** Converts a string in the format "[int] [time unit]" to milliseconds to be
      *  fed into a timer.
      *  @param time the string to be parsed
-     *
      *  @requires time to be in the correct format of a number followed by a space followed
      *  by a unit of time: "sec" for seconds, "min" for minutes, and "hr" for hours.
-     *
      *  @return -1 if the string was not in the correct format, or a positive number if
      *  it was correctly parsed.
      */
@@ -239,7 +234,7 @@ public class TripActivity extends ActionBarActivity implements GoogleApiClient.C
                             break;
                 case "min": millis *= (1000 * 60);
                             break;
-                case "hr":  millis *= (1000 * 60 *60);
+                case "hr":  millis *= (1000 * 60 * 60);
                             break;
                 default:    return -1;  // invalid time unit
             }
@@ -275,9 +270,8 @@ public class TripActivity extends ActionBarActivity implements GoogleApiClient.C
         Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
         if (mLastLocation != null) {
-            Log.i(TAG, "Connected!");
+            Log.d(TAG, "Connected!");
             Messenger.sendNotifications(Contacts.Tier.ONE, mLastLocation, getApplicationContext(), Messenger.MessageType.DANGER);
-            Toast.makeText(TripActivity.this, "Contacts have been notified", Toast.LENGTH_SHORT).show();
         } else {
             Log.e(TAG, "Failed on getting last location");
         }
@@ -332,16 +326,6 @@ public class TripActivity extends ActionBarActivity implements GoogleApiClient.C
         return result;
     }
 
-    ////////////////////////CONSTRUCTION ZONE AHEAD - HERE THERE BE DRAGONS////////////////////////
-    // 1.) if timer has 5 seconds left you cannot end time
-    // 2.) handle failure in each calling activity
-    // 3.) Maximum amount of time a user has to put in password is 1 min 30 seconds. If there
-    //     is less than that amount left on the HSTimer activity then whatever time is left in
-    //     is how much time they have to put in their password.
-    // 4.) put on DangerActivity, change password Activity, add more time Activity
-    // 5.) make prettier: Maybe a dark grey background color to mimic the pop-up dialogue we
-    //     had before?
-    // 6.) limit to 4 nums when entering a password.
     /**
      * Callback method that receives information from PasswordActivity based on
      * @param requestCode Identifying code for the event that requested the password screen.
@@ -365,9 +349,6 @@ public class TripActivity extends ActionBarActivity implements GoogleApiClient.C
                 } else if (retcode.equals(PasswordActivity.RetCode.FAILURE)) {
                     startActivity(new Intent(TripActivity.this, DangerActivity.class));
                 } else if (retcode.equals(PasswordActivity.RetCode.SPECIAL)) {
-                    // TODO: Don't call location services or send messages from this activity
-                    // Instead, arrange with Arrival activity to send in extra parameter in the
-                    //  intent that specifies which type of message to send.
                     timer.cancel();
                     Intent intent = new Intent(getApplicationContext(), ArrivalActivity.class);
                     intent.putExtra("AlertType", "DANGER");
@@ -411,7 +392,7 @@ public class TripActivity extends ActionBarActivity implements GoogleApiClient.C
                     Toast.makeText(TripActivity.this, "Added " + selectedTime,
                             Toast.LENGTH_SHORT).show();
                 }
-                // Else Cancel was pressed, do nothing
+                // Else Cancel was pressed or wrong password was input, do nothing
             }
         }
     }
