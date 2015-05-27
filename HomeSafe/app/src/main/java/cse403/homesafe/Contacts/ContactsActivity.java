@@ -19,7 +19,6 @@ import cse403.homesafe.R;
  * displays them in their respective tabs.
  */
 public class ContactsActivity extends ActionBarActivity {
-<<<<<<< HEAD
     private FloatingActionButton fab;
     private ViewPager pager;
     private ViewPagerAdapter adapter;
@@ -31,28 +30,16 @@ public class ContactsActivity extends ActionBarActivity {
     // Number of tabs to display, equal to the number of tiers available.
     private static final int NUM_TABS = 3;
 
-    /**
-     * Sets up the main components of the contacts user interface, including displaying
-     * the contacts card view
-     */
-=======
     public static final String TAB = "TAB";
     public static final String TAB_2 = "TAB2";
     public static final String TAB_3 = "TAB3";
     public static final String ACTIVITY = "ACTIVITY";
     public static final String ADD = "ADD";
-    FloatingActionButton fab;
 
-    ViewPager pager;
-    ViewPagerAdapter adapter;
-    SlidingTabLayout tabs;
-    HomeSafeDbHelper mDbHelper;
-    ViewPager.OnPageChangeListener onPageChangeListener;
-    CharSequence Titles[]={"Tier 1","Tier 2", "Tier 3"};
-    int Numboftabs = 3;
-    int tabNum;
-
->>>>>>> 94a906051d46f0847ed87dc2f0fd1b843793811a
+    /**
+     * Sets up the main components of the contacts user interface, including displaying
+     * the contacts card view
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
