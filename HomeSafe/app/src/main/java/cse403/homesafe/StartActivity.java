@@ -103,7 +103,6 @@ public class StartActivity extends ActionBarActivity implements GoogleApiClient.
 //            Toast.makeText(StartScreenActivity.this, menuListItems[position], Toast.LENGTH_SHORT).show();
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //TODO hardcoded case, needs a switch to go to three different screens
                 Intent i;
                 if (position == 0) {
                     i = new Intent(StartActivity.this, ContactsActivity.class);
@@ -156,21 +155,7 @@ public class StartActivity extends ActionBarActivity implements GoogleApiClient.
     private void setupDrawer() {
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
 
-            /** Called when a drawer has settled in a completely open state. */
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                getSupportActionBar().setTitle("Menu");
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-
-            /** Called when a drawer has settled in a completely closed state. */
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
-                getSupportActionBar().setTitle("HomeSafe");
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
         };
-
         mDrawerToggle.setDrawerIndicatorEnabled(true);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
@@ -180,12 +165,6 @@ public class StartActivity extends ActionBarActivity implements GoogleApiClient.
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_start_screen, menu);
         return super.onCreateOptionsMenu(menu);
-    }
-
-    /* Called whenever we call invalidateOptionsMenu() */
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        return true;
     }
 
     @Override
@@ -213,13 +192,6 @@ public class StartActivity extends ActionBarActivity implements GoogleApiClient.
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
         mDrawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        // Pass any configuration change to the drawer toggles
-        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     //*************** After returning from PasswordActivity *********************
