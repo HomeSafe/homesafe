@@ -164,7 +164,7 @@ public class EditContactActivity extends ActionBarActivity {
                     Contact contact = new Contact(nameStr, emailStr, phoneStr, tier);
                     if(add){
                         //add contact to in memory cache
-                        mContactList.addContact(contact, tier);
+                        mContactList.addContact(contact);
                         //add contact to db
                         DbFactory.addContactToDb(contact, mDbHelper);
                         Toast.makeText(EditContactActivity.this, "Added Contact " + mEditName.getText(), Toast.LENGTH_SHORT).show();
