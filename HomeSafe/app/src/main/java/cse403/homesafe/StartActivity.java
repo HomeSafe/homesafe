@@ -235,6 +235,10 @@ public class StartActivity extends ActionBarActivity implements GoogleApiClient.
                 GoogleGPSUtils gpsUtils = null;
                 try {
                     gpsUtils = new GoogleGPSUtils(this);
+                    synchronized (gpsUtils) {
+                        Log.e(TAG, "Waiting on gpsUtils");
+                        gpsUtils.wait();
+                    }
                     gpsUtils.alertContacts(this, 1); // Util is not connected prior to running this method. need to be fixed
                 } catch (Exception ex) {
                     Log.e(TAG, "Start gpsUtils failed");

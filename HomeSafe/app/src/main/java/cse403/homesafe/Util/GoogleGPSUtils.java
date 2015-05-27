@@ -36,7 +36,13 @@ public class GoogleGPSUtils implements GoogleApiClient.ConnectionCallbacks, Goog
         }
         if (mGoogleApiClient != null) {
             Log.i(TAG, "Build Complete");
-            mGoogleApiClient.connect();
+
+            synchronized (this) {
+                mGoogleApiClient.connect();
+//                mGoogleApiClient.wait();
+//                this.wait();
+                Log.i(TAG, "Starting Connect");
+            }
         } else {
             Log.i(TAG, "Build Incomplete");
         }
@@ -47,9 +53,9 @@ public class GoogleGPSUtils implements GoogleApiClient.ConnectionCallbacks, Goog
     }
 
     public boolean alertContacts(RecyclerView contactsView, RecyclerView.Adapter rvAdapter, Context context, int currentTier) throws Exception {
-        if (!isReady) {
-            mGoogleApiClient.wait();
-        }
+//        if (!isReady) {
+//            mGoogleApiClient.wait();
+//        }
 
         Log.e(TAG, "alerting contacts, starting main method " + isReady);
         if (!isReady) {
@@ -94,9 +100,11 @@ public class GoogleGPSUtils implements GoogleApiClient.ConnectionCallbacks, Goog
 
     @Override
     public void onConnected(Bundle bundle) {
-        isReady = true;
-        synchronized (mGoogleApiClient) {
-            mGoogleApiClient.notifyAll();
+        Log.i(TAG, "onConnect entered");
+        synchronized (this) {
+            isReady = true;
+            this.notifyAll();
+            Log.i(TAG, "Connected");
         }
     }
 
