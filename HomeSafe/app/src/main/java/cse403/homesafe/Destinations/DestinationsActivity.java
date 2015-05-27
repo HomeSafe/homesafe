@@ -16,6 +16,9 @@ import cse403.homesafe.R;
 
 
 public class DestinationsActivity extends ActionBarActivity {
+    public static final String TITLE = "Favorite Locations";
+    public static final String ACTIVITY = "ACTIVITY";
+    public static final String ADD = "ADD";
     FloatingActionButton fab;
     RecyclerView recyclerView;
     @Override
@@ -23,7 +26,7 @@ public class DestinationsActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fav_locations);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Favorite Locations");
+        getSupportActionBar().setTitle(TITLE);
 
         this.recyclerView = (RecyclerView) findViewById(R.id.recyclerList);
         LinearLayoutManager linearLM = new LinearLayoutManager(this);
@@ -39,7 +42,7 @@ public class DestinationsActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(DestinationsActivity.this, cse403.homesafe.Destinations.EditDestinationActivity.class);
-                i.putExtra("ACTIVITY", "ADD");
+                i.putExtra(ACTIVITY, ADD);
                 startActivity(i);
             }
         });

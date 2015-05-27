@@ -34,7 +34,24 @@ import cse403.homesafe.R;
  */
 public class EditContactActivity extends ActionBarActivity {
     public static final String EMPTY_STR = "";
+    public static final String EDIT_MSG = "Edited Contact ";
     private static final String TAG = "EditContactActivity";
+    public static final String ACTIVITY = "ACTIVITY";
+    public static final String ADD = "ADD";
+    public static final String ADD_CONTACT = "Add Contact";
+    public static final String TAB = "TAB";
+    public static final String SAVE = "Save";
+    public static final String NAME = "NAME";
+    public static final String PHONE = "PHONE";
+    public static final String EMAIL = "EMAIL";
+    public static final String TIER = "TIER";
+    public static final String CID = "CID";
+    public static final String EDIT_CONTACT = "Edit Contact";
+    public static final String DELETE_CONTACT = "Delete Contact";
+    public static final String MISSING_INFO_MSG = "Please enter either 1, 2 or 3 as tier level";
+    public static final String MISSING_FIELDS = "Missing Fields";
+    public static final String DELETE_MSG = "Contact Deleted";
+    public static final String ADD_MSG = "Added Contact ";
     Button discardChange;
     Button saveButton;
     ImageView saveContact;
@@ -55,7 +72,7 @@ public class EditContactActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         Intent intent = getIntent();
         //these information always come from the recyclerview
-        String activityType = intent.getStringExtra("ACTIVITY");
+        String activityType = intent.getStringExtra(ACTIVITY);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_contact);
@@ -74,13 +91,13 @@ public class EditContactActivity extends ActionBarActivity {
         this.mEditEmail = (EditText)findViewById(R.id.email_text);
         this.mEditTier = (EditText)findViewById(R.id.tier_text);
 
-        if(activityType.equals("ADD")){
-            mTitleTextView.setText("Add Contact");
+        if(activityType.equals(ADD)){
+            mTitleTextView.setText(ADD_CONTACT);
             EditText mEditTier = (EditText)findViewById(R.id.tier_text);
-            tier = getIntent().getStringExtra("TAB");
+            tier = getIntent().getStringExtra(TAB);
             mEditTier.setText(tier);
             saveButton = new Button(this);
-            saveButton.setText("Save");
+            saveButton.setText(SAVE);
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 saveButton.setBackground(getResources().getDrawable(R.drawable.ripple));
             }
@@ -94,18 +111,18 @@ public class EditContactActivity extends ActionBarActivity {
             layout.addView(saveButton, layoutParam);
             add = true;
         } else {
-            String name = intent.getStringExtra("NAME");
-            String phone = intent.getStringExtra("PHONE");
-            String email = intent.getStringExtra("EMAIL");
-            tier = intent.getStringExtra("TIER");
-            cid = intent.getLongExtra("CID", 0);
+            String name = intent.getStringExtra(NAME);
+            String phone = intent.getStringExtra(PHONE);
+            String email = intent.getStringExtra(EMAIL);
+            tier = intent.getStringExtra(TIER);
+            cid = intent.getLongExtra(CID, 0);
             mEditName.setText(name);
             mEditPhone.setText(phone);
             mEditEmail.setText(email);
             mEditTier.setText(tier);
-            mTitleTextView.setText("Edit Contact");
+            mTitleTextView.setText(EDIT_CONTACT);
             deleteContact = new Button(this);
-            deleteContact.setText("Delete Contact");
+            deleteContact.setText(DELETE_CONTACT);
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 deleteContact.setBackground(getResources().getDrawable(R.drawable.ripple));
             }
@@ -134,8 +151,8 @@ public class EditContactActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(EditContactActivity.this, ContactsActivity.class);
-                i.putExtra("TAB", "TAB" + tier);
-                Log.e(TAG, "TAB" + tier);
+                i.putExtra(TAB, TAB + tier);
+                Log.e(TAG, TAB + tier);
                 startActivity(i);
                 finish();
             }
@@ -158,7 +175,7 @@ public class EditContactActivity extends ActionBarActivity {
                     } else if(tierNum == 3) {
                         tier = Contacts.Tier.THREE;
                     } else {
-                        Toast.makeText(EditContactActivity.this, "Please enter either 1, 2 or 3 as tier level", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditContactActivity.this, MISSING_INFO_MSG, Toast.LENGTH_SHORT).show();
                         return;
                     }
                     Contact contact = new Contact(nameStr, emailStr, phoneStr, tier);
@@ -167,21 +184,21 @@ public class EditContactActivity extends ActionBarActivity {
                         mContactList.addContact(contact, tier);
                         //add contact to db
                         DbFactory.addContactToDb(contact, mDbHelper);
-                        Toast.makeText(EditContactActivity.this, "Added Contact " + mEditName.getText(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditContactActivity.this, ADD_MSG + mEditName.getText(), Toast.LENGTH_SHORT).show();
                     } else {
                         contact.setCid(cid);
                         mContactList.editContact(cid, mEditName.getText().toString(), mEditPhone.getText().toString(), mEditEmail.getText().toString(), tier);
                         DbFactory.updateContact(contact, mDbHelper);
-                        Toast.makeText(EditContactActivity.this, "Edited Contact " + nameStr, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditContactActivity.this, EDIT_MSG + nameStr, Toast.LENGTH_SHORT).show();
                     }
                     Intent i = new Intent(EditContactActivity.this, ContactsActivity.class);
-                    i.putExtra("TAB", "TAB" + tierNum);
+                    i.putExtra(TAB, TAB + tierNum);
 
                     startActivity(i);
                     finish();
                 } else {
                     //information incomplete
-                    Toast.makeText(EditContactActivity.this, "Missing Fields", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditContactActivity.this, MISSING_FIELDS, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -192,9 +209,9 @@ public class EditContactActivity extends ActionBarActivity {
                 public void onClick(View v) {
                     mContactList.removeContact(cid);
                     DbFactory.deleteContactFromDb(cid, mDbHelper);
-                    Toast.makeText(EditContactActivity.this, "Contact Deleted", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditContactActivity.this, DELETE_MSG, Toast.LENGTH_SHORT).show();
                     Intent i = new Intent(EditContactActivity.this, ContactsActivity.class);
-                    i.putExtra("TAB", "TAB" + tier);
+                    i.putExtra(TAB, TAB + tier);
                     startActivity(i);
                     finish();
                 }

@@ -16,6 +16,11 @@ import cse403.homesafe.R;
 //ContactActivity retrieves three different tier's list of contacts
 //and displays them in different tabs
 public class ContactsActivity extends ActionBarActivity {
+    public static final String TAB = "TAB";
+    public static final String TAB_2 = "TAB2";
+    public static final String TAB_3 = "TAB3";
+    public static final String ACTIVITY = "ACTIVITY";
+    public static final String ADD = "ADD";
     FloatingActionButton fab;
 
     ViewPager pager;
@@ -75,10 +80,10 @@ public class ContactsActivity extends ActionBarActivity {
     @Override
     public void onResume() {
         super.onResume();
-        if (getIntent().getStringExtra("TAB") != null) {
-            if (getIntent().getStringExtra("TAB").equals("TAB2")) {
+        if (getIntent().getStringExtra(TAB) != null) {
+            if (getIntent().getStringExtra(TAB).equals(TAB_2)) {
                 pager.setCurrentItem(1, true);
-            } else if (getIntent().getStringExtra("TAB").equals("TAB3")) {
+            } else if (getIntent().getStringExtra(TAB).equals(TAB_3)) {
                 pager.setCurrentItem(2, true);
             } else {
                 pager.setCurrentItem(0, true);
@@ -94,8 +99,8 @@ public class ContactsActivity extends ActionBarActivity {
                 Intent i = new Intent(ContactsActivity.this, EditContactActivity.class);
                 tabNum = pager.getCurrentItem();
                 tabNum++;
-                i.putExtra("TAB", String.valueOf(tabNum));
-                i.putExtra("ACTIVITY", "ADD");
+                i.putExtra(TAB, String.valueOf(tabNum));
+                i.putExtra(ACTIVITY, ADD);
                 startActivity(i);
                 finish();
             }
