@@ -26,6 +26,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import static cse403.homesafe.Messaging.Messenger.*;
+
 /**
  * Abstraction that serves as the interface for sending emails through HomeSafe's
  * email address.
@@ -33,13 +35,13 @@ import java.util.Properties;
  * Provides functionality for sending an email to a specified Contact given the user's
  * current location, message, and message type.
  */
-public class Email extends javax.mail.Authenticator implements cse403.homesafe.Messaging.Message {
+public class Email extends javax.mail.Authenticator implements Message {
 
     private static final String TAG = "Email";
 
-    private String mailhost = "smtp.gmail.com";
     private String user;
     private String password;
+    private String mailHost;
     private Session session;
     private Properties props;
 
@@ -50,10 +52,11 @@ public class Email extends javax.mail.Authenticator implements cse403.homesafe.M
     private Email(String user, String password) {
         this.user = user;
         this.password = password;
+        mailHost = "smtp.gmail.com";
 
         props = new Properties();
         props.setProperty("mail.transport.protocol", "smtp");
-        props.setProperty("mail.host", mailhost);
+        props.setProperty("mail.host", mailHost);
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.port", "465");
         props.put("mail.smtp.socketFactory.port", "465");
@@ -83,8 +86,9 @@ public class Email extends javax.mail.Authenticator implements cse403.homesafe.M
      * @param location      Last location of user
      * @param customMessage Customized message to be sent
      */
+    @Override
     public void sendMessage(final Contact recipient, final Location location, final String customMessage,
-                            final Context context, final Messenger.MessageType type) {
+                            final Context context, final MessageType type) {
         new Thread(new Runnable() {
             public void run() {
                 String recipientEmail = recipient.getEmail();
@@ -102,7 +106,7 @@ public class Email extends javax.mail.Authenticator implements cse403.homesafe.M
                 String subject, body;
                 body = buildBody(type, context, userFirstName, userLastName, customMessage, location);
 
-                if (type == Messenger.MessageType.DANGER) {
+                if (type == MessageType.DANGER) {
                     subject = userFirstName + " " + userLastName + " May Need Your Help";
 //                    body = userFirstName + " was using HomeSafe, a walking safety app.\n\nThey were"
 //                            + " using the app to get to a destination, but did not check in with the app."
@@ -111,7 +115,6 @@ public class Email extends javax.mail.Authenticator implements cse403.homesafe.M
 //                            + location.getLongitude() + "). You may need to check in with " + userFirstName + "."
 //                            + "\n\n" + userFirstName + " says: " + customMessage;
                 } else {
-
                     subject = userFirstName + " " + userLastName + " Arrived Safely";
 //                    body = userFirstName + " was using HomeSafe, a walking safety app.\n\nThey were"
 //                            + " using the app to get to a destination and they arrived safely. This is"
@@ -128,7 +131,17 @@ public class Email extends javax.mail.Authenticator implements cse403.homesafe.M
         }).start();
     }
 
-    private String buildBody(Messenger.MessageType type, Context context, String first, String last, String message, Location location) {
+    /**
+     * combine all of the information and build body of html page
+     * @param type  HOMESAFE or DANGER
+     * @param context   application context
+     * @param first     first name of user
+     * @param last      last name of user
+     * @param message   custom message from user
+     * @param location  last known location if type is DANGER
+     * @return  the body of html page
+     */
+    private String buildBody(MessageType type, Context context, String first, String last, String message, Location location) {
         try {
             InputStream is = context.getAssets().open("Prefix.html");
             int size = is.available();
@@ -137,9 +150,9 @@ public class Email extends javax.mail.Authenticator implements cse403.homesafe.M
             is.close();
             String prefix = new String(buffer);
 
-            if (type == Messenger.MessageType.HOMESAFE)
+            if (type == MessageType.HOMESAFE)     //safe arrival
                 is = context.getAssets().open("ArrivalFormat.html");
-            else
+            else                                            //danger zone
                 is = context.getAssets().open("DangerFormat.html");
 
             size = is.available();
@@ -147,7 +160,7 @@ public class Email extends javax.mail.Authenticator implements cse403.homesafe.M
             is.read(buffer);
             is.close();
             String format;
-            if (type == Messenger.MessageType.HOMESAFE)
+            if (type == MessageType.HOMESAFE)
                 format = String.format(new String(buffer), first, last, first, first);
             else
                 format = String.format(new String(buffer), first, last, first, first, location.getLatitude(), location.getLongitude(),
@@ -169,10 +182,19 @@ public class Email extends javax.mail.Authenticator implements cse403.homesafe.M
     }
 
     // Authentication for email
+    @Override
     protected PasswordAuthentication getPasswordAuthentication() {
         return new PasswordAuthentication(user, password);
     }
 
+    /**
+     * send out the email
+     * @param subject   subject of html
+     * @param body      body of html
+     * @param sender    email of homeSafe group
+     * @param recipients    email of emergency contacts
+     * @throws MessagingException if unable to send message
+     */
     private synchronized void sendMail(String subject, String body, String sender, String recipients) throws Exception {
         try {
             MimeMessage message = new MimeMessage(session);
