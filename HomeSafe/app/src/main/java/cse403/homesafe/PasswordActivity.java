@@ -69,7 +69,7 @@ public class PasswordActivity extends ActionBarActivity {
         confirm = (Button) findViewById(R.id.btnConfirm);
         passwordField = (EditText) findViewById(R.id.passwordField);
         InputFilter lengthFilter = new InputFilter.LengthFilter(4);
-        passwordField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        passwordField.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
         passwordField.setFilters(new InputFilter[]{lengthFilter});
         passwordField.setSingleLine(true);
         timerView = (TextView) findViewById(R.id.timerView);
