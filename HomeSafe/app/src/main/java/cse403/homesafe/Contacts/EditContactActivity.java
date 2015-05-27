@@ -157,29 +157,30 @@ public class EditContactActivity extends ActionBarActivity {
                 finish();
             }
         });
-        //save contact information based on the text change
-        saveContact.setOnClickListener(new View.OnClickListener() {
+
+        // listener for the save buttons
+        View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String nameStr = mEditName.getText().toString();
                 String phoneStr = mEditPhone.getText().toString();
                 String emailStr = mEditEmail.getText().toString();
                 String tierStr = mEditTier.getText().toString();
-                if(!nameStr.equals(EMPTY_STR) && !phoneStr.equals(EMPTY_STR) && !emailStr.equals(EMPTY_STR) && !tierStr.equals(EMPTY_STR)) {
+                if (!nameStr.equals(EMPTY_STR) && !phoneStr.equals(EMPTY_STR) && !emailStr.equals(EMPTY_STR) && !tierStr.equals(EMPTY_STR)) {
                     int tierNum = Integer.parseInt(mEditTier.getText().toString());
                     Contacts.Tier tier;
-                    if(tierNum == 1){
+                    if (tierNum == 1) {
                         tier = Contacts.Tier.ONE;
-                    } else if(tierNum == 2){
+                    } else if (tierNum == 2) {
                         tier = Contacts.Tier.TWO;
-                    } else if(tierNum == 3) {
+                    } else if (tierNum == 3) {
                         tier = Contacts.Tier.THREE;
                     } else {
                         Toast.makeText(EditContactActivity.this, MISSING_INFO_MSG, Toast.LENGTH_SHORT).show();
                         return;
                     }
                     Contact contact = new Contact(nameStr, emailStr, phoneStr, tier);
-                    if(add){
+                    if (add) {
                         //add contact to in memory cache
                         mContactList.addContact(contact);
                         //add contact to db
@@ -201,7 +202,12 @@ public class EditContactActivity extends ActionBarActivity {
                     Toast.makeText(EditContactActivity.this, MISSING_FIELDS, Toast.LENGTH_SHORT).show();
                 }
             }
-        });
+        };
+
+        //save contact information based on the text change
+        saveContact.setOnClickListener(listener);
+        if (saveButton != null)
+            saveButton.setOnClickListener(listener);
         //delete the contact and navigate back to contact screen
         if(edit) {
             deleteContact.setOnClickListener(new View.OnClickListener() {
