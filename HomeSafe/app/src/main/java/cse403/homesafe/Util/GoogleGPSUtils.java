@@ -33,7 +33,7 @@ public class GoogleGPSUtils implements GoogleApiClient.ConnectionCallbacks, Goog
             synchronized (this) {
                 mGoogleApiClient.connect();
                 Log.i(TAG, "Starting Connect");
-                this.wait();
+                this.wait(2000);
             }
         } else {
             Log.i(TAG, "Build Incomplete");
