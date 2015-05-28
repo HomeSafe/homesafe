@@ -10,16 +10,28 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
 /**
- * If an activity need to use GoogleGPSUtils, it should construct a GoogleGPSUtils in
- * its onStart(), and call disconnect() in onStop()
+ * GoogleGPSUtils wraps the functionality of the GoogleApiClient
+ * into a synchronous setup call.
+ *
+ * If an activity needs to use GoogleGPSUtils, it should construct a GoogleGPSUtils in
+ * its onStart() (in a non-UI thread), and call disconnect() in onStop()
+ *
+ * For example, in onStart, include:
+ *
+     gpsUtils = new GoogleGPSUtils(c);
+     gpsUtils.start();
+ * Where gpsUtils is a field of the Activity
  */
 public class GoogleGPSUtils implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private Location mLastLocation;
     private GoogleApiClient mGoogleApiClient;
     private static final String TAG = "GoogleGPSUtils";
     private boolean isReady = false;
+    private Context context;
 
-    public GoogleGPSUtils(Context context) throws Exception {
+    public GoogleGPSUtils(Context context) {
+        this.context = context;
+
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(context)
                     .addConnectionCallbacks(this)
@@ -27,19 +39,47 @@ public class GoogleGPSUtils implements GoogleApiClient.ConnectionCallbacks, Goog
                     .addApi(LocationServices.API)
                     .build();
         }
-        if (mGoogleApiClient != null) {
-            Log.i(TAG, "Build Complete");
-
-            synchronized (this) {
-                mGoogleApiClient.connect();
-                Log.i(TAG, "Starting Connect");
-                this.wait();
-            }
-        } else {
-            Log.i(TAG, "Build Incomplete");
-        }
     }
 
+    /**
+     * Asynchronously connects to the GoogleApiClient. Notifies this when
+     * callback is done.
+     *
+     */
+    public void start()  {
+        (new Thread() {
+            public void run() {
+                try {
+                    if (mGoogleApiClient != null) {
+                        Log.i(TAG, "Build Complete");
+                        synchronized (this) {
+                            mGoogleApiClient.connect();
+                            Log.i(TAG, "Starting Connect");
+                            this.wait(2000);
+                            Log.i(TAG, "Done waiting");
+                        }
+                    } else {
+                        Log.i(TAG, "Build Incomplete");
+                    }
+                } catch(InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    /**
+     * returns true if this GoogleGPSUtils object is ready to getLastLocation,
+     * @return
+     */
+    public boolean isReady() {
+        return isReady;
+    }
+
+    /**
+     * Gets and returns the last location of the user.
+     * @return an android Location object storing this device's last known location.
+     */
     public Location getLastLocation() {
         Log.e(TAG, "getLastLocation, checking is ready: " + isReady);
         if (!isReady) {
@@ -63,16 +103,19 @@ public class GoogleGPSUtils implements GoogleApiClient.ConnectionCallbacks, Goog
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        Log.i(TAG, "onConnectionSuspended");
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-
+        Log.i(TAG, "onConnectionFailed");
     }
 
     public void disconnect() {
         mGoogleApiClient.disconnect();
+        synchronized (this) {
+            this.notifyAll(); // if disconnected, let the constructor terminate
+        }
         Log.i(TAG, "Disconnected");
     }
 }

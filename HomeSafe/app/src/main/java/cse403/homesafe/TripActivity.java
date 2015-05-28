@@ -32,14 +32,14 @@ import java.util.List;
 
 import cse403.homesafe.Data.Contacts;
 import cse403.homesafe.Messaging.Messenger;
+import cse403.homesafe.Util.GoogleGPSUtils;
 
 /**
  * This class represents the main activity for the duration of a trip. It holds the timer and
  * logic for a single trip, including the security mechanisms to disallow exiting until either
  * the user ends the trip or time runs out.
  */
-public class TripActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+public class TripActivity extends ActionBarActivity {
 
     private static final String TAG = "TripActivity";  // for logcat purposes
 
@@ -55,6 +55,7 @@ public class TripActivity extends ActionBarActivity implements GoogleApiClient.C
 
     private long currentTimeMillis; // the time left on the timer in millis
 
+    private GoogleGPSUtils gpsUtils;
     private GoogleApiClient mGoogleApiClient;
 
     private static final int END_TRIP_PASSWORD_REQUEST = 1;
@@ -99,6 +100,9 @@ public class TripActivity extends ActionBarActivity implements GoogleApiClient.C
         }
         pb.setMax((int) countDownPeriod / 1000);
         createTimer();
+
+        gpsUtils = new GoogleGPSUtils(getApplicationContext());
+        gpsUtils.start();
     }
 
     // Helper method to initializes the progress bar.
@@ -125,7 +129,7 @@ public class TripActivity extends ActionBarActivity implements GoogleApiClient.C
                 if (seconds == TIME_BUFFER) {
                     btnEnd.setEnabled(false);
                 }
-                int barVal = (int) (millisUntilFinished/ 1000);  // update progress bar animation
+                int barVal = (int) (millisUntilFinished / 1000);  // update progress bar animation
                 pb.setProgress(barVal);
 
                 // Re-calculate the text display for the timer
@@ -199,7 +203,7 @@ public class TripActivity extends ActionBarActivity implements GoogleApiClient.C
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), PasswordActivity.class);
                 String time = "90";
-                if ((currentTimeMillis / 1000) < 90 ) {
+                if ((currentTimeMillis / 1000) < 90) {
                     time = String.format("%d", currentTimeMillis / 1000);
                 }
                 Log.d(TAG, String.format("%d", currentTimeMillis));
@@ -212,13 +216,15 @@ public class TripActivity extends ActionBarActivity implements GoogleApiClient.C
         return true;
     }
 
-    /** Converts a string in the format "[int] [time unit]" to milliseconds to be
-     *  fed into a timer.
-     *  @param time the string to be parsed
-     *  @requires time to be in the correct format of a number followed by a space followed
-     *  by a unit of time: "sec" for seconds, "min" for minutes, and "hr" for hours.
-     *  @return -1 if the string was not in the correct format, or a positive number if
-     *  it was correctly parsed.
+    /**
+     * Converts a string in the format "[int] [time unit]" to milliseconds to be
+     * fed into a timer.
+     *
+     * @param time the string to be parsed
+     * @return -1 if the string was not in the correct format, or a positive number if
+     * it was correctly parsed.
+     * @requires time to be in the correct format of a number followed by a space followed
+     * by a unit of time: "sec" for seconds, "min" for minutes, and "hr" for hours.
      */
     public static long parseTimeString(String time) {
         long millis = 0;
@@ -261,76 +267,12 @@ public class TripActivity extends ActionBarActivity implements GoogleApiClient.C
         timeOptions.setAdapter(dataAdapter);
     }
 
-
-    /**
-     * Callback method of Google API Client if connected
-     */
-    @Override
-    public void onConnected(Bundle bundle) {
-        Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                mGoogleApiClient);
-        if (mLastLocation != null) {
-            Log.d(TAG, "Connected!");
-            Messenger.sendNotifications(Contacts.Tier.ONE, mLastLocation, getApplicationContext(), Messenger.MessageType.DANGER);
-        } else {
-            Log.e(TAG, "Failed on getting last location");
-        }
-    }
-
-    /**
-     * Callback method for Google API Client if connection is suspended
-     */
-    @Override
-    public void onConnectionSuspended(int i) {
-        Log.e(TAG, "Connection Suspended");
-    }
-
-    /**
-     * Callback method for Google API Client if connection fails
-     */
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.e(TAG, "Connection Failed");
-    }
-
-    /**
-     * Starts the Google API Client
-     */
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (mGoogleApiClient != null) {
-            Log.e(TAG, "Connection Started");
-            mGoogleApiClient.connect();
-        }
-    }
-
-    /**
-     * Builds the Google API Client
-     */
-    protected synchronized boolean buildGoogleApiClient() {
-        boolean result = false;
-
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-        if (mGoogleApiClient != null) {
-            Log.e(TAG, "Build Complete");
-            result = true;
-        } else {
-            Log.e(TAG, "Build Incomplete");
-        }
-
-        return result;
-    }
-
     /**
      * Callback method that receives information from PasswordActivity based on
+     *
      * @param requestCode Identifying code for the event that requested the password screen.
-     * @param resultCode Determines the success or failure
-     * @param data Intent in which the result is stored
+     * @param resultCode  Determines the success or failure
+     * @param data        Intent in which the result is stored
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -375,8 +317,15 @@ public class TripActivity extends ActionBarActivity implements GoogleApiClient.C
                     Toast.makeText(TripActivity.this, "Added " + selectedTime,
                             Toast.LENGTH_SHORT).show();
                 } else if (retcode == PasswordActivity.RetCode.SPECIAL) {
-                    buildGoogleApiClient();
-                    onStart();
+                    Location lastLocation = gpsUtils.getLastLocation();
+                    if (lastLocation == null) {
+                        // Fail fast. Location shouldn't be null.
+                        Log.e(TAG, "Location was null when retrieved from GoogleGPSUtils");
+                        return;
+                    }
+                    Messenger.sendNotifications(Contacts.Tier.ONE, lastLocation,
+                            getApplicationContext(), Messenger.MessageType.DANGER);
+
                     // Extend timer
                     // Each timer object is immutable so we must cancel the old one to create
                     // a new timer object with more time in it.
@@ -397,4 +346,8 @@ public class TripActivity extends ActionBarActivity implements GoogleApiClient.C
         }
     }
 
+    @Override
+    protected void onStop() {
+        gpsUtils.disconnect();
+    }
 }

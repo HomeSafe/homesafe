@@ -58,7 +58,6 @@ public class EditContactActivity extends ActionBarActivity {
     HomeSafeDbHelper mDbHelper;
     Contacts mContactList;
     Button deleteContact;
-    Button discardEdit;
     long cid;
     EditText mEditName;
     EditText mEditPhone;

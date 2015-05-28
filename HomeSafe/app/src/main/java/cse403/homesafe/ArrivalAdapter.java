@@ -28,11 +28,10 @@ public class ArrivalAdapter extends RecyclerView.Adapter<ArrivalAdapter.ViewHold
         }
     }
 
-    // Provide a suitable constructor (depends on the kind of dataset)
-//    public ArrivalScreenAdapter(String[] dataset) {
-//        this.dataset = dataset;
-//    }
-    public ArrivalAdapter(ArrayList<Contact> contacts) {
+    /** Makes a new ArrivalAdapter which will display a list of contacts
+     * @param contacts The list of contacts to be displayed
+     */
+    public ArrivalAdapter(List<Contact> contacts) {
         this.contacts = Collections.unmodifiableList(contacts);
     }
 
