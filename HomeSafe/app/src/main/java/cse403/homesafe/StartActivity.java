@@ -56,6 +56,9 @@ public class StartActivity extends ActionBarActivity implements GoogleApiClient.
     private static final String TAG = "StartScreenActivity";    // for logcat purposes
     private Location mLastLocation;
 
+    GoogleGPSUtils gpsUtils;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -202,18 +205,9 @@ public class StartActivity extends ActionBarActivity implements GoogleApiClient.
             if (retcode.equals(PasswordActivity.RetCode.SUCCESS)) {
                 startActivity(new Intent(StartActivity.this, SettingsActivity.class));
             } else if (retcode.equals(PasswordActivity.RetCode.SPECIAL)) {
-                final Context c = this;
-                (new Thread() {
-                    public void run() {
-                        GoogleGPSUtils gpsUtils = null;
-                        try {
-                            gpsUtils = new GoogleGPSUtils(c);
-                            Messenger.sendNotifications(Contacts.Tier.ONE, gpsUtils.getLastLocation(), c, Messenger.MessageType.DANGER);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }).start();
+                Messenger.sendNotifications(Contacts.Tier.ONE, gpsUtils.getLastLocation(), this, Messenger.MessageType.DANGER);
+
+
                 startActivity(new Intent(StartActivity.this, SettingsActivity.class));
             }
         }
@@ -225,10 +219,28 @@ public class StartActivity extends ActionBarActivity implements GoogleApiClient.
     @Override
     protected void onStart() {
         super.onStart();
-        if (mGoogleApiClient != null) {
-            Log.e(TAG, "Connection Started");
-            mGoogleApiClient.connect();
-        }
+        final Context c = this;
+//        gpsUtils = new GoogleGPSUtils(c);
+
+//        // construct GPS utils
+//        (new Thread() {
+//            public void run() {
+//                try {
+//                    gpsUtils.start();
+//                    Log.i(TAG, "start terminated in onStart");
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }).start();
+    }
+
+    @Override
+    protected void onStop() {
+//        if(gpsUtils != null) {
+//            gpsUtils.disconnect();
+//        }
+
     }
 
     /**
