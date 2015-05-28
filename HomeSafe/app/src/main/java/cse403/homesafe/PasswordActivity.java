@@ -71,7 +71,6 @@ public class PasswordActivity extends ActionBarActivity {
         InputFilter lengthFilter = new InputFilter.LengthFilter(4);
         passwordField.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
         passwordField.setFilters(new InputFilter[]{lengthFilter});
-        passwordField.setSingleLine(true);
         timerView = (TextView) findViewById(R.id.timerView);
 
         // set the button message and the test message
