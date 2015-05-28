@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -71,7 +73,6 @@ public class PasswordActivity extends ActionBarActivity {
         InputFilter lengthFilter = new InputFilter.LengthFilter(4);
         passwordField.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
         passwordField.setFilters(new InputFilter[]{lengthFilter});
-        passwordField.setSingleLine(true);
         timerView = (TextView) findViewById(R.id.timerView);
 
         // set the button message and the test message
@@ -102,11 +103,16 @@ public class PasswordActivity extends ActionBarActivity {
             }
         }.start();
 
-        // this will happen...eventually... (make the password field focus when clicked on.
-        passwordField.setOnClickListener(new View.OnClickListener() {
+        // make the enter key work the same as the "submit" button
+        passwordField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void onClick(View view) {
-                passwordField.requestFocus();
+            public boolean onEditorAction(TextView textView, int keyCode, KeyEvent event) {
+                if (keyCode == EditorInfo.IME_ACTION_DONE) {
+                    // Perform action on key press
+                    confirm.performClick();
+                    return true;
+                }
+                return false;
             }
         });
 
