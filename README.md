@@ -1,10 +1,10 @@
 The <i>original</i> Software Requirements Specification is located [here](https://drive.google.com/file/d/0B7Qa-eLpQZL2b093UHI0aVk1ZHM/view?usp=sharing).
-The <i>updated</i> SRS -- contained in a single document -- can be foud [here](https://drive.google.com/open?id=1oygRUxuyMpw9emZNEf7O103dDs92CsdnTmK7E975e1Q&authuser=0) (note: only the use cases were slightly altered).
+The <i>updated</i> SRS -- contained in a single document -- can be found [here](https://drive.google.com/open?id=1oygRUxuyMpw9emZNEf7O103dDs92CsdnTmK7E975e1Q&authuser=0) (note: only the use cases were slightly altered).
 
 The <i>original</i> Software Design Specification is located [here](https://drive.google.com/open?id=0B7Qa-eLpQZL2VXRUTlNBaGk1a00&authuser=0).
 The <i>updated</i> SDS can be found [here](https://drive.google.com/file/d/0B4eVFDvqMnKhS191UXlJYWFfems/view?usp=sharing)
 
-Our User Testing Feedback Analysis is located [here](https://docs.google.com/document/d/1qGnvA7i8Y1O-auHEEr8mS8uQLkMkjbt3_Xx00sZo51A/edit?usp=sharing)
+Our User Testing Feedback Analysis is located [here](https://drive.google.com/open?id=0B4eVFDvqMnKhV2ktRXdvU1BtaUU&authuser=0)
 
 A Code Review Document discussing the changes which lead to the birth of the GoogleGPSUtils class can be found [here](insertLink)
 
