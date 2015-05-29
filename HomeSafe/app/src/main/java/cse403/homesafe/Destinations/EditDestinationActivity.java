@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -379,6 +380,21 @@ public class EditDestinationActivity extends ActionBarActivity implements Google
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_edit_location, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // The action bar home/up action should open or close the drawer.
+        // ActionBarDrawerToggle will take care of this.
+
+        if (item.getItemId() == R.id.action_map) {
+            selectFromMap.callOnClick();
+            return true;
+        }
+        switch(item.getItemId()) {
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
 
