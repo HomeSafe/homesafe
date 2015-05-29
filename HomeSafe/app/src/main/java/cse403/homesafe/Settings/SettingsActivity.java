@@ -33,8 +33,6 @@ import cse403.homesafe.StartActivity;
  */
 public class SettingsActivity extends ActionBarActivity {
 
-    private Context ctx;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +66,6 @@ public class SettingsActivity extends ActionBarActivity {
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
 
-        ctx = this;
     }
 
     @Override
