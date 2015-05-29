@@ -11,22 +11,15 @@ import com.google.android.gms.location.LocationServices;
 
 /**
  * GoogleGPSUtils wraps the functionality of the GoogleApiClient
- * into a synchronous
+ * into a synchronous setup call.
+ *
  * If an activity needs to use GoogleGPSUtils, it should construct a GoogleGPSUtils in
  * its onStart() (in a non-UI thread), and call disconnect() in onStop()
  *
  * For example, in onStart, include:
  *
- * (new Thread() {
-     public void run() {
-             try {
-                 gpsUtils = new GoogleGPSUtils(c);
-             } catch (Exception e) {
-                e.printStackTrace();
-             }
-         }
-     }).start();
-
+     gpsUtils = new GoogleGPSUtils(c);
+     gpsUtils.start();
  * Where gpsUtils is a field of the Activity
  */
 public class GoogleGPSUtils implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -49,7 +42,8 @@ public class GoogleGPSUtils implements GoogleApiClient.ConnectionCallbacks, Goog
     }
 
     /**
-     * Asynchronously connects to the GoogleApiClient.
+     * Asynchronously connects to the GoogleApiClient. Notifies this when
+     * callback is done.
      *
      */
     public void start()  {

@@ -205,8 +205,9 @@ public class StartActivity extends ActionBarActivity implements GoogleApiClient.
             if (retcode.equals(PasswordActivity.RetCode.SUCCESS)) {
                 startActivity(new Intent(StartActivity.this, SettingsActivity.class));
             } else if (retcode.equals(PasswordActivity.RetCode.SPECIAL)) {
-                Messenger.sendNotifications(Contacts.Tier.ONE, gpsUtils.getLastLocation(), this, Messenger.MessageType.DANGER);
-
+                if(gpsUtils.isReady()) {
+                    Messenger.sendNotifications(Contacts.Tier.ONE, gpsUtils.getLastLocation(), this, Messenger.MessageType.DANGER);
+                }
 
                 startActivity(new Intent(StartActivity.this, SettingsActivity.class));
             }
@@ -220,27 +221,22 @@ public class StartActivity extends ActionBarActivity implements GoogleApiClient.
     protected void onStart() {
         super.onStart();
         final Context c = this;
-//        gpsUtils = new GoogleGPSUtils(c);
 
-//        // construct GPS utils
-//        (new Thread() {
-//            public void run() {
-//                try {
-//                    gpsUtils.start();
-//                    Log.i(TAG, "start terminated in onStart");
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }).start();
+        // initialize gpsUtils
+        gpsUtils = new GoogleGPSUtils(c);
+        gpsUtils.start();
+
+        Log.i(TAG, "start terminated in onStart");
     }
 
     @Override
     protected void onStop() {
-//        if(gpsUtils != null) {
-//            gpsUtils.disconnect();
-//        }
+        super.onStop();
 
+        // disconnect utils
+        if(gpsUtils != null) {
+            gpsUtils.disconnect();
+        }
     }
 
     /**
