@@ -1,15 +1,19 @@
 package cse403.homesafe.Contacts;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.melnykov.fab.FloatingActionButton;
 
 import cse403.homesafe.ContactTabs.SlidingTabLayout;
 import cse403.homesafe.ContactTabs.ViewPagerAdapter;
+import cse403.homesafe.Data.Contacts;
 import cse403.homesafe.Data.HomeSafeDbHelper;
 import cse403.homesafe.R;
 
@@ -81,6 +85,22 @@ public class ContactsActivity extends ActionBarActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_contacts, menu);
         return true;
+    }
+
+    /**
+     * Displays a dialog of instructions and explanations of HomeSafe app.
+     */
+    public void displayHelpDialog(MenuItem item) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(ContactsActivity.this);
+        alert.setTitle("Help");
+        alert.setMessage(R.string.contacts_help);
+        alert.setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        alert.show();
     }
 
     @Override
