@@ -1,10 +1,18 @@
 package cse403.homesafe.Settings;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import cse403.homesafe.R;
 import cse403.homesafe.StartActivity;
 
 /**
@@ -18,11 +26,35 @@ import cse403.homesafe.StartActivity;
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
  * API Guide</a> for more information on developing a Settings UI.
  */
-public class SettingsActivity extends Activity {
+public class SettingsActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // set Custom Action bar with check mark
+        ActionBar mSupportActionBar = getSupportActionBar();
+        mSupportActionBar.setDisplayHomeAsUpEnabled(false);
+        mSupportActionBar.setDisplayShowTitleEnabled(false);
+        LayoutInflater mInflater = LayoutInflater.from(this);
+        View mCustomView = mInflater.inflate(R.layout.actionbar_custom, null);
+        TextView mTitleTextView = (TextView) mCustomView.findViewById(R.id.title);
+        mTitleTextView.setTextColor(Color.WHITE);
+        mTitleTextView.setText("Settings");
+        mSupportActionBar.setCustomView(mCustomView);
+        mSupportActionBar.setDisplayShowCustomEnabled(true);
+
+
+        ImageView saveSetting = (ImageView)findViewById(R.id.save_menu_item);
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        };
+        saveSetting.setOnClickListener(listener);
+
+
 
         // Display the fragment as the main content.
         getFragmentManager().beginTransaction()
