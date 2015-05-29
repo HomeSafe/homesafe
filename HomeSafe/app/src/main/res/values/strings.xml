@@ -43,4 +43,13 @@
     <string name="add_time">Choose How Much Time To Add</string>
     <string name="title_activity_arrival_screen">Arrived Safely</string>
     <string name="action_map">map</string>
+
+    <string name="preferences_help">The Pin is your main gateway to accessing the secure parts of the app, like ending a trip safely or changing your preferences.
+
+Panic Pin is the pin you\'ll input during a trip in the case of an emergency. It\'s a discreet way of letting your contacts know that you might need their help without visible feedback. This is useful if an attacker is coercing you to end a trip.
+
+The Custom Message is the message sent to your contacts when you\'re in danger. HomeSafe will notify them of your possible danger as well give them your last known location, but you may choose to communicate additional information here.
+
+By checking Alert Contacts on Safe Arrival, your contacts will know when you get to your destination safely.</string>
+
 </resources>
