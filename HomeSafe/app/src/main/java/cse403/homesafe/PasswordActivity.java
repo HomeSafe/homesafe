@@ -29,6 +29,8 @@ import cse403.homesafe.Messaging.Messenger;
 public class PasswordActivity extends ActionBarActivity {
 
     private static final String TAG = "PasswordActivity";
+    // Enable for debugging purposes
+    private static final boolean DEBUG = false;
     // under-the-hood components
     private CountDownTimer timer;   // how much time the user has left to put in correct password
     private int numchances;         // how many chances the user has to put in correct password
@@ -130,13 +132,15 @@ public class PasswordActivity extends ActionBarActivity {
                 } else {
                     if (comparePassword("pin", password)) {
                         Log.d(TAG, "Return code Success");
-                        Toast.makeText(PasswordActivity.this, "You entered correct password", Toast.LENGTH_SHORT).show();
+                        if (DEBUG)
+                            Toast.makeText(PasswordActivity.this, "You entered correct password", Toast.LENGTH_SHORT).show();
                         i.putExtra("retval", RetCode.SUCCESS);
                         setResult(RESULT_OK, i);
                         finish();
                     } else if (comparePassword("pin_mock", password)) {
                         Log.d(TAG, "Return code Special");
-                        Toast.makeText(PasswordActivity.this, "You entered your emergency password!", Toast.LENGTH_SHORT).show();
+                        if (DEBUG)
+                            Toast.makeText(PasswordActivity.this, "You entered your emergency password!", Toast.LENGTH_SHORT).show();
                         i.putExtra("retval", RetCode.SPECIAL);
                         setResult(RESULT_OK, i);
                         finish();
@@ -144,7 +148,8 @@ public class PasswordActivity extends ActionBarActivity {
                         Toast.makeText(PasswordActivity.this, "You entered an incorrect password", Toast.LENGTH_SHORT).show();
                         numchances--;
                         if (numchances <= 0) {
-                            Toast.makeText(PasswordActivity.this, "No more chances!", Toast.LENGTH_SHORT).show();
+                            if (DEBUG)
+                                Toast.makeText(PasswordActivity.this, "No more chances!", Toast.LENGTH_SHORT).show();
                             confirm.setEnabled(false);
                             Log.d(TAG, "Return code Special");
                             i.putExtra("retval", RetCode.FAILURE);

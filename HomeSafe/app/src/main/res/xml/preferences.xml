@@ -47,6 +47,7 @@
             android:key="customMessage"
             android:title="@string/preferences_title_custom_message"
             android:dialogTitle="Message sent to contacts"
+            android:inputType="textCapSentences"
             android:textColor="#FFFFFF"
             android:defaultValue="" />
         <CheckBoxPreference
