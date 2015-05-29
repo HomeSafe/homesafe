@@ -52,7 +52,6 @@ public class GoogleGPSUtils implements GoogleApiClient.ConnectionCallbacks, Goog
                 try {
                     if (mGoogleApiClient != null) {
                         Log.i(TAG, "Build Complete");
-
                         synchronized (this) {
                             mGoogleApiClient.connect();
                             Log.i(TAG, "Starting Connect");
