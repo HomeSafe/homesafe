@@ -260,14 +260,22 @@ public class EditDestinationActivity extends ActionBarActivity implements Google
                     if (parsedPlace.length == 3) {
                         mEditCity.setText(parsedPlace[0].trim());
                         mEditState.setText(parsedPlace[1].substring(0, 3).trim());
-                    } else {
+                    } else if(parsedPlace.length == 4) {
                         mEditStAddr.setText(parsedPlace[0].trim());
                         mEditCity.setText(parsedPlace[1].trim());
                         mEditState.setText((parsedPlace[2].substring(0, 3)).trim());
+                    } else if(parsedPlace.length == 5) {
+                        mEditStAddr.setText(parsedPlace[1].trim());
+                        mEditCity.setText(parsedPlace[2].trim());
+                        mEditState.setText((parsedPlace[3].substring(0, 3)).trim());
+                    } else {
+                        Toast.makeText(getApplicationContext(),
+                                "Unsupported address format", Toast.LENGTH_LONG)
+                                .show();
                     }
                 } else {
                     Toast.makeText(getApplicationContext(),
-                            "Please select from \"Nearby Places\" ist", Toast.LENGTH_LONG)
+                            "Please select from \"Nearby Places\" list", Toast.LENGTH_LONG)
                             .show();
                 }
 
