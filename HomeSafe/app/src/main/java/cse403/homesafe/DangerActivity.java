@@ -103,6 +103,9 @@ public class DangerActivity extends ActionBarActivity
                 // Send alerts to currentTier contacts
                 alertContacts();
 
+                if (currentTier == Contacts.Tier.THREE)
+                    return;
+
                 incrementTier();
 
                 // Keep prompting the user to input their password.
