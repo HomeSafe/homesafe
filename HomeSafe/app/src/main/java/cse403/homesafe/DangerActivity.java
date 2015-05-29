@@ -20,6 +20,7 @@ import com.google.android.gms.location.LocationServices;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import cse403.homesafe.Data.Contact;
 import cse403.homesafe.Data.Contacts;
@@ -44,16 +45,12 @@ public class DangerActivity extends ActionBarActivity
     // Provides a binding from a list of contacts to be displayed within RecyclerView "contactsView"
     private RecyclerView.Adapter rvAdapter;
 
-    private int currentTier; // Current tier level
+    private Contacts.Tier currentTier; // Current tier level
 
-    private static final int TIER_ONE = 1;      // Tier 1
-    private static final int TIER_TWO = 2;      // Tier 2
-    private static final int TIER_THREE = 3;    // Tier 3
+    private static final int PASSWORD_PROMPT_TIME = 30; // Time allowed for user to enter password
+    private static final int NUM_PASSWORD_ATTEMPTS = 3; // Num of password attempts the user has
 
-    private final int PASSWORD_PROMPT_TIME = 30; // Time allowed for user to enter password
-    private final int NUM_PASSWORD_ATTEMPTS = 3; // Num of password attempts the user has
-
-    private final int PLAY_SERVICES_RESOLUTION_REQUEST = 1000; // Google play services resolution request
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 1000; // Google play services resolution request
     private final String TAG = "DangerActivity"; // For logcat debugging purposes
 
     @Override
@@ -75,7 +72,7 @@ public class DangerActivity extends ActionBarActivity
         RecyclerView.LayoutManager rvLayoutManager = new LinearLayoutManager(this);
         contactsView.setLayoutManager(rvLayoutManager);
         contactsView.setHasFixedSize(true);
-        currentTier = 1;
+        currentTier = Contacts.Tier.ONE;
 
         if (checkPlayServices()) {
             Log.e(TAG, "Device has Google Play Services installed");
@@ -106,9 +103,7 @@ public class DangerActivity extends ActionBarActivity
                 // Send alerts to currentTier contacts
                 alertContacts();
 
-                if (currentTier < TIER_THREE) {
-                    currentTier++;
-                }
+                incrementTier();
 
                 // Keep prompting the user to input their password.
                 promptForPassword();
@@ -130,28 +125,22 @@ public class DangerActivity extends ActionBarActivity
                 mGoogleApiClient);
         if (mLastLocation != null) {
             Log.e(TAG, "Connected!");
-            Contacts.Tier tier;
-            ArrayList<Contact> contacts;
-            switch (currentTier){
-                case TIER_ONE :
-                    tier = Contacts.Tier.ONE;
-                    contacts = new ArrayList<Contact>(Contacts.getInstance().getContactsInTier(Contacts.Tier.ONE));
-                    break;
-                case TIER_TWO :
-                    tier = Contacts.Tier.TWO;
-                    contacts = new ArrayList<Contact>(Contacts.getInstance().getContactsInTier(Contacts.Tier.TWO));
-                    break;
-                case TIER_THREE :
-                    tier = Contacts.Tier.THREE;
-                    contacts = new ArrayList<Contact>(Contacts.getInstance().getContactsInTier(Contacts.Tier.THREE));
-                    break;
-                default :   tier = Contacts.Tier.ONE;
-                    contacts = new ArrayList<Contact>(Contacts.getInstance().getContactsInTier(Contacts.Tier.ONE));
-            }
-
-            Messenger.sendNotifications(tier, mLastLocation, getApplicationContext(), Messenger.MessageType.DANGER);
+            List<Contact> contacts = Contacts.getInstance().getContactsInTier(currentTier);
+            Messenger.sendNotifications(currentTier, mLastLocation, getApplicationContext(), Messenger.MessageType.DANGER);
             rvAdapter = new ArrivalAdapter(contacts);
             contactsView.setAdapter(rvAdapter);
+        }
+    }
+
+    private void incrementTier() {
+        switch (currentTier) {
+            case ONE:   currentTier = Contacts.Tier.TWO;
+                        break;
+            case TWO:   currentTier = Contacts.Tier.THREE;
+                        break;
+            case THREE:
+                        break;
+            default:
         }
     }
 
