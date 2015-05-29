@@ -1,8 +1,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="cse403.homesafe.Contacts.EditContactActivity">
-    <item android:id="@+id/action_map" android:title="@string/action_settings"
+    tools:context="cse403.homesafe.Destinations.EditDestinationActivity">
+    <item android:id="@+id/action_map" android:title="@string/action_map"
         android:icon="@mipmap/ic_action_map"
         android:orderInCategory="100" app:showAsAction="always" />
 </menu>

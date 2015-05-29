@@ -377,7 +377,7 @@ public class EditDestinationActivity extends ActionBarActivity implements Google
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_edit_contact, menu);
+        inflater.inflate(R.menu.menu_edit_location, menu);
         return super.onCreateOptionsMenu(menu);
     }
 }
