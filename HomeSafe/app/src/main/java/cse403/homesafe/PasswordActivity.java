@@ -3,6 +3,8 @@ package cse403.homesafe;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -75,6 +78,7 @@ public class PasswordActivity extends ActionBarActivity {
         InputFilter lengthFilter = new InputFilter.LengthFilter(4);
         passwordField.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
         passwordField.setFilters(new InputFilter[]{lengthFilter});
+        showKeyboard();
         timerView = (TextView) findViewById(R.id.timerView);
 
         // set the button message and the test message
@@ -171,6 +175,17 @@ public class PasswordActivity extends ActionBarActivity {
             }
         });
 
+    }
+
+    private void showKeyboard() {
+        (new Handler()).postDelayed(new Runnable() {
+
+            public void run() {
+                EditText yourEditText= (EditText) findViewById(R.id.passwordField);
+                yourEditText.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN, 0, 0, 0));
+                yourEditText.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_UP , 0, 0, 0));
+            }
+        }, 200);
     }
 
     /**
