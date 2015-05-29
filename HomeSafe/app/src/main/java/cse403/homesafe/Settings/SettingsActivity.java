@@ -1,12 +1,17 @@
 package cse403.homesafe.Settings;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,6 +32,8 @@ import cse403.homesafe.StartActivity;
  * API Guide</a> for more information on developing a Settings UI.
  */
 public class SettingsActivity extends ActionBarActivity {
+
+    private Context ctx;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +67,31 @@ public class SettingsActivity extends ActionBarActivity {
         getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
+
+        ctx = this;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_setting, menu);
+        return true;
+    }
+
+    /**
+     * Displays a dialog of instructions and explanations of HomeSafe app.
+     */
+    public void displayHelpDialog(MenuItem item) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(SettingsActivity.this);
+        alert.setTitle("Help");
+        alert.setMessage(R.string.preferences_help);
+
+        alert.setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        alert.show();
     }
 
     @Override

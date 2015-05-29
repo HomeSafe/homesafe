@@ -54,15 +54,4 @@
             android:title="@string/preferences_title_home_safe_alert"
             android:defaultValue="false" />
     </PreferenceCategory>
-    <PreferenceCategory
-        android:title="Help"
-        android:key="help">
-        <Preference
-            android:title="Instructions"
-            android:key="instructionsButton"
-
-            />
-
-
-    </PreferenceCategory>
 </PreferenceScreen>

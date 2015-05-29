@@ -33,23 +33,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.preferences);
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
-        Preference button = (Preference) findPreference("instructionsButton");
-        button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                alert.setTitle("Help");
-                alert.setMessage("The purpose of the mock password is to...");
-                alert.setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-                alert.show();
-                return true;
-            }
-        });
     }
 
     @Override
@@ -79,7 +62,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
             listPreference.setSummary(listPreference.getEntry());
         }
         if (preference instanceof EditTextPreference) {
-            if (!preference.getTitle().toString().equals("Passcode") && !preference.getTitle().toString().equals("Mock Passcode")) {  // Don't show if it's the passcode preference
+            if (!preference.getTitle().toString().equals("Pin") && !preference.getTitle().toString().equals("Panic Pin")) {  // Don't show if it's the passcode preference
                 EditTextPreference editTextPref = (EditTextPreference) preference;
                 Spannable summary = new SpannableString(editTextPref.getText());
                 summary.setSpan(new ForegroundColorSpan(0xFF000000), 0, summary.length(), 0);
