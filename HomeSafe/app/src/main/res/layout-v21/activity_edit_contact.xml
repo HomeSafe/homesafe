@@ -20,7 +20,6 @@ tools:context="cse403.homesafe.Contacts.AddContactActivity">
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
     android:background="@drawable/ripple"
-    android:layout_alignTop="@+id/delete"
     android:layout_alignParentLeft="true"
     android:layout_alignParentBottom="true" />
 

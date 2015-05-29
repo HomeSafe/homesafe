@@ -1,11 +1,13 @@
 package cse403.homesafe.Destinations;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -15,11 +17,21 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
+
 import cse403.homesafe.Data.DbFactory;
 import cse403.homesafe.Data.Destination;
 import cse403.homesafe.Data.Destinations;
 import cse403.homesafe.Data.HomeSafeDbHelper;
 import cse403.homesafe.R;
+import cse403.homesafe.Util.GoogleMapsUtilsCallback;
 
 
 /**
@@ -31,7 +43,7 @@ import cse403.homesafe.R;
  * , user needs to modify based on the original information.
  * Incomplete information will not be processed
  */
-public class EditDestinationActivity extends ActionBarActivity {
+public class EditDestinationActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleMapsUtilsCallback{
     public static final String EMPTY_STR = "";
     public static final String ACTIVITY = "ACTIVITY";
     public static final String EDIT = "EDIT";
@@ -47,10 +59,15 @@ public class EditDestinationActivity extends ActionBarActivity {
     public static final String ADD_MSG = "Added Location";
     public static final String EDIT_MSG = "Edited Location";
     public static final String INVALID_ADDR_MSG = "Please enter a valid address";
+    int PLACE_PICKER_REQUEST = 1;
+    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1000;
+    String TAG = "EditDestinationActivity";
+    GoogleApiClient mGoogleApiClient;
     Button discardChange;
     ImageView saveLocation;
     Button deleteLocation;
     Button saveButton;
+    Button selectFromMap;
     EditText mEditName;
     EditText mEditStAddr;
     EditText mEditCity;
@@ -134,7 +151,7 @@ public class EditDestinationActivity extends ActionBarActivity {
         mActionBar.setCustomView(mCustomView);
         mActionBar.setDisplayShowCustomEnabled(true);
         discardChange = (Button)findViewById(R.id.discard);
-
+        selectFromMap = (Button)findViewById(R.id.select_from_map);
         saveLocation = (ImageView) findViewById(R.id.save_menu_item);
         setUpButton();
     }
@@ -209,6 +226,103 @@ public class EditDestinationActivity extends ActionBarActivity {
                 }
             });
         }
+        selectFromMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int PLACE_PICKER_REQUEST = 1;
+                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+
+                Context context = getApplicationContext();
+                try {
+                    startActivityForResult(builder.build(context), PLACE_PICKER_REQUEST);
+                } catch (GooglePlayServicesRepairableException e) {
+                    e.printStackTrace();
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    /**
+     * Listener method for when user's selects a destination from the map. This method
+     * autofilled the address of the selected place
+     */
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PLACE_PICKER_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlacePicker.getPlace(data, this);
+                String address = place.getAddress().toString();
+                String[] parsedPlace = address.split(",");
+                if(!address.equals("")) {
+                    mEditName.setText(place.getName());
+
+                    if (parsedPlace.length == 3) {
+                        mEditCity.setText(parsedPlace[0].trim());
+                        mEditState.setText(parsedPlace[1].substring(0, 3).trim());
+                    } else {
+                        mEditStAddr.setText(parsedPlace[0].trim());
+                        mEditCity.setText(parsedPlace[1].trim());
+                        mEditState.setText((parsedPlace[2].substring(0, 3)).trim());
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(),
+                            "Please select from \"Nearby Places\" ist", Toast.LENGTH_LONG)
+                            .show();
+                }
+
+                if (checkPlayServices()) {
+                    Log.e(TAG, "Google Play Services is installed");
+                    buildGoogleApiClient();
+                    onStart();
+                } else {
+                    Log.e(TAG, "Google Play Services is not installed");
+                }
+            } else {
+                Log.e(TAG, "result code was not okay: " + resultCode);
+            }
+        } else {
+            Log.e(TAG, "request code was not PLACE_PICKER_REQUEST: " + requestCode);
+        }
+    }
+
+    /**
+     * Returns true if GooglePlayServices is installed on the device otherwise
+     * false.
+     */
+    private boolean checkPlayServices() {
+        int resultCode = GooglePlayServicesUtil
+                .isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            } else {
+                Toast.makeText(getApplicationContext(),
+                        "This device is not supported.", Toast.LENGTH_LONG)
+                        .show();
+                finish();
+            }
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Builds the Google Api Client for the purpose of retrieving the
+     * user's current location.
+     */
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+        if (mGoogleApiClient != null) {
+            Log.e(TAG, "Build Complete");
+        } else {
+            Log.e(TAG, "Build Incomplete");
+        }
     }
 
     // Quick helper method for capitalizing the first letter of each word in user input.
@@ -224,4 +338,30 @@ public class EditDestinationActivity extends ActionBarActivity {
         }
         return sb.toString().trim();
     }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        Log.e(TAG, "Connected");
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.e(TAG, "Connection Suspended");
+    }
+
+    @Override
+    public void onGetDistanceAndTime(Object obj) {
+
+    }
+
+    @Override
+    public void onAddressToLocation(Object obj) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.e(TAG, "Connection Failed");
+    }
 }
+
