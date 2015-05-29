@@ -110,10 +110,10 @@ public class Contacts{
     }
 
     /**
-     * Returns a LinkedList of all Contact objects which are of the passed-in tier.
+     * Returns a List of all Contact objects which are of the passed-in tier.
      *
      * @param tier The desired Tier of the returned objects
-     * @return A LinkedList<Contact> which contains all Contact objects with the given Tier
+     * @return A List<Contact> which contains all Contact objects with the given Tier
      */
     public List<Contact> getContactsInTier(Contacts.Tier tier) {
         if (tier != Tier.ONE && tier != Tier.TWO && tier != Tier.THREE) {
