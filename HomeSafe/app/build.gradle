@@ -8,8 +8,8 @@ android {
         applicationId "cse403.homesafe"
         minSdkVersion 19
         targetSdkVersion 21
-        versionCode 3
-        versionName "1.1"
+        versionCode 4
+        versionName "1.2"
         testApplicationId "cse403.homesafe.test"
     }
     buildTypes {
