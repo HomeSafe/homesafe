@@ -6,7 +6,7 @@ The <i>updated</i> SDS can be found [here](https://drive.google.com/file/d/0B4eV
 
 Our User Testing Feedback Analysis is located [here](https://drive.google.com/open?id=0B4eVFDvqMnKhV2ktRXdvU1BtaUU&authuser=0)
 
-A Code Review Document discussing the changes which lead to the birth of the GoogleGPSUtils class can be found [here](insertLink)
+A Code Review Document discussing the changes which lead to the birth of the GoogleGPSUtils class can be found [here](https://drive.google.com/open?id=0B4eVFDvqMnKhdDEwTVN0M29icU0&authuser=0)
 
 The Design Changes and Rationale Document is located in the Design Changes and Rationale Directory in this repository.
 
