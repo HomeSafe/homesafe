@@ -347,7 +347,9 @@ public class TripActivity extends ActionBarActivity {
     }
 
     @Override
-    protected void onStop() {
+    protected void onStop()
+    {
+        super.onStop();
         gpsUtils.disconnect();
     }
 }
