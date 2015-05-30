@@ -1,5 +1,6 @@
 package cse403.homesafe;
 
+import android.app.Dialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -188,6 +189,7 @@ public class TripActivity extends ActionBarActivity {
                 String numChances = "3";
                 String confirmButtonMessage = "Extend timer";
                 i.putExtra("passwordParams", new ArrayList<String>(Arrays.asList(time, numChances, confirmButtonMessage)));
+
                 startActivityForResult(i, ADD_TIME_PASSWORD_REQUEST);
             }
 
