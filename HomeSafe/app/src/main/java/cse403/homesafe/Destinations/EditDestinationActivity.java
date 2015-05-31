@@ -70,7 +70,6 @@ public class EditDestinationActivity extends ActionBarActivity implements Google
     ImageView saveLocation;
     Button deleteLocation;
     Button saveButton;
-    Button selectFromMap;
     EditText mEditName;
     EditText mEditStAddr;
     EditText mEditCity;
@@ -154,7 +153,6 @@ public class EditDestinationActivity extends ActionBarActivity implements Google
         mActionBar.setCustomView(mCustomView);
         mActionBar.setDisplayShowCustomEnabled(true);
         discardChange = (Button)findViewById(R.id.discard);
-        selectFromMap = (Button)findViewById(R.id.select_from_map);
         saveLocation = (ImageView) findViewById(R.id.save_menu_item);
         setUpButton();
     }
@@ -226,22 +224,6 @@ public class EditDestinationActivity extends ActionBarActivity implements Google
                 @Override
                 public void onClick(View v) {
                     saveLocation.callOnClick();
-                }
-            });
-            selectFromMap.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int PLACE_PICKER_REQUEST = 1;
-                    PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-
-                    Context context = getApplicationContext();
-                    try {
-                        startActivityForResult(builder.build(context), PLACE_PICKER_REQUEST);
-                    } catch (GooglePlayServicesRepairableException e) {
-                        e.printStackTrace();
-                    } catch (GooglePlayServicesNotAvailableException e) {
-                        e.printStackTrace();
-                    }
                 }
             });
         }
@@ -388,7 +370,17 @@ public class EditDestinationActivity extends ActionBarActivity implements Google
         // ActionBarDrawerToggle will take care of this.
 
         if (item.getItemId() == R.id.action_map) {
-            selectFromMap.callOnClick();
+            int PLACE_PICKER_REQUEST = 1;
+            PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+
+            Context context = getApplicationContext();
+            try {
+                startActivityForResult(builder.build(context), PLACE_PICKER_REQUEST);
+            } catch (GooglePlayServicesRepairableException e) {
+                e.printStackTrace();
+            } catch (GooglePlayServicesNotAvailableException e) {
+                e.printStackTrace();
+            }
             return true;
         }
         switch(item.getItemId()) {
