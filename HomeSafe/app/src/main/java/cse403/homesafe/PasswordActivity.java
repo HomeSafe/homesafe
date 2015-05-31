@@ -32,19 +32,18 @@ import cse403.homesafe.Messaging.Messenger;
  * authority in the HomeSafe App.
  */
 public class PasswordActivity extends ActionBarActivity {
-
-    private static final String TAG = "PasswordActivity";
-    // Enable for debugging purposes
-    private static final boolean DEBUG = false;
     // under-the-hood components
     private CountDownTimer timer;   // how much time the user has left to put in correct password
     private int numchances;         // how many chances the user has to put in correct password
+    private static final String TAG = "PasswordActivity";
+    private static final boolean DEBUG = false;   // Enable for debugging purposes
 
     // on screen components
     private Button cancel;
     private Button confirm;
-    private EditText passwordField;         // where user inputs their password
-    private TextView timerView;             // how much time is left to correctly input password
+    private EditText passwordField;           // where user inputs their password
+    private TextView timerView;               // how much time is left to correctly input password
+    private TextView customMsgView;           // displays which contact tiers have been notified
 
     /**
      * Represents the 3 possible user-interactions with the Password screen;
@@ -71,24 +70,27 @@ public class PasswordActivity extends ActionBarActivity {
         int time = Integer.parseInt(params.get(0));
         numchances = Integer.parseInt(params.get(1));
         String confirmButtonMessage = params.get(2);
+        String customMsg = params.get(3);
         boolean enableCancelButton = true;
-        if (params.size() >= 4) {
-            enableCancelButton = Boolean.parseBoolean(params.get(3));
+        if (params.size() >= 5) {
+            enableCancelButton = Boolean.parseBoolean(params.get(4));
         }
 
         // Make on-screen components visible.
         cancel = (Button) findViewById(R.id.btnCancel);
         confirm = (Button) findViewById(R.id.btnConfirm);
         passwordField = (EditText) findViewById(R.id.passwordField);
-        InputFilter lengthFilter = new InputFilter.LengthFilter(4);
+        timerView = (TextView) findViewById(R.id.timerView);
+        customMsgView = (TextView) findViewById(R.id.customMsg);
+
+        InputFilter lengthFilter = new InputFilter.LengthFilter(5);
         passwordField.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
         passwordField.setFilters(new InputFilter[]{lengthFilter});
         showKeyboard();
-        timerView = (TextView) findViewById(R.id.timerView);
 
         // set the button message and the test message
         confirm.setText(confirmButtonMessage);
-
+        customMsgView.setText(customMsg);
         cancel.setEnabled(enableCancelButton);
 
         timer = new CountDownTimer(time * 1000, 1) {

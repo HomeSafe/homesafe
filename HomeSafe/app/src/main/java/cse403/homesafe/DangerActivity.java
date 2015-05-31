@@ -229,7 +229,20 @@ public class DangerActivity extends ActionBarActivity
         String numChances = NUM_PASSWORD_ATTEMPTS  + "";
         String confirmButtonMessage = "End Trip";
         String enableCancelButton = "false";
-        i.putExtra("passwordParams", new ArrayList<String>(Arrays.asList(time, numChances, confirmButtonMessage, enableCancelButton)));
+
+        // create a custom message to be displayed depending on the current tier level
+        String message = "Tier ";
+        if (currentTier.equals(Contacts.Tier.ONE)) {
+            message += "one";
+        } else if (currentTier.equals(Contacts.Tier.TWO)) {
+            message += "two";
+        } else {
+            message += "three";
+        }
+        message += " has been notified";
+
+        i.putExtra("passwordParams", new ArrayList<String>(Arrays.asList(time, numChances,
+                confirmButtonMessage, message, enableCancelButton)));
         startActivityForResult(i, 1);
     }
 

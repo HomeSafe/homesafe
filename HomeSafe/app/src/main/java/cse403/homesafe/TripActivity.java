@@ -52,7 +52,6 @@ public class TripActivity extends ActionBarActivity {
     private long currentTimeMillis; // the time left on the timer in millis
 
     private GoogleGPSUtils gpsUtils;
-    private GoogleApiClient mGoogleApiClient;
 
     private static final int END_TRIP_PASSWORD_REQUEST = 1;
     private static final int ADD_TIME_PASSWORD_REQUEST = 2;
@@ -157,7 +156,7 @@ public class TripActivity extends ActionBarActivity {
                 NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 manager.notify(0, builder.build());
 
-                // Ask for password
+                // Ask for password TODO
                 timer.cancel();
                 pb.setProgress(0);
                 Toast.makeText(TripActivity.this, "Your Trip Has Ended", Toast.LENGTH_SHORT).show();
@@ -182,7 +181,7 @@ public class TripActivity extends ActionBarActivity {
                 Log.d(TAG, String.format("%d", currentTimeMillis));
                 String numChances = "3";
                 String confirmButtonMessage = "Extend timer";
-                i.putExtra("passwordParams", new ArrayList<String>(Arrays.asList(time, numChances, confirmButtonMessage)));
+                i.putExtra("passwordParams", new ArrayList<String>(Arrays.asList(time, numChances, confirmButtonMessage, "")));
 
                 startActivityForResult(i, ADD_TIME_PASSWORD_REQUEST);
             }
@@ -205,7 +204,7 @@ public class TripActivity extends ActionBarActivity {
                 Log.d(TAG, String.format("%d", currentTimeMillis));
                 String numChances = "3";
                 String confirmButtonMessage = "End Trip";
-                i.putExtra("passwordParams", new ArrayList<String>(Arrays.asList(time, numChances, confirmButtonMessage)));
+                i.putExtra("passwordParams", new ArrayList<String>(Arrays.asList(time, numChances, confirmButtonMessage, "")));
                 startActivityForResult(i, END_TRIP_PASSWORD_REQUEST);
             }
         });
