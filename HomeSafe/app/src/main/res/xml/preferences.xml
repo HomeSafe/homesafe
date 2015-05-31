@@ -36,7 +36,7 @@
         <EditTextPreference
             android:key="pin_mock"
             android:title="@string/preferences_title_password_mock"
-            android:dialogTitle="4-digit Mock Pin"
+            android:dialogTitle="4-digit Panic Pin"
             android:defaultValue=""
             android:textColor="#FFFFFF"
             android:maxLength="4"
