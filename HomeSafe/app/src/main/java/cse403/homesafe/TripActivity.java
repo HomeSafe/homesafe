@@ -1,8 +1,8 @@
 package cse403.homesafe;
 
-import android.app.Dialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
@@ -15,21 +15,17 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import cse403.homesafe.Data.Contacts;
 import cse403.homesafe.Messaging.Messenger;
@@ -51,7 +47,6 @@ public class TripActivity extends ActionBarActivity {
     private ProgressBar pb;         // the timer animation
     private Button btnAdd;          // the button for adding time
     private Button btnEnd;          // the button for ending the trip early
-    private Spinner timeOptions;    // the different amounts of time that can be added to timer
     private TextView txtTimer;      // textual representation of the time left in timer
 
     private long currentTimeMillis; // the time left on the timer in millis
@@ -73,14 +68,13 @@ public class TripActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_hstimer);
+        setContentView(R.layout.activity_trip);
         getSupportActionBar().setTitle("Trip in Progress");
 
         currentTimeMillis = 0;
 
         // creates the views for the on-screen components
         initProgressBar();
-        populateTimeOptions();
 
         txtTimer = (TextView) findViewById(R.id.textTimer);
         txtTimer.setText("00:00");
@@ -219,57 +213,6 @@ public class TripActivity extends ActionBarActivity {
     }
 
     /**
-     * Converts a string in the format "[int] [time unit]" to milliseconds to be
-     * fed into a timer.
-     *
-     * @param time the string to be parsed
-     * @return -1 if the string was not in the correct format, or a positive number if
-     * it was correctly parsed.
-     * @requires time to be in the correct format of a number followed by a space followed
-     * by a unit of time: "sec" for seconds, "min" for minutes, and "hr" for hours.
-     */
-    public static long parseTimeString(String time) {
-        long millis = 0;
-        if (time == null)
-            return -1;
-        String tokens[] = time.split(" ");
-        if (tokens.length != 2)
-            return -1;
-        try {
-            millis = Long.parseLong(tokens[0]);  // throws an exception if this doesn't work
-            switch (tokens[1]) {
-                case "sec": millis *= 1000;
-                            break;
-                case "min": millis *= (1000 * 60);
-                            break;
-                case "hr":  millis *= (1000 * 60 * 60);
-                            break;
-                default:    return -1;  // invalid time unit
-            }
-        } catch (NumberFormatException e) {
-            return -1;
-        }
-        return millis;
-    }
-
-    // Helper method to populate the drop down menu with options to pick from
-    // These times must be in the format [number] [time unit (sec, min, hr)] or
-    // else parseTimeString cannot read them as proper amounts of time.
-    private void populateTimeOptions() {
-        timeOptions = (Spinner) findViewById(R.id.timeOptions);
-        List<String> list = new ArrayList<String>();
-        list.add("1 min");
-        list.add("5 min");
-        list.add("10 min");
-        list.add("30 min");
-        list.add("1 hr");
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, list);
-        dataAdapter.setDropDownViewResource(R.layout.spinner_drop_down);
-        timeOptions.setAdapter(dataAdapter);
-    }
-
-    /**
      * Callback method that receives information from PasswordActivity based on
      *
      * @param requestCode Identifying code for the event that requested the password screen.
@@ -310,14 +253,9 @@ public class TripActivity extends ActionBarActivity {
                     if (timer != null)
                         timer.cancel();
 
-                    // Get the selected time in drop-down menu
-                    String selectedTime = timeOptions.getSelectedItem().toString();
-                    countDownPeriod += parseTimeString(selectedTime);
-                    // The maximum capacity for the progress bar must be increased
-                    pb.setMax((int) (countDownPeriod / 1000));
-                    createTimer();
-                    Toast.makeText(TripActivity.this, "Added " + selectedTime,
-                            Toast.LENGTH_SHORT).show();
+                    // give the user a pop-up dialog to add time
+                    chooseTimeToAdd();
+
                 } else if (retcode == PasswordActivity.RetCode.SPECIAL) {
                     Location lastLocation = gpsUtils.getLastLocation();
                     if (lastLocation == null) {
@@ -334,14 +272,8 @@ public class TripActivity extends ActionBarActivity {
                     if (timer != null)
                         timer.cancel();
 
-                    // the selected time in the drop down menu
-                    String selectedTime = timeOptions.getSelectedItem().toString();
-                    countDownPeriod += parseTimeString(selectedTime);
-                    // The maximum capacity for the progress bar must be increased
-                    pb.setMax((int) (countDownPeriod / 1000));
-                    createTimer();
-                    Toast.makeText(TripActivity.this, "Added " + selectedTime,
-                            Toast.LENGTH_SHORT).show();
+                    // give the user a pop-up dialog to add time
+                    chooseTimeToAdd();
                 }
                 // Else Cancel was pressed or wrong password was input, do nothing
             }
@@ -353,5 +285,37 @@ public class TripActivity extends ActionBarActivity {
     {
         super.onStop();
         gpsUtils.disconnect();
+    }
+
+    // Shows the user a pop-up dialog allowing them to pick how much time to add to the timer.
+    private void chooseTimeToAdd() {
+        final TimePickerDialog timePickerDialog = new TimePickerDialog(this, TimePickerDialog.THEME_HOLO_DARK, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+                // create a new timer object with the additional amount of time
+                countDownPeriod += (hour * 60 * 60 * 1000) + (minute * 60 * 1000);
+                pb.setMax((int) (countDownPeriod / 1000));
+                createTimer();
+
+                // create a custom message to display to the user based on chosen amount of time
+                String message = "Added ";
+                if (hour == 0 && minute == 0)
+                    message += "no time";
+                else {
+                    if (hour == 1)
+                        message += ("1 hour and ");
+                    else
+                        message += (hour + " hours and ");
+                    if (minute == 1)
+                        message += ("1 minute");
+                    else
+                        message += (minute + " minutes");
+                }
+                message += " to the trip";
+                Toast.makeText(TripActivity.this, message, Toast.LENGTH_SHORT).show();
+            }
+        }, 0, 0, true);
+        timePickerDialog.setTitle("Enter Time to Add (H:M)");
+        timePickerDialog.show();
     }
 }
