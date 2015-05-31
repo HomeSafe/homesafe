@@ -5,4 +5,7 @@
     <item android:id="@+id/action_map" android:title="@string/action_map"
         android:icon="@mipmap/ic_action_map"
         android:orderInCategory="100" app:showAsAction="always" />
+    <item android:id="@+id/map_text" android:title="map"
+        android:color="#FFFFFF" android:enabled="false"
+        android:orderInCategory="99" app:showAsAction="always" />
 </menu>
