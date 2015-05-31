@@ -39,7 +39,7 @@ public class ContactsTest {
 
         contacts = Contacts.getInstance();
 
-        boolean result = contacts.addContact(contact1, Contacts.Tier.ONE);
+        boolean result = contacts.addContact(contact1);
         Assert.assertTrue(result);
     }
 
@@ -52,7 +52,7 @@ public class ContactsTest {
         contacts = Contacts.getInstance();
 
 
-        boolean result = contacts.addContact(contact1, Contacts.Tier.ONE);
+        boolean result = contacts.addContact(contact1);
         Assert.assertTrue(result);
 
         result = contacts.removeContact(44);
@@ -67,7 +67,7 @@ public class ContactsTest {
 
         contacts = Contacts.getInstance();
 
-        boolean result = contacts.addContact(contact1, Contacts.Tier.ONE);
+        boolean result = contacts.addContact(contact1);
         Assert.assertTrue(result);
 
         contacts.editContact(44, "Bob", "9999999999", "test@email.com", Contacts.Tier.TWO);
@@ -101,13 +101,13 @@ public class ContactsTest {
 
         contacts = Contacts.getInstance();
 
-        boolean result = contacts.addContact(contact1, Contacts.Tier.ONE);
+        boolean result = contacts.addContact(contact1);
         Assert.assertTrue(result);
-        result = contacts.addContact(contact2, Contacts.Tier.TWO);
+        result = contacts.addContact(contact2);
         Assert.assertTrue(result);
-        result = contacts.addContact(contact3, Contacts.Tier.THREE);
+        result = contacts.addContact(contact3);
         Assert.assertTrue(result);
-        result = contacts.addContact(contact4, Contacts.Tier.ONE);
+        result = contacts.addContact(contact4);
         Assert.assertTrue(result);
 
         List<Contact> resultContacts = contacts.getContactsInTier(Contacts.Tier.ONE);
@@ -139,13 +139,13 @@ public class ContactsTest {
 
         contacts = Contacts.getInstance();
 
-        boolean result = contacts.addContact(contact1, Contacts.Tier.ONE);
+        boolean result = contacts.addContact(contact1);
         Assert.assertTrue(result);
-        result = contacts.addContact(contact2, Contacts.Tier.TWO);
+        result = contacts.addContact(contact2);
         Assert.assertTrue(result);
-        result = contacts.addContact(contact3, Contacts.Tier.THREE);
+        result = contacts.addContact(contact3);
         Assert.assertTrue(result);
-        result = contacts.addContact(contact4, Contacts.Tier.ONE);
+        result = contacts.addContact(contact4);
         Assert.assertTrue(result);
 
         contacts.clearContacts();
