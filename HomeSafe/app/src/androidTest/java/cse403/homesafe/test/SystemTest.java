@@ -85,16 +85,19 @@ public class SystemTest extends ActivityInstrumentationTestCase2<StartActivity> 
         synchronized (lock) {
             lock.wait(500);
         }
-        solo.pressSpinnerItem(0, 2);
         solo.clickOnButton("Add More Time");
+        solo.typeText(0, PASSWORD);
+        solo.clickOnButton(0);
 
+        solo.setTimePicker(0, 0, 1);
+        solo.clickOnButton("OK");
 
         // wait to switch screens
         synchronized (lock) {
             lock.wait(500);
         }
-        solo.typeText(0, PASSWORD);
-        solo.clickOnButton(0);
+
+        assertTrue(solo.waitForText("Added 0 hours and 1 minute", 1, 3000));
         // success
     }
 
@@ -124,6 +127,12 @@ public class SystemTest extends ActivityInstrumentationTestCase2<StartActivity> 
         }
         solo.typeText(0, SPECIAL_PASSWORD);
         solo.clickOnButton(0);
+
+        synchronized (lock) {
+            lock.wait(500);
+        }
+
+        assertTrue(solo.waitForText("testName has been notified", 1, 3000));
         // success
     }
 
