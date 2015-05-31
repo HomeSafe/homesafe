@@ -46,6 +46,7 @@ public class DangerActivity extends ActionBarActivity
     private RecyclerView.Adapter rvAdapter;
 
     private Contacts.Tier currentTier; // Current tier level
+    private String tiersAlertedMessage = ""; // message to user about who has been alerted
 
     private static final int PASSWORD_PROMPT_TIME = 30; // Time allowed for user to enter password
     private static final int NUM_PASSWORD_ATTEMPTS = 3; // Num of password attempts the user has
@@ -231,15 +232,19 @@ public class DangerActivity extends ActionBarActivity
         String enableCancelButton = "false";
 
         // create a custom message to be displayed depending on the current tier level
-        String message = "Tier ";
-        if (currentTier.equals(Contacts.Tier.ONE)) {
-            message += "one";
-        } else if (currentTier.equals(Contacts.Tier.TWO)) {
-            message += "two";
+        String message = "Tier " + tiersAlertedMessage + " has been notified";
+
+        // increment tier alert message
+        if (tiersAlertedMessage.equals("")) {
+            tiersAlertedMessage = "one";
+            message = "";
         } else {
-            message += "three";
+            if (tiersAlertedMessage.equals("one")) {
+                tiersAlertedMessage = "two";
+            } else if (tiersAlertedMessage.equals("two")) {
+                tiersAlertedMessage = "three";
+            }
         }
-        message += " has been notified";
 
         i.putExtra("passwordParams", new ArrayList<String>(Arrays.asList(time, numChances,
                 confirmButtonMessage, message, enableCancelButton)));
