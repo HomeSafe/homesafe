@@ -119,7 +119,7 @@ public class StartActivity extends ActionBarActivity implements GoogleApiClient.
                     String time = "90";
                     String numChances = "3";
                     String confirmButtonMessage = "Enter";
-                    i.putExtra("passwordParams", new ArrayList<String>(Arrays.asList(time, numChances, confirmButtonMessage)));
+                    i.putExtra("passwordParams", new ArrayList<String>(Arrays.asList(time, numChances, confirmButtonMessage, "")));
                     startActivityForResult(i, 1);
                 }
             }
