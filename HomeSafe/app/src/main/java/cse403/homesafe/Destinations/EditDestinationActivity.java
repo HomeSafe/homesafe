@@ -221,30 +221,30 @@ public class EditDestinationActivity extends ActionBarActivity implements Google
                 }
             });
         }
-        if(add){
+        if(add) {
             saveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     saveLocation.callOnClick();
                 }
             });
-        }
-        selectFromMap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int PLACE_PICKER_REQUEST = 1;
-                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+            selectFromMap.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int PLACE_PICKER_REQUEST = 1;
+                    PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
 
-                Context context = getApplicationContext();
-                try {
-                    startActivityForResult(builder.build(context), PLACE_PICKER_REQUEST);
-                } catch (GooglePlayServicesRepairableException e) {
-                    e.printStackTrace();
-                } catch (GooglePlayServicesNotAvailableException e) {
-                    e.printStackTrace();
+                    Context context = getApplicationContext();
+                    try {
+                        startActivityForResult(builder.build(context), PLACE_PICKER_REQUEST);
+                    } catch (GooglePlayServicesRepairableException e) {
+                        e.printStackTrace();
+                    } catch (GooglePlayServicesNotAvailableException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     /**
