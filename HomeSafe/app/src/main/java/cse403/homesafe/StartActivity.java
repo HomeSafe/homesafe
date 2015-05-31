@@ -1,6 +1,8 @@
 package cse403.homesafe;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -148,7 +150,7 @@ public class StartActivity extends ActionBarActivity implements GoogleApiClient.
                     Intent i = new Intent(StartActivity.this, TripSettingActivity.class);
                     startActivity(i);
                 } else {
-                    Toast.makeText(StartActivity.this, "Set up emergency contact before start a trip", Toast.LENGTH_LONG).show();
+                    Toast.makeText(StartActivity.this, "Set up emergency contact before starting a trip", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -195,6 +197,24 @@ public class StartActivity extends ActionBarActivity implements GoogleApiClient.
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
         mDrawerToggle.syncState();
+    }
+
+
+    /**
+     * Displays a dialog of instructions and explanations of HomeSafe app.
+     */
+    public void displayHelpDialog(MenuItem item) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(StartActivity.this);
+        alert.setTitle("Help");
+        alert.setMessage(R.string.startScreen_help);
+
+        alert.setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        alert.show();
     }
 
     //*************** After returning from PasswordActivity *********************
