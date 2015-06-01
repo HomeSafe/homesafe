@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -56,7 +57,9 @@ public class ArrivalActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_arrival_screen);
-        getSupportActionBar().setTitle("SAFE ARRIVAL");
+        ActionBar bar = getSupportActionBar();
+        if (bar != null)
+            bar.setTitle("SAFE ARRIVAL");
 
         String alertType = getIntent().getStringExtra("AlertType");
         if (alertType.equals("DANGER")) {
