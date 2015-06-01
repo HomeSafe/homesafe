@@ -120,7 +120,6 @@ public class DangerActivity extends ActionBarActivity {
                 Intent intent = new Intent(getApplicationContext(), ArrivalActivity.class);
                 intent.putExtra("AlertType", "DANGER");
                 startActivity(intent);
-                startActivity(new Intent(DangerActivity.this, ArrivalActivity.class));
             }
         }
     }
