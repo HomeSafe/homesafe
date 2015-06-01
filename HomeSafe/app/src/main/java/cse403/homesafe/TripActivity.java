@@ -94,9 +94,6 @@ public class TripActivity extends ActionBarActivity {
         }
         pb.setMax((int) countDownPeriod / 1000);
         createTimer();
-
-        gpsUtils = new GoogleGPSUtils(getApplicationContext());
-        gpsUtils.start();
     }
 
     // Helper method to initializes the progress bar.
@@ -279,11 +276,27 @@ public class TripActivity extends ActionBarActivity {
         }
     }
 
+    /**
+     * Starts the Google API Client
+     */
     @Override
-    protected void onStop()
-    {
+    protected void onStart() {
+        super.onStart();
+        final Context c = this;
+
+        // initialize gpsUtils
+        gpsUtils = new GoogleGPSUtils(c);
+        gpsUtils.start();
+    }
+
+    @Override
+    protected void onStop() {
         super.onStop();
-        gpsUtils.disconnect();
+
+        // disconnect utils
+        if(gpsUtils != null) {
+            gpsUtils.disconnect();
+        }
     }
 
     // Shows the user a pop-up dialog allowing them to pick how much time to add to the timer.

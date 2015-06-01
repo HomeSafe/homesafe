@@ -1,6 +1,7 @@
 package cse403.homesafe;
 
 import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -25,6 +26,8 @@ import java.util.List;
 import cse403.homesafe.Data.Contact;
 import cse403.homesafe.Data.Contacts;
 import cse403.homesafe.Messaging.Messenger;
+import cse403.homesafe.Util.GoogleGPSUtils;
+import cse403.homesafe.Util.GoogleMapsUtils;
 
 /**
  * This activity displays a password prompt to the user.
@@ -32,11 +35,9 @@ import cse403.homesafe.Messaging.Messenger;
  * some amount of time then the phone will contact the emergency
  * contacts.
  */
-public class DangerActivity extends ActionBarActivity
-        implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
+public class DangerActivity extends ActionBarActivity {
 
     private Location mLastLocation; // Current location
-    private GoogleApiClient mGoogleApiClient; // Google API Client to retrieve current location
 
     private Button homeScreenBtnDanger; // Button to start a new trip
 
@@ -53,6 +54,7 @@ public class DangerActivity extends ActionBarActivity
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 1000; // Google play services resolution request
     private final String TAG = "DangerActivity"; // For logcat debugging purposes
+    private GoogleGPSUtils gpsUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,12 +77,8 @@ public class DangerActivity extends ActionBarActivity
         contactsView.setHasFixedSize(true);
         currentTier = Contacts.Tier.ONE;
 
-        if (checkPlayServices()) {
-            Log.e(TAG, "Device has Google Play Services installed");
-            buildGoogleApiClient();
-            onStart();
-        } else {
-            Log.e(TAG, "Device does not have Google Play Services installed");
+        if(gpsUtils.isReady()) {
+            mLastLocation = gpsUtils.getLastLocation();
         }
         promptForPassword();
     }
@@ -125,8 +123,9 @@ public class DangerActivity extends ActionBarActivity
      * Send danger alerts to the current tier contacts.
      */
     public void alertContacts() {
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                mGoogleApiClient);
+        if(gpsUtils.isReady()) {
+            mLastLocation = gpsUtils.getLastLocation();
+        }
         if (mLastLocation != null) {
             Log.e(TAG, "Connected!");
             List<Contact> contacts = Contacts.getInstance().getContactsInTier(currentTier);
@@ -154,61 +153,6 @@ public class DangerActivity extends ActionBarActivity
         String ns = getApplicationContext().NOTIFICATION_SERVICE;
         NotificationManager nMgr = (NotificationManager) getApplicationContext().getSystemService(ns);
         nMgr.cancelAll();
-    }
-
-    /**
-     * Builds the Google API Client.
-     */
-    protected synchronized void buildGoogleApiClient() {
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
-        }
-        if (mGoogleApiClient != null) {
-            Log.i(TAG, "Build Complete");
-        } else {
-            Log.i(TAG, "Build Incomplete");
-        }
-    }
-
-    /**
-     * Attempts to start Google API Client. Connection to Google API Client
-     * can be successful, failure, or suspended.
-     */
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (mGoogleApiClient != null) {
-            Log.e(TAG, "Connection Started");
-            mGoogleApiClient.connect();
-        }
-    }
-
-    /**
-     * Callback method if connection to Google API Client is successful.
-     */
-    @Override
-    public void onConnected(Bundle bundle) {
-        Log.i(TAG, "Connected to Google API Client");
-    }
-
-    /**
-     * Callback method if connection to Google API Client is suspended.
-     */
-    @Override
-    public void onConnectionSuspended(int i) {
-        Log.i(TAG, "Connection to Google API Client is suspended");
-    }
-
-    /**
-     * Callback method if connection to Google API Client is failed.
-     */
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.i(TAG, "Connection to Google API Client failed");
     }
 
     /**
@@ -297,6 +241,29 @@ public class DangerActivity extends ActionBarActivity
                         StartActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
             }
         });
+    }
+
+    /**
+     * Starts the Google API Client
+     */
+    @Override
+    protected void onStart() {
+        super.onStart();
+        final Context c = this;
+
+        // initialize gpsUtils
+        gpsUtils = new GoogleGPSUtils(c);
+        gpsUtils.start();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        // disconnect utils
+        if(gpsUtils != null) {
+            gpsUtils.disconnect();
+        }
     }
 
 }

@@ -31,9 +31,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cse403.homesafe.Data.Contacts;
 import cse403.homesafe.Data.Destination;
 import cse403.homesafe.Data.Destinations;
+import cse403.homesafe.Messaging.Messenger;
 import cse403.homesafe.Util.DistanceAndTime;
+import cse403.homesafe.Util.GoogleGPSUtils;
 import cse403.homesafe.Util.GoogleMapsUtils;
 import cse403.homesafe.Util.GoogleMapsUtilsCallback;
 
@@ -42,7 +45,7 @@ import cse403.homesafe.Util.GoogleMapsUtilsCallback;
  * time arrival from the current location to the destination, and starting the trip
  * after destination has been selected.
  */
-public class TripSettingActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleMapsUtilsCallback {
+public class TripSettingActivity extends ActionBarActivity implements GoogleMapsUtilsCallback {
 
     public static final int SPINNER_PLACEHOLDER = -100;
     public static final String PLACEHOLDER_STR = "Select From Favorites";
@@ -52,11 +55,11 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
     Location mLastLocation; // the user's last known location (current location)
     Location destination;   // the user's intended destination
     DistanceAndTime distAndTime; // stores the distance and time it takes to arrive at destination
-    GoogleApiClient mGoogleApiClient; // access the google api to retrieve last known location
     String TAG = "TripSettingActivity"; // for logcat debugging purposes
     int PLACE_PICKER_REQUEST = 1;
 
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1000;
+    private GoogleGPSUtils gpsUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,12 +154,8 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
                 destination.setLongitude(place.getLatLng().longitude);
                 TextView currentDestinationText = (TextView) findViewById(R.id.currentDestinationText);
                 currentDestinationText.setText("Destination: " + place.getName());
-                if (checkPlayServices()) {
-                    Log.e(TAG, "Google Play Services is installed");
-                    buildGoogleApiClient();
-                    onStart();
-                } else {
-                    Log.e(TAG, "Google Play Services is not installed");
+                if(gpsUtils.isReady()) {
+                    mLastLocation = gpsUtils.getLastLocation();
                 }
             } else {
                 Log.e(TAG, "result code was not okay: " + resultCode);
@@ -186,65 +185,6 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * Builds the Google Api Client for the purpose of retrieving the
-     * user's current location.
-     */
-    protected synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-        if (mGoogleApiClient != null) {
-            Log.e(TAG, "Build Complete");
-        } else {
-            Log.e(TAG, "Build Incomplete");
-        }
-    }
-
-    /**
-     * Callback method of Google API Client if connected.
-     */
-    @Override
-    public void onConnected(Bundle connectionHint) {
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                mGoogleApiClient);
-        Log.e(TAG, "Connected!");
-        if (mLastLocation != null) {
-            GoogleMapsUtils.getDistanceAndTime(mLastLocation, destination, this);
-        }
-    }
-
-    /**
-     * Starts the Google API Client.
-     */
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (mGoogleApiClient != null) {
-            Log.e(TAG, "Connection Started");
-            mGoogleApiClient.connect();
-        }
-    }
-
-    /**
-     * Callback method for Google API Client if connection is suspended.
-     */
-    @Override
-    public void onConnectionSuspended(int i) {
-        Log.e(TAG, "Connection Suspended");
-
-    }
-
-    /**
-     * Callback method for Google API Client if connection fails.
-     */
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.e(TAG, "Connection Failed");
     }
 
     /**
@@ -331,12 +271,13 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
             if(position != 0) {
                 String nameOfDest = parent.getItemAtPosition(position).toString() + "";
                 destination = nameToLocation.get(nameOfDest);
-                if (checkPlayServices()) {
-                    Log.e(TAG, "Google Play Services is installed");
-                    buildGoogleApiClient();
-                    onStart();
-                } else {
-                    Log.e(TAG, "Google Play Services is not installed");
+                // use gps utils to get the last know location
+                if(gpsUtils.isReady()) {
+                    mLastLocation = gpsUtils.getLastLocation();
+                }
+                // use maps utils to get distance and time
+                if (mLastLocation != null) {
+                    GoogleMapsUtils.getDistanceAndTime(mLastLocation, destination, TripSettingActivity.this);
                 }
 
                 TextView currentDestinationText = (TextView) findViewById(R.id.currentDestinationText);
@@ -354,6 +295,29 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleApiC
         @Override
         public void onNothingSelected(AdapterView<?> parent) {
 
+        }
+    }
+
+    /**
+     * Starts the Google API Client
+     */
+    @Override
+    protected void onStart() {
+        super.onStart();
+        final Context c = this;
+
+        // initialize gpsUtils
+        gpsUtils = new GoogleGPSUtils(c);
+        gpsUtils.start();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        // disconnect utils
+        if(gpsUtils != null) {
+            gpsUtils.disconnect();
         }
     }
 }
