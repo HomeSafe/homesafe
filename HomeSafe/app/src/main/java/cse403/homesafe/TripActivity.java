@@ -1,9 +1,11 @@
 package cse403.homesafe;
 
+import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -153,7 +155,7 @@ public class TripActivity extends ActionBarActivity {
                 NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 manager.notify(0, builder.build());
 
-                // Ask for password TODO
+                // Ask for password
                 timer.cancel();
                 pb.setProgress(0);
                 Toast.makeText(TripActivity.this, "Your Trip Has Ended", Toast.LENGTH_SHORT).show();

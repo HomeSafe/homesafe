@@ -9,6 +9,7 @@
         <!--   darker variant for the status bar and contextual app bars -->
         <item name="android:textColorPrimary">@color/primary_text</item>
         <item name="android:windowBackground">@color/window_background</item>
+        <item name="android:actionMenuTextColor">@color/window_background</item>
         <!--   theme UI controls like checkboxes and text fields -->
     </style>
 

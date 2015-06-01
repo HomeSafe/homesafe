@@ -78,19 +78,38 @@ Testing is very important (especially if you plan to add your code to our code).
 * [JUnit Testing](http://www.javacodegeeks.com/2014/11/junit-tutorial-unit-testing.html)
 * [JUnit Testing in Eclipse](http://help.eclipse.org/luna/index.jsp?topic=%2Forg.eclipse.jdt.doc.user%2FgettingStarted%2Fqs-junit.htm)
 
-To run the whole test suite at once, navigate to the project's top-level directory (homesafe/HomeSafe). From here, you can run the command:
+####Unit Test
+To run the whole unit test suite at once, navigate to the project's top-level directory (homesafe/HomeSafe). From here, you can run the command:
 ```
 $ ./gradlew test
 ```
-This will build and run all tests. Once the tests have completed, you may find a detailed report in the file
+This will build and run all tests in ```src/main/java/test``` directory. Once the tests have completed, you may find a detailed report in the file
 ```
 app/build/outputs/reports/androidTests/connected/index.html.
 ```
-If you'd like to run individual tests, you'll find core class JUnit tests in app/src/main/java/UnitTests/ and Activity unit tests in app/src/androidTest/java/cse403/homesafe/test/.
+If you'd like to run individual tests, you'll find core class JUnit tests in app/src/main/java/UnitTests/ 
 
 To run individual tests from Android Studio, you'll need to manually switch back and forth between the two modes: unit testing mode and instrumentation testing mode. If you're running Android Studio 1.1 or below, make sure unit testing is enabled first by going to Preferences > Build Tools > Gradle > Experimental and ticking the Unit Testing box (this step is unnecesssary in newer versions).
 
-To run unit tests, go to View > Tool Windows > Build Variants and pick Unit Tests in the dropdown. To run instrumentation (i.e. Activity) tests, switch it to Instrumentation Tests.
+To run unit tests, go to View > Tool Windows > Build Variants and pick Unit Tests in the dropdown. 
+####System Test
+System tests can be found in:
+```
+app/src/androidTest/java/cse403/homesafe/test/   
+```   
+To run system test, you will need an Android phone or emulator
+
+####Code Coverage
+We use code coverage library [Jacoco](http://www.eclemma.org/jacoco/) for test coverage. It is configured in build.gradle to run all the unit tests in ```src/main/java/test``` directory.   
+In project's top-level directory, run:   
+```
+./gradlew jacocoTestReport
+```   
+Coverage report can be found in:
+```
+/app/build/reports/jacoco/jacocoTestReport/html/index.html
+```
+
 
 ###Setting Up Automated Builds and Tests
 Building and testing can be a pain; if you're interesting in setting up automated daily builds the following sites can help you on your way to setting some up: [Jenkins](http://jenkins-ci.org/ "Jenkins"), [CruiseControl](http://cruisecontrol.sourceforge.net/ "CruiseControl"), [Cron](http://en.wikipedia.org/wiki/Cron "Cron").

@@ -44,13 +44,15 @@
     <string name="title_activity_arrival_screen">Arrived Safely</string>
     <string name="action_map">map</string>
 
-    <string name="preferences_help">The Pin is your main gateway to accessing the secure parts of the app, like ending a trip safely or changing your preferences.\n\n
-        Panic Pin is the pin you\'ll input during a trip in the case of an emergency. It\'s a discreet way of letting your contacts know that you might need their help without visible feedback. This is useful if an attacker is coercing you to end a trip.\n\n
+    <string name="preferences_help">The Pin is your main gateway to accessing the secure parts of the app, like ending a trip safely or changing your preferences.\n\nPanic Pin is the pin you\'ll input during a trip in the case of an emergency. It\'s a discreet way of letting your contacts know that you might need their help without visible feedback. This is useful if an attacker is coercing you to end a trip.\n\nThe Custom Message is the message sent to your contacts when you\'re in danger. HomeSafe will notify them of your possible danger as well give them your last known location, but you may choose to communicate additional information here.\n\nBy checking Alert Contacts on Safe Arrival, your contacts will know when you get to your destination safely.
 
 The Custom Message is the message sent to your contacts when you\'re in danger. HomeSafe will notify them of your possible danger as well give them your last known location, but you may choose to communicate additional information here.\n\n
 
 By checking Alert Contacts on Safe Arrival, your contacts will know when you get to your destination safely.</string>
 
-    <string name="contacts_help">Tiers are a simple way of differentiating between your contacts. Contacts in your tier 1 will be the first to be notified in case of an emergency.\nA length of time after the first set of contacts have been notified, your tier 2 contacts will be notified.\nFinally, some time later tier 3 will be alerted. This way, you can choose who will be the first to respond and you can avoid embarrassments in the case of a false alarm.</string>
+    <string name="startScreen_help">Welcome to Homesafe! This is the Home Screen.\n\n
+        Before starting a trip, you need to set a emergency contact. You can add Contacts by clicking on the settings tile in the top left corner of the screen.\n\n
+        Once you have added at least once Contact, you can click on the Start Trip button below to select a destination, a trip timer, and begin your trip.</string>
+    <string name="contacts_help">Tiers are a simple way of differentiating between your contacts. Contacts in your tier 1 will be the first to be notified in case of an emergency.\n\nA length of time after the first set of contacts have been notified, your tier 2 contacts will be notified.\n\nFinally, some time later tier 3 will be alerted. This way, you can choose who will be the first to respond and you can avoid embarrassments in the case of a false alarm.</string>
 
 </resources>

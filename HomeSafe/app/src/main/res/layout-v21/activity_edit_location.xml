@@ -23,19 +23,6 @@ tools:context="cse403.homesafe.EditLocationActivity">
     android:layout_alignParentBottom="true"
     android:layout_alignParentStart="true" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Select From Map"
-        android:textColor="@android:color/white"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp"
-        android:textSize="25dp"
-        android:id="@+id/select_from_map"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/state_text"/>
-
     <com.rengwuxian.materialedittext.MaterialEditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
