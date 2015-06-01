@@ -79,6 +79,12 @@ public class ArrivalActivity extends ActionBarActivity {
         RecyclerView.LayoutManager rvLayoutManager = new LinearLayoutManager(this);
         contactsView.setLayoutManager(rvLayoutManager);
 
+        final Context ctx = this;
+
+        // initialize gpsUtils
+        gpsUtils = new GoogleGPSUtils(ctx);
+        gpsUtils.start();
+
         if(gpsUtils.isReady()) {
             lastKnownLocation = gpsUtils.getLastLocation();
         }
@@ -149,19 +155,6 @@ public class ArrivalActivity extends ActionBarActivity {
             return false;
         }
         return true;
-    }
-
-    /**
-     * Starts the Google API Client
-     */
-    @Override
-    protected void onStart() {
-        super.onStart();
-        final Context c = this;
-
-        // initialize gpsUtils
-        gpsUtils = new GoogleGPSUtils(c);
-        gpsUtils.start();
     }
 
     @Override

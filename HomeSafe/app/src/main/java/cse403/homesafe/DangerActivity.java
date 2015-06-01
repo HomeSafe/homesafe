@@ -77,6 +77,12 @@ public class DangerActivity extends ActionBarActivity {
         contactsView.setHasFixedSize(true);
         currentTier = Contacts.Tier.ONE;
 
+        final Context c = this;
+
+        // initialize gpsUtils
+        gpsUtils = new GoogleGPSUtils(c);
+        gpsUtils.start();
+
         if(gpsUtils.isReady()) {
             mLastLocation = gpsUtils.getLastLocation();
         }
@@ -241,19 +247,6 @@ public class DangerActivity extends ActionBarActivity {
                         StartActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
             }
         });
-    }
-
-    /**
-     * Starts the Google API Client
-     */
-    @Override
-    protected void onStart() {
-        super.onStart();
-        final Context c = this;
-
-        // initialize gpsUtils
-        gpsUtils = new GoogleGPSUtils(c);
-        gpsUtils.start();
     }
 
     @Override
