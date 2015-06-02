@@ -23,6 +23,15 @@ import com.google.android.gms.location.LocationServices;
  * Where gpsUtils is a field of the Activity
  */
 public class GoogleGPSUtils implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+
+    private static GoogleGPSUtils _instance;
+
+    public static GoogleGPSUtils getInstance(Context context) {
+        if (_instance == null)
+            _instance = new GoogleGPSUtils(context);
+        return _instance;
+    }
+
     private Location mLastLocation;
     private GoogleApiClient mGoogleApiClient;
     private static final String TAG = "GoogleGPSUtils";
