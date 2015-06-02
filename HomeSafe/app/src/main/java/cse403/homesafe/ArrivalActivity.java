@@ -56,6 +56,13 @@ public class ArrivalActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        final Context ctx = this;
+
+        // initialize gpsUtils
+        gpsUtils = new GoogleGPSUtils(ctx);
+        gpsUtils.start();
+
         setContentView(R.layout.activity_arrival_screen);
         ActionBar bar = getSupportActionBar();
         if (bar != null)
@@ -81,12 +88,6 @@ public class ArrivalActivity extends ActionBarActivity {
         // Uses a linear layout manager
         RecyclerView.LayoutManager rvLayoutManager = new LinearLayoutManager(this);
         contactsView.setLayoutManager(rvLayoutManager);
-
-        final Context ctx = this;
-
-        // initialize gpsUtils
-        gpsUtils = new GoogleGPSUtils(ctx);
-        gpsUtils.start();
 
         if(gpsUtils.isReady()) {
             lastKnownLocation = gpsUtils.getLastLocation();
