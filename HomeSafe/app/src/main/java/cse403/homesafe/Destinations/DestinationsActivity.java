@@ -49,9 +49,10 @@ public class DestinationsActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 //switch to EditDestinationActivity for add option
-                Intent i = new Intent(DestinationsActivity.this, cse403.homesafe.Destinations.EditDestinationActivity.class);
+                Intent i = new Intent(DestinationsActivity.this, EditDestinationActivity.class);
                 i.putExtra(ACTIVITY, ADD);
                 startActivity(i);
+                finish();
             }
         });
     }

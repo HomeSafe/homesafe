@@ -57,7 +57,7 @@
         </activity>
         <activity
             android:name=".Destinations.DestinationsActivity"
-            android:exported="true"
+            android:launchMode="singleTop"
             android:label="@string/title_activity_fav_locations" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -66,7 +66,6 @@
         <activity
             android:name=".PasswordActivity"
             android:theme="@style/Theme.AppCompat.Dialog"
-            android:exported="true"
             android:label="@string/title_activity_password" >
         </activity>
         <activity
@@ -75,7 +74,11 @@
         </activity>
         <activity
             android:name=".Destinations.EditDestinationActivity"
-            android:label=".EditLocationActivity" >
+            android:launchMode="singleTop"
+            android:label=".EditDestinationActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Destinations.DestinationsActivity" />
         </activity>
         <activity
             android:name=".Contacts.EditContactActivity"

@@ -29,6 +29,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
+import cse403.homesafe.Contacts.EditContactActivity;
 import cse403.homesafe.Data.DbFactory;
 import cse403.homesafe.Data.Destination;
 import cse403.homesafe.Data.Destinations;
@@ -91,6 +92,7 @@ public class EditDestinationActivity extends ActionBarActivity implements Google
 
         ActionBar mActionBar = getSupportActionBar();
         mActionBar.setDisplayShowHomeEnabled(false);
+        mActionBar.setDisplayHomeAsUpEnabled(false);
         mActionBar.setDisplayShowTitleEnabled(false);
         LayoutInflater mInflater = LayoutInflater.from(this);
 
@@ -387,6 +389,13 @@ public class EditDestinationActivity extends ActionBarActivity implements Google
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(EditDestinationActivity.this, DestinationsActivity.class);
+        startActivity(i);
+        finish();
     }
 }
 
