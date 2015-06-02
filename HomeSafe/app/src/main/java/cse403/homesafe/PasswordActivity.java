@@ -42,7 +42,7 @@ public class PasswordActivity extends ActionBarActivity {
     private Button cancel;
     private Button confirm;
     private EditText passwordField;           // where user inputs their password
-    private TextView timerView;               // how much time is left to correctly input password
+    private TextView timerView;               // displays how much time is left to input password
     private TextView customMsgView;           // displays which contact tiers have been notified
 
     /**
@@ -65,7 +65,10 @@ public class PasswordActivity extends ActionBarActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_password);
 
-        // get the parameters from the previous activity
+        // get the parameters from the previous activity.
+        // these parameters become the time in the timer, the number of chances a person has to
+        // input their password, a custom message to display to the user, and whether or not the
+        // cancel button is enabled.
         ArrayList<String> params = getIntent().getStringArrayListExtra("passwordParams");
         int time = Integer.parseInt(params.get(0));
         numchances = Integer.parseInt(params.get(1));
@@ -83,16 +86,18 @@ public class PasswordActivity extends ActionBarActivity {
         timerView = (TextView) findViewById(R.id.timerView);
         customMsgView = (TextView) findViewById(R.id.customMsg);
 
-        InputFilter lengthFilter = new InputFilter.LengthFilter(5);
+        // set the password input field to only take 4 numbers
+        InputFilter lengthFilter = new InputFilter.LengthFilter(4);
         passwordField.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
         passwordField.setFilters(new InputFilter[]{lengthFilter});
         showKeyboard();
 
-        // set the button message and the test message
+        // set the button message and the custom message
         confirm.setText(confirmButtonMessage);
         customMsgView.setText(customMsg);
         cancel.setEnabled(enableCancelButton);
 
+        // start the timer
         timer = new CountDownTimer(time * 1000, 1) {
             @Override
             public void onTick(long l) {
@@ -129,6 +134,7 @@ public class PasswordActivity extends ActionBarActivity {
             }
         });
 
+        // set up the confirm button
         confirm.setOnClickListener(new View.OnClickListener() {
 
             // Can only confirm if entered something in the password field
@@ -172,6 +178,7 @@ public class PasswordActivity extends ActionBarActivity {
             }
         });
 
+        // set the cancel button
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
