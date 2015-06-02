@@ -222,8 +222,13 @@ public class StartActivity extends ActionBarActivity {
             if (retcode.equals(PasswordActivity.RetCode.SUCCESS)) {
                 startActivity(new Intent(StartActivity.this, SettingsActivity.class));
             } else if (retcode.equals(PasswordActivity.RetCode.SPECIAL)) {
-                if(gpsUtils.isReady()) {
-                    Messenger.sendNotifications(Contacts.Tier.ONE, gpsUtils.getLastLocation(), this, Messenger.MessageType.DANGER);
+                Location lastLocation = gpsUtils.getLastLocation();
+                if(gpsUtils.isReady() && lastLocation != null) {
+                    Messenger.sendNotifications(Contacts.Tier.ONE, lastLocation, this, Messenger.MessageType.DANGER);
+                    Messenger.sendNotifications(Contacts.Tier.TWO, lastLocation, this, Messenger.MessageType.DANGER);
+                    Messenger.sendNotifications(Contacts.Tier.THREE, lastLocation, this, Messenger.MessageType.DANGER);
+                } else {
+                    Log.e(TAG, "Last known location is null.");
                 }
 
                 startActivity(new Intent(StartActivity.this, SettingsActivity.class));

@@ -95,11 +95,23 @@ public class ArrivalActivity extends ActionBarActivity {
             // Only send out messages on safe arrival if the user has specified this.
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             boolean shouldNotify = prefs.getBoolean("homeSafeAlert", false);
-            if (shouldNotify) {
+            if (shouldNotify || messageType == Messenger.MessageType.DANGER) {
                 // Notify contacts on safe arrival
-                Messenger.sendNotifications(Contacts.Tier.ONE, lastKnownLocation,
-                        getApplicationContext(), messageType);
-                rvAdapter = new ArrivalAdapter(new ArrayList<Contact>(Contacts.getInstance().getContactsInTier(Contacts.Tier.ONE)));
+                if (messageType == Messenger.MessageType.DANGER) {
+                    Messenger.sendNotifications(Contacts.Tier.ONE, lastKnownLocation,
+                            getApplicationContext(), messageType);
+                    Messenger.sendNotifications(Contacts.Tier.TWO, lastKnownLocation,
+                            getApplicationContext(), messageType);
+                    Messenger.sendNotifications(Contacts.Tier.THREE, lastKnownLocation,
+                            getApplicationContext(), messageType);
+                } else {
+                    Messenger.sendNotifications(Contacts.Tier.ONE, lastKnownLocation,
+                            getApplicationContext(), messageType);
+                }
+
+                if (shouldNotify) {
+                    rvAdapter = new ArrivalAdapter(new ArrayList<Contact>(Contacts.getInstance().getContactsInTier(Contacts.Tier.ONE)));
+                }
             } else {
                 // Don't contact anyone
                 ArrayList<Contact> c = new ArrayList<Contact>();

@@ -260,9 +260,14 @@ public class TripActivity extends ActionBarActivity {
                         // Fail fast. Location shouldn't be null.
                         Log.e(TAG, "Location was null when retrieved from GoogleGPSUtils");
                         return;
+                    } else {
+                        Messenger.sendNotifications(Contacts.Tier.ONE, lastLocation,
+                                getApplicationContext(), Messenger.MessageType.DANGER);
+                        Messenger.sendNotifications(Contacts.Tier.TWO, lastLocation,
+                                getApplicationContext(), Messenger.MessageType.DANGER);
+                        Messenger.sendNotifications(Contacts.Tier.THREE, lastLocation,
+                                getApplicationContext(), Messenger.MessageType.DANGER);
                     }
-                    Messenger.sendNotifications(Contacts.Tier.ONE, lastLocation,
-                            getApplicationContext(), Messenger.MessageType.DANGER);
 
                     // Extend timer
                     // Each timer object is immutable so we must cancel the old one to create
