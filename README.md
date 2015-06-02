@@ -102,10 +102,10 @@ System tests can be found in:
 ```
 app/src/androidTest/java/cse403/homesafe/test/   
 ```   
-To run system test, you will need an Android phone or emulator
+To run system test, you will need an Android phone, or test environment that has emulator built in.
 
 ####Code Coverage
-We use code coverage library [Jacoco](http://www.eclemma.org/jacoco/) for test coverage. It is configured in build.gradle to run all the unit tests in ```src/main/java/test``` directory.   
+We use code coverage library [Jacoco](http://www.eclemma.org/jacoco/) for test coverage. It is configured in build.gradle to run all the unit tests in ```src/main/java/``` directory.   
 In project's top-level directory, run:   
 ```
 ./gradlew jacocoTestReport
@@ -113,7 +113,8 @@ In project's top-level directory, run:
 Coverage report can be found in:
 ```
 /app/build/reports/jacoco/jacocoTestReport/html/index.html
-```
+```   
+(We aim to cover most of the data classes in our project. Android Activities and functionalities (database, SMS, etc.) that depend on Android system are tested in system tests, the coverage is not supported)
 
 
 ###Setting Up Automated Builds and Tests

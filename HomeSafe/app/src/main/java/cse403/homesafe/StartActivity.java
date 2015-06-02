@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -26,9 +25,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -42,11 +39,10 @@ import cse403.homesafe.Data.HomeSafeDbHelper;
 import cse403.homesafe.Destinations.DestinationsActivity;
 import cse403.homesafe.Messaging.Messenger;
 import cse403.homesafe.Settings.SettingsActivity;
-import cse403.homesafe.Util.ContextHolder;
 import cse403.homesafe.Util.GoogleGPSUtils;
 
 //This class is for Start Screen Activity, where it handles the side bar menu and start trip events
-public class StartActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class StartActivity extends ActionBarActivity {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -85,7 +81,8 @@ public class StartActivity extends ActionBarActivity implements GoogleApiClient.
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        ContextHolder.setContext(getApplicationContext());
+        gpsUtils = GoogleGPSUtils.getInstance(getApplicationContext());
+        gpsUtils.start();
     }
 
     // return true if user can connect to internet
@@ -243,8 +240,7 @@ public class StartActivity extends ActionBarActivity implements GoogleApiClient.
         final Context c = this;
 
         // initialize gpsUtils
-        gpsUtils = new GoogleGPSUtils(c);
-        gpsUtils.start();
+
 
         Log.i(TAG, "start terminated in onStart");
     }
@@ -257,59 +253,6 @@ public class StartActivity extends ActionBarActivity implements GoogleApiClient.
         if(gpsUtils != null) {
             gpsUtils.disconnect();
         }
-    }
-
-    /**
-     * Builds the Google API Client
-     */
-    protected synchronized boolean buildGoogleApiClient() {
-        boolean result = false;
-
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-        if (mGoogleApiClient != null) {
-            Log.e(TAG, "Build Complete");
-            result = true;
-        } else {
-            Log.e(TAG, "Build Incomplete");
-        }
-
-        return result;
-    }
-
-    /**
-     * Callback method of Google API Client if connected
-     */
-    @Override
-    public void onConnected(Bundle bundle) {
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                mGoogleApiClient);
-        if (mLastLocation != null) {
-            Log.i(TAG, "Connected!");
-            Messenger.sendNotifications(Contacts.Tier.ONE, mLastLocation, getApplicationContext(), Messenger.MessageType.DANGER);
-            Toast.makeText(StartActivity.this, "Contacts have been notified", Toast.LENGTH_SHORT).show();
-        } else {
-            Log.e(TAG, "Failed on getting last location");
-        }
-    }
-
-    /**
-     * Callback method for Google API Client if connection is suspended
-     */
-    @Override
-    public void onConnectionSuspended(int i) {
-        Log.e(TAG, "Connection Suspended");
-    }
-
-    /**
-     * Callback method for Google API Client if connection fails
-     */
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.e(TAG, "Connection Failed");
     }
 
     @Override
