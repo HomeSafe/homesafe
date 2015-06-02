@@ -259,7 +259,6 @@ public class TripActivity extends ActionBarActivity {
                     if (lastLocation == null) {
                         // Fail fast. Location shouldn't be null.
                         Log.e(TAG, "Location was null when retrieved from GoogleGPSUtils");
-                        return;
                     } else {
                         Messenger.sendNotifications(Contacts.Tier.ONE, lastLocation,
                                 getApplicationContext(), Messenger.MessageType.DANGER);
