@@ -231,6 +231,7 @@ public class TripActivity extends ActionBarActivity {
                     startActivity(intent);
                 } else if (retcode.equals(PasswordActivity.RetCode.FAILURE)) {
 //                    startActivity(new Intent(TripActivity.this, DangerActivity.class));
+                    timer.cancel();
                     GoogleGPSUtils gpsUtils = GoogleGPSUtils.getInstance(getApplicationContext());
                     Location lastLocation = gpsUtils.getLastLocation();
                     if (lastLocation == null) {
@@ -291,6 +292,7 @@ public class TripActivity extends ActionBarActivity {
                     chooseTimeToAdd();
                 } else if (retcode.equals(PasswordActivity.RetCode.FAILURE)) {
                     // entered the password in wrong too many times
+                    timer.cancel();
                     GoogleGPSUtils gpsUtils = GoogleGPSUtils.getInstance(getApplicationContext());
                     Location lastLocation = gpsUtils.getLastLocation();
                     if (lastLocation == null) {
