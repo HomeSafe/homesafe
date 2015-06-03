@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
@@ -94,7 +95,11 @@ public class SettingsActivity extends ActionBarActivity {
     @Override
     public void onBackPressed() {
         if (StartActivity.isAccountSetUp(getApplicationContext())) {
-            super.onBackPressed();
+//            super.onBackPressed();
+            Intent intent = new Intent(getApplicationContext(), StartActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+
         } else {
             Toast.makeText(getApplicationContext(),
                     "Set a first/last name and passcode.", Toast.LENGTH_LONG)
