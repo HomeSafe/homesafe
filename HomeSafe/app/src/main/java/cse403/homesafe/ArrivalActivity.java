@@ -60,8 +60,7 @@ public class ArrivalActivity extends ActionBarActivity {
         final Context ctx = this;
 
         // initialize gpsUtils
-        gpsUtils = new GoogleGPSUtils(ctx);
-        gpsUtils.start();
+        gpsUtils = GoogleGPSUtils.getInstance(getApplicationContext());
 
         setContentView(R.layout.activity_arrival_screen);
         ActionBar bar = getSupportActionBar();
