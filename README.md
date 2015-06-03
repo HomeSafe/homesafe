@@ -87,7 +87,7 @@ To run the whole unit test suite at once, navigate to the project's top-level di
 ```
 $ ./gradlew test
 ```
-This will build and run all tests in ```src/main/java/test``` directory. Once the tests have completed, you may find a detailed report in the file
+This will build and run all tests in ```app/src/test/java``` directory. Once the tests have completed, you may find a detailed report in the file
 ```
 app/build/outputs/reports/androidTests/connected/index.html.
 ```   
@@ -106,7 +106,7 @@ app/src/androidTest/java/cse403/homesafe/test/
 To run system test, you will need an Android phone, or test environment that has emulator built in.
 
 ####Code Coverage
-We use code coverage library [Jacoco](http://www.eclemma.org/jacoco/) for test coverage. It is configured in build.gradle to run all the unit tests in ```src/main/java/``` directory.   
+We use code coverage library [Jacoco](http://www.eclemma.org/jacoco/) for test coverage. It is configured in build.gradle to run all the unit tests and compare with code in ```src/main/java/``` directory.   
 In project's top-level directory, run:   
 ```
 ./gradlew jacocoTestReport
