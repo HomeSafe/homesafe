@@ -219,7 +219,7 @@ public class DangerActivity extends ActionBarActivity {
      * to the safe arrival screen.
      */
     private void onCorrectPinCode() {
-        Toast.makeText(DangerActivity.this, "Correct Pincode", Toast.LENGTH_SHORT).show();
+        // Toast.makeText(DangerActivity.this, "Correct Pincode", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(getApplicationContext(), ArrivalActivity.class);
         intent.putExtra("AlertType", "HOMESAFE");
         startActivity(intent);

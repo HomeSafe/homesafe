@@ -1,6 +1,5 @@
 The <i>original</i> Software Requirements Specification is located [here](https://drive.google.com/file/d/0B7Qa-eLpQZL2b093UHI0aVk1ZHM/view?usp=sharing).
-The <i>updated</i> SRS -- contained in a single document -- can be found [here](https://drive.google.com/open?id=1oygRUxuyMpw9emZNEf7O103dDs92CsdnTmK7E975e1Q&authuser=0) (note: only the use cases were slightly altered).
-
+The <i>updated</i> SRS -- contained in a single document -- can be found [here](https://drive.google.com/open?id=1oygRUxuyMpw9emZNEf7O103dDs92CsdnTmK7E975e1Q&authuser=0) 
 The <i>original</i> Software Design Specification is located [here](https://drive.google.com/open?id=0B7Qa-eLpQZL2VXRUTlNBaGk1a00&authuser=0).
 The <i>updated</i> SDS can be found [here](https://drive.google.com/file/d/0B4eVFDvqMnKhS191UXlJYWFfems/view?usp=sharing)
 
@@ -88,10 +87,12 @@ To run the whole unit test suite at once, navigate to the project's top-level di
 ```
 $ ./gradlew test
 ```
-This will build and run all tests in ```src/main/java/test``` directory. Once the tests have completed, you may find a detailed report in the file
+This will build and run all tests in ```app/src/test/java``` directory. Once the tests have completed, you may find a detailed report in the file
 ```
 app/build/outputs/reports/androidTests/connected/index.html.
-```
+```   
+Report looks like this:
+![alt text](README assets/screenshot4.png "unit_test_report")
 If you'd like to run individual tests, you'll find core class JUnit tests in app/src/main/java/UnitTests/ 
 
 To run individual tests from Android Studio, you'll need to manually switch back and forth between the two modes: unit testing mode and instrumentation testing mode. If you're running Android Studio 1.1 or below, make sure unit testing is enabled first by going to Preferences > Build Tools > Gradle > Experimental and ticking the Unit Testing box (this step is unnecesssary in newer versions).
@@ -105,7 +106,7 @@ app/src/androidTest/java/cse403/homesafe/test/
 To run system test, you will need an Android phone, or test environment that has emulator built in.
 
 ####Code Coverage
-We use code coverage library [Jacoco](http://www.eclemma.org/jacoco/) for test coverage. It is configured in build.gradle to run all the unit tests in ```src/main/java/``` directory.   
+We use code coverage library [Jacoco](http://www.eclemma.org/jacoco/) for test coverage. It is configured in build.gradle to run all the unit tests and compare with code in ```src/main/java/``` directory.   
 In project's top-level directory, run:   
 ```
 ./gradlew jacocoTestReport
@@ -114,6 +115,8 @@ Coverage report can be found in:
 ```
 /app/build/reports/jacoco/jacocoTestReport/html/index.html
 ```   
+Report looks like this:
+![alt text](README assets/screenshot5.png "test_coverage")
 (We aim to cover most of the data classes in our project. Android Activities and functionalities (database, SMS, etc.) that depend on Android system are tested in system tests, the coverage is not supported)
 
 
