@@ -236,30 +236,6 @@ public class StartActivity extends ActionBarActivity {
         }
     }
 
-    /**
-     * Starts the Google API Client
-     */
-    @Override
-    protected void onStart() {
-        super.onStart();
-        final Context c = this;
-
-        // initialize gpsUtils
-
-
-        Log.i(TAG, "start terminated in onStart");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        // disconnect utils
-        if(gpsUtils != null) {
-            gpsUtils.disconnect();
-        }
-    }
-
     @Override
     public void onResume() {
         super.onResume();

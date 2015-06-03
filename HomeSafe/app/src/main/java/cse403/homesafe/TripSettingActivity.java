@@ -138,6 +138,8 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleMaps
                     }
                 }
         );
+
+        gpsUtils = GoogleGPSUtils.getInstance(getApplicationContext());
     }
 
     /**
@@ -156,6 +158,9 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleMaps
                 currentDestinationText.setText("Destination: " + place.getName());
                 if(gpsUtils.isReady()) {
                     mLastLocation = gpsUtils.getLastLocation();
+                    if (mLastLocation != null) {
+                        GoogleMapsUtils.getDistanceAndTime(mLastLocation, destination, this);
+                    }
                 }
             } else {
                 Log.e(TAG, "result code was not okay: " + resultCode);
@@ -234,28 +239,6 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleMaps
     public void onAddressToLocation(Object obj) { }
 
     /**
-     * Returns true if GooglePlayServices is installed on the device otherwise
-     * false.
-     */
-    private boolean checkPlayServices() {
-        int resultCode = GooglePlayServicesUtil
-                .isGooglePlayServicesAvailable(this);
-        if (resultCode != ConnectionResult.SUCCESS) {
-            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
-                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
-            } else {
-                Toast.makeText(getApplicationContext(),
-                        "This device is not supported.", Toast.LENGTH_LONG)
-                        .show();
-                finish();
-            }
-            return false;
-        }
-        return true;
-    }
-
-    /**
      * Listener class for when user's selects a destination from the drop down favorite list.
      * This method displays the estimated time arrival from the current location to the
      * destination that was selected from the map.
@@ -295,29 +278,6 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleMaps
         @Override
         public void onNothingSelected(AdapterView<?> parent) {
 
-        }
-    }
-
-    /**
-     * Starts the Google API Client
-     */
-    @Override
-    protected void onStart() {
-        super.onStart();
-        final Context c = this;
-
-        // initialize gpsUtils
-        gpsUtils = new GoogleGPSUtils(c);
-        gpsUtils.start();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        // disconnect utils
-        if(gpsUtils != null) {
-            gpsUtils.disconnect();
         }
     }
 }

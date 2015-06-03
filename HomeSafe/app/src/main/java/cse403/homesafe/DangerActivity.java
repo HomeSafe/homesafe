@@ -37,8 +37,6 @@ import cse403.homesafe.Util.GoogleMapsUtils;
  */
 public class DangerActivity extends ActionBarActivity {
 
-    private Location mLastLocation; // Current location
-
     private Button homeScreenBtnDanger; // Button to start a new trip
 
     private RecyclerView contactsView;  // Provides a view of contacts that have been notified
@@ -54,7 +52,6 @@ public class DangerActivity extends ActionBarActivity {
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 1000; // Google play services resolution request
     private final String TAG = "DangerActivity"; // For logcat debugging purposes
-    private GoogleGPSUtils gpsUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,13 +76,6 @@ public class DangerActivity extends ActionBarActivity {
 
         final Context c = this;
 
-        // initialize gpsUtils
-        gpsUtils = new GoogleGPSUtils(c);
-        gpsUtils.start();
-
-        if(gpsUtils.isReady()) {
-            mLastLocation = gpsUtils.getLastLocation();
-        }
         promptForPassword();
     }
 
@@ -128,15 +118,17 @@ public class DangerActivity extends ActionBarActivity {
      * Send danger alerts to the current tier contacts.
      */
     public void alertContacts() {
+        GoogleGPSUtils gpsUtils = GoogleGPSUtils.getInstance(getApplicationContext());
+        Location mLastLocation;
         if(gpsUtils.isReady()) {
             mLastLocation = gpsUtils.getLastLocation();
-        }
-        if (mLastLocation != null) {
-            Log.e(TAG, "Connected!");
-            List<Contact> contacts = Contacts.getInstance().getContactsInTier(currentTier);
-            Messenger.sendNotifications(currentTier, mLastLocation, getApplicationContext(), Messenger.MessageType.DANGER);
-            rvAdapter = new ArrivalAdapter(contacts);
-            contactsView.setAdapter(rvAdapter);
+            if (mLastLocation != null) {
+                Log.e(TAG, "Connected!");
+                List<Contact> contacts = Contacts.getInstance().getContactsInTier(currentTier);
+                Messenger.sendNotifications(currentTier, mLastLocation, getApplicationContext(), Messenger.MessageType.DANGER);
+                rvAdapter = new ArrivalAdapter(contacts);
+                contactsView.setAdapter(rvAdapter);
+            }
         }
     }
 
@@ -247,15 +239,4 @@ public class DangerActivity extends ActionBarActivity {
             }
         });
     }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        // disconnect utils
-        if(gpsUtils != null) {
-            gpsUtils.disconnect();
-        }
-    }
-
 }

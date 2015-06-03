@@ -89,7 +89,9 @@ public class Email extends javax.mail.Authenticator implements Message {
     @Override
     public void sendMessage(final Contact recipient, final Location location, final String customMessage,
                             final Context context, final MessageType type) {
-        new Thread(new Runnable() {
+
+        (new Thread() {
+
             public void run() {
                 String recipientEmail = recipient.getEmail();
 
@@ -97,38 +99,33 @@ public class Email extends javax.mail.Authenticator implements Message {
                 String userFirstName = preferences.getString("firstName", null);
                 String userLastName = preferences.getString("lastName", null);
 
-                if (userFirstName == null || userLastName == null) {
-                    // TODO (Alex): Remove this hacky fix at a later time
+                if (userFirstName == null)
                     userFirstName = "";
+                if (userLastName == null)
                     userLastName = "";
-                }
 
                 String subject, body;
-                body = buildBody(type, context, userFirstName, userLastName, customMessage, location);
+                body =
 
-                if (type == MessageType.DANGER) {
-                    subject = userFirstName + " " + userLastName + " May Need Your Help";
-//                    body = userFirstName + " was using HomeSafe, a walking safety app.\n\nThey were"
-//                            + " using the app to get to a destination, but did not check in with the app."
-//                            + " As a result, this automated email is being sent to all of " + userFirstName
-//                            + "'s contacts. Their last known coordinates are (" + location.getLatitude() + ", "
-//                            + location.getLongitude() + "). You may need to check in with " + userFirstName + "."
-//                            + "\n\n" + userFirstName + " says: " + customMessage;
-                } else {
-                    subject = userFirstName + " " + userLastName + " Arrived Safely";
-//                    body = userFirstName + " was using HomeSafe, a walking safety app.\n\nThey were"
-//                            + " using the app to get to a destination and they arrived safely. This is"
-//                            + " an automated message sent by " + userFirstName + "'s phone to"
-//                            + " notify you of their safe arrival.";
+                        buildBody(type, context, userFirstName, userLastName, customMessage, location);
 
-                }
-                try {
+                subject = userFirstName + " " + userLastName;
+                subject += (type == MessageType.DANGER) ? " May Need Your Help" : " Arrived Safely";
+
+                try
+
+                {
                     sendMail(subject, body, "homesafealerts@gmail.com", recipientEmail);
-                } catch (Exception e) {
+                } catch (
+                        Exception e
+                        )
+
+                {
                     e.printStackTrace();
                 }
             }
         }).start();
+
     }
 
     /**
@@ -150,21 +147,23 @@ public class Email extends javax.mail.Authenticator implements Message {
             is.close();
             String prefix = new String(buffer);
 
-            if (type == MessageType.HOMESAFE)     //safe arrival
+            if (type == MessageType.HOMESAFE)
                 is = context.getAssets().open("ArrivalFormat.html");
-            else                                            //danger zone
+            else
                 is = context.getAssets().open("DangerFormat.html");
 
             size = is.available();
             buffer = new byte[size];
             is.read(buffer);
             is.close();
+            String optional = (location == null) ? " Note: unknown last location. Link above will not work." : "";
+            location = (location == null) ? new Location("") : location;
             String format;
             if (type == MessageType.HOMESAFE)
                 format = String.format(new String(buffer), first, last, first, first);
             else
                 format = String.format(new String(buffer), first, last, first, first, location.getLatitude(), location.getLongitude(),
-                        location.getLatitude(), location.getLongitude(), first, first, message);
+                        location.getLatitude(), location.getLongitude(), first, first, optional, message);
 
             is = context.getAssets().open("Suffix.html");
             size = is.available();

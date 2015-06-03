@@ -53,8 +53,6 @@ public class TripActivity extends ActionBarActivity {
 
     private long currentTimeMillis; // the time left on the timer in millis
 
-    private GoogleGPSUtils gpsUtils;
-
     private static final int END_TRIP_PASSWORD_REQUEST = 1;
     private static final int ADD_TIME_PASSWORD_REQUEST = 2;
     private static final long TIME_BUFFER = 5;
@@ -255,6 +253,7 @@ public class TripActivity extends ActionBarActivity {
                     chooseTimeToAdd();
 
                 } else if (retcode == PasswordActivity.RetCode.SPECIAL) {
+                    GoogleGPSUtils gpsUtils = GoogleGPSUtils.getInstance(getApplicationContext());
                     Location lastLocation = gpsUtils.getLastLocation();
                     if (lastLocation == null) {
                         // Fail fast. Location shouldn't be null.
@@ -279,29 +278,6 @@ public class TripActivity extends ActionBarActivity {
                 }
                 // Else Cancel was pressed or wrong password was input, do nothing
             }
-        }
-    }
-
-    /**
-     * Starts the Google API Client
-     */
-    @Override
-    protected void onStart() {
-        super.onStart();
-        final Context c = this;
-
-        // initialize gpsUtils
-        gpsUtils = new GoogleGPSUtils(c);
-        gpsUtils.start();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        // disconnect utils
-        if(gpsUtils != null) {
-            gpsUtils.disconnect();
         }
     }
 
