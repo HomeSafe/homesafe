@@ -230,7 +230,11 @@ public class TripActivity extends ActionBarActivity {
                     intent.putExtra("AlertType", "HOMESAFE");
                     startActivity(intent);
                 } else if (retcode.equals(PasswordActivity.RetCode.FAILURE)) {
-                    startActivity(new Intent(TripActivity.this, DangerActivity.class));
+//                    startActivity(new Intent(TripActivity.this, DangerActivity.class));
+                    Toast.makeText(TripActivity.this, "HomeSafe trip is closing: contacts have been notified.", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(), StartActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
                 } else if (retcode.equals(PasswordActivity.RetCode.SPECIAL)) {
                     timer.cancel();
                     Intent intent = new Intent(getApplicationContext(), ArrivalActivity.class);
@@ -275,8 +279,14 @@ public class TripActivity extends ActionBarActivity {
 
                     // give the user a pop-up dialog to add time
                     chooseTimeToAdd();
+                } else if (retcode.equals(PasswordActivity.RetCode.FAILURE)) {
+                    // entered the password in wrong too many times
+                    Toast.makeText(TripActivity.this, "HomeSafe trip is closing: contacts have been notified.", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(), StartActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
                 }
-                // Else Cancel was pressed or wrong password was input, do nothing
+                // Else Cancel was pressed
             }
         }
     }
