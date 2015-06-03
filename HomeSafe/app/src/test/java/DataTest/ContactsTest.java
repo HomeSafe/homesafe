@@ -32,7 +32,7 @@ public class ContactsTest {
     /**
      * Test basic functions
      */
-
+    //add
     @Test
     public void testAddContact() {
         Contact contact1 = new Contact("Amy");
@@ -43,6 +43,7 @@ public class ContactsTest {
         Assert.assertTrue(result);
     }
 
+    //remove
     @Test
     public void testRemoveContact() {
         Contact contact1 = new Contact("Amy");
@@ -59,6 +60,7 @@ public class ContactsTest {
         Assert.assertTrue(result);
     }
 
+    //edit
     @Test
     public void testEditContact() {
         Contact contact1 = new Contact("Amy");
@@ -79,7 +81,7 @@ public class ContactsTest {
     }
 
     /**
-     * Test tier functionality
+     * Test function of getting contacts from specific tier
      */
 
     @Test
@@ -122,7 +124,7 @@ public class ContactsTest {
     }
 
     /**
-     * Test clear functionality
+     * Test clear contacts functionality
      */
 
     @Test

@@ -48,7 +48,7 @@ public class DestinationsTest {
     }
 
     /**
-     * Test basic functionality
+     * Test basic functionality of adding destination to the list
      */
 
     @Test
@@ -61,6 +61,9 @@ public class DestinationsTest {
         Assert.assertEquals(2, destinations.getSize());
     }
 
+    /**
+     * Test basic functionality of removing destination from the list
+     */
     @Test
     public void testRemoveContact() {
         destinations = Destinations.getInstance();

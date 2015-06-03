@@ -32,7 +32,8 @@ The HomeSafe Security app is an open-source safety app for Android devices. In o
 * For everyone else here's a handy [Github cheatsheet](https://training.github.com/kit/downloads/github-git-cheat-sheet.pdf "Github cheatsheet")!
 
 ###Downloading APK
-* [Release Candidate](https://drive.google.com/open?id=0B1FqQrkO5AHPc0R4bkJfcFoyQVU&authuser=0) (requires Android 4.4.4+)   
+* [Final Release](https://drive.google.com/open?id=0B1FqQrkO5AHPV1VtSFByYkpKenM&authuser=0) (requires Android 4.4+)
+* [Release Candidate](https://drive.google.com/open?id=0B1FqQrkO5AHPc0R4bkJfcFoyQVU&authuser=0) (requires Android 4.4+)   
 * [Feature Complete Release](https://drive.google.com/open?id=0B1FqQrkO5AHPbE9GalQxZ1BJOFE&authuser=0) (requires Android 5.0+)   
 * [Beta Release](https://drive.google.com/open?id=0B1FqQrkO5AHPdzdOREZ6Yk5fMEk&authuser=0) (requires Android 5.0+)   
 * [Zero Feature Release](https://drive.google.com/open?id=0B1FqQrkO5AHPU2N0YkRjVTBZTm8&authuser=0)   

@@ -57,6 +57,7 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleMaps
     DistanceAndTime distAndTime; // stores the distance and time it takes to arrive at destination
     String TAG = "TripSettingActivity"; // for logcat debugging purposes
     int PLACE_PICKER_REQUEST = 1;
+    boolean map = false;
 
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1000;
     private GoogleGPSUtils gpsUtils;
@@ -150,6 +151,9 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleMaps
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == RESULT_OK) {
+                map = true;
+                Spinner input = (Spinner) findViewById(R.id.favoriteLocationSpinner);
+                input.setSelection(0);
                 Place place = PlacePicker.getPlace(data, this);
                 destination = new Location("New Destination");
                 destination.setLatitude(place.getLatLng().latitude);
@@ -252,6 +256,7 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleMaps
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             if(position != 0) {
+                map = false;
                 String nameOfDest = parent.getItemAtPosition(position).toString() + "";
                 destination = nameToLocation.get(nameOfDest);
                 // use gps utils to get the last know location
@@ -265,7 +270,7 @@ public class TripSettingActivity extends ActionBarActivity implements GoogleMaps
 
                 TextView currentDestinationText = (TextView) findViewById(R.id.currentDestinationText);
                 currentDestinationText.setText("Destination: " + nameOfDest);
-            } else {
+            } else if(!map) {
                 TextView currentDestinationText = (TextView) findViewById(R.id.currentDestinationText);
                 currentDestinationText.setText("No Destination Selected");
                 TextView estimateTime = (TextView) findViewById(R.id.hint);

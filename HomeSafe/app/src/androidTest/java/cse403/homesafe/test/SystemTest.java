@@ -11,30 +11,35 @@ import cse403.homesafe.R;
 import cse403.homesafe.StartActivity;
 
 /**
+ * This class is the Black-box UI test for Homesafe app
+ * It covers most of the use cases, find more comments in the class body
  * Created by dliuxy94 on 5/14/15.
  */
 public class SystemTest extends ActivityInstrumentationTestCase2<StartActivity> {
-    private Solo solo;
+    private Solo solo;  //robotium test util
     public SystemTest() {
         super(StartActivity.class);
-    }
+    } //test starts from start activity
 
     public static final String PASSWORD = "1111";
     public static final String SPECIAL_PASSWORD = "2222";
 
+    //set up the test utilities
     protected void setUp() throws Exception {
         super.setUp();
         solo = new Solo(getInstrumentation(), getActivity());
         setActivityInitialTouchMode(false);
     }
 
+    //clean up the resources and actvities
     @Override
     public void tearDown() throws Exception {
         solo.finishOpenedActivities();
         super.tearDown();
     }
 
-    //weird name but sure this will get executed first
+    //It has a weird name but this will make sure it gets executed first
+    //inject settings at fresh install so that the system knows the pw to check against
     public void testAASetupAccount(){
         Context context = getActivity();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -44,6 +49,7 @@ public class SystemTest extends ActivityInstrumentationTestCase2<StartActivity> 
         prefs.edit().putString("pin_mock", SPECIAL_PASSWORD).apply();
     }
 
+    //test for setting a trip's destination and time
     public void testStartTripSettingActivity() throws Exception {
         solo.clickOnButton("Start Trip");
         solo.pressSpinnerItem(0, 1);
@@ -66,6 +72,7 @@ public class SystemTest extends ActivityInstrumentationTestCase2<StartActivity> 
         solo.clickOnButton("End Trip");
     }
 
+    //test for extend the timer during a trip
     public void testExtendTimeActivity() throws Exception {
         solo.clickOnButton("Start Trip");
         solo.pressSpinnerItem(0, 1);
@@ -101,6 +108,7 @@ public class SystemTest extends ActivityInstrumentationTestCase2<StartActivity> 
         // success
     }
 
+    //test for special password utility
     public void testSecretPasswordEndTrip() throws Exception {
         solo.clickOnButton("Start Trip");
         solo.pressSpinnerItem(0, 1);
@@ -136,6 +144,7 @@ public class SystemTest extends ActivityInstrumentationTestCase2<StartActivity> 
         // success
     }
 
+    //test for adding an emergency contact
     public void testAddContact() throws Exception {
         solo.clickOnActionBarHomeButton();
         solo.clickOnMenuItem("Emergency Contacts");
@@ -156,6 +165,7 @@ public class SystemTest extends ActivityInstrumentationTestCase2<StartActivity> 
         solo.clickOnButton("Save");
     }
 
+    //test for adding a location
     public void testAddDestination() throws Exception {
         solo.clickOnActionBarHomeButton();
         solo.clickOnMenuItem("Favorite Locations");

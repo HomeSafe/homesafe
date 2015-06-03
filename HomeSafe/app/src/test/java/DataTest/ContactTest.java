@@ -22,7 +22,7 @@ public class ContactTest {
     }
 
     /**
-     * Test constructors
+     * tests constructing a contact, ensure all fields filled correctly
      */
 
     @Test

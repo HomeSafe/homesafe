@@ -1,7 +1,5 @@
 package DataTest;
 
-import android.location.Location;
-
 import junit.framework.Assert;
 
 import org.junit.After;
@@ -12,7 +10,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import cse403.homesafe.Data.Destination;
 
 /**
- * Class to test Destination.java
+ * Class to test Destination
  */
 @PrepareForTest(Destination.class)
 public class DestinationTest {
@@ -24,7 +22,7 @@ public class DestinationTest {
     public void setUp() { dest1 = null; dest2 = null; dest3 = null; }
 
     /**
-     * Constructor tests
+     * test constructing a destination, ensure all fields filled correctly
      */
 
     @Test
