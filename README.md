@@ -90,7 +90,9 @@ $ ./gradlew test
 This will build and run all tests in ```src/main/java/test``` directory. Once the tests have completed, you may find a detailed report in the file
 ```
 app/build/outputs/reports/androidTests/connected/index.html.
-```
+```   
+Report looks like this:
+![alt text](README assets/screenshot4.png "unit_test_report")
 If you'd like to run individual tests, you'll find core class JUnit tests in app/src/main/java/UnitTests/ 
 
 To run individual tests from Android Studio, you'll need to manually switch back and forth between the two modes: unit testing mode and instrumentation testing mode. If you're running Android Studio 1.1 or below, make sure unit testing is enabled first by going to Preferences > Build Tools > Gradle > Experimental and ticking the Unit Testing box (this step is unnecesssary in newer versions).
@@ -113,6 +115,8 @@ Coverage report can be found in:
 ```
 /app/build/reports/jacoco/jacocoTestReport/html/index.html
 ```   
+Report looks like this:
+![alt text](README assets/screenshot5.png "test_coverage")
 (We aim to cover most of the data classes in our project. Android Activities and functionalities (database, SMS, etc.) that depend on Android system are tested in system tests, the coverage is not supported)
 
 
