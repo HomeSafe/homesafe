@@ -231,6 +231,16 @@ public class TripActivity extends ActionBarActivity {
                     startActivity(intent);
                 } else if (retcode.equals(PasswordActivity.RetCode.FAILURE)) {
 //                    startActivity(new Intent(TripActivity.this, DangerActivity.class));
+                    GoogleGPSUtils gpsUtils = GoogleGPSUtils.getInstance(getApplicationContext());
+                    Location lastLocation = gpsUtils.getLastLocation();
+                    if (lastLocation == null) {
+                        // Fail fast. Location shouldn't be null.
+                        Log.e(TAG, "Location was null when retrieved from GoogleGPSUtils");
+                    } else {
+                        Messenger.sendNotifications(Contacts.Tier.ONE, lastLocation,
+                                getApplicationContext(), Messenger.MessageType.DANGER);
+
+                    }
                     Toast.makeText(TripActivity.this, "HomeSafe trip is closing: contacts have been notified.", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getApplicationContext(), StartActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -281,6 +291,16 @@ public class TripActivity extends ActionBarActivity {
                     chooseTimeToAdd();
                 } else if (retcode.equals(PasswordActivity.RetCode.FAILURE)) {
                     // entered the password in wrong too many times
+                    GoogleGPSUtils gpsUtils = GoogleGPSUtils.getInstance(getApplicationContext());
+                    Location lastLocation = gpsUtils.getLastLocation();
+                    if (lastLocation == null) {
+                        // Fail fast. Location shouldn't be null.
+                        Log.e(TAG, "Location was null when retrieved from GoogleGPSUtils");
+                    } else {
+                        Messenger.sendNotifications(Contacts.Tier.ONE, lastLocation,
+                                getApplicationContext(), Messenger.MessageType.DANGER);
+
+                    }
                     Toast.makeText(TripActivity.this, "HomeSafe trip is closing: contacts have been notified.", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getApplicationContext(), StartActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
